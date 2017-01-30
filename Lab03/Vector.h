@@ -21,5 +21,8 @@ class Vector
 		double getMagnitude();
 		float getAngle();
 		void print();
+
+		//Task 3
+		bool operator==(Vector v);
 };
 #endif

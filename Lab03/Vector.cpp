@@ -19,8 +19,8 @@ Vector::Vector(double x, double y)
 Vector::Vector(double r, float th)
 {	
 	//for degrees
-	xVal = cos(th *180/PI)*r;
-	yVal = sin(th *180/PI)*r;	
+	xVal = cos(th /180*PI)*r;
+	yVal = sin(th /180*PI)*r;	
 }
 
 double Vector::getX() { return xVal; }
@@ -33,3 +33,11 @@ double Vector::getMagnitude() { return sqrt(xVal*xVal + yVal*yVal); }
 float Vector::getAngle() { return float(atan(yVal / xVal));}
 void Vector::print() { cout << "Rectangular coordinates: (" + to_string(xVal) + "," + to_string(yVal) + ")" << endl; }
 
+//Task 3
+bool Vector::operator==(Vector v) 
+{ 
+	float diffX = xVal - v.getX();
+	float diffY = yVal - v.getY();
+	float p = .005; //precision bc floats  
+	return abs(diffX) < p && abs(diffY) < p;
+}
