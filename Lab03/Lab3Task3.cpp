@@ -15,6 +15,11 @@ int main()
 
 	cout << "V1 v V2: " << boolalpha << (vec1 == vec2) <<endl;
 	cout << "V2 v V3: " << boolalpha << (vec2 == vec3) <<endl;
-
+	
+	vec2 * 5;
+	vec2.print();
+	vec3 * 2;
+	vec3.print();
+	
 	//task 4
 }

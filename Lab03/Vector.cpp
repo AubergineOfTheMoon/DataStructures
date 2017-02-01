@@ -41,3 +41,10 @@ bool Vector::operator==(Vector v)
 	float p = .005; //precision bc floats  
 	return abs(diffX) < p && abs(diffY) < p;
 }
+
+// Multiplication Vector Operator
+void Vector::operator*(double s) 
+{
+	setX(xVal*s);
+	setY(yVal*s);
+}
