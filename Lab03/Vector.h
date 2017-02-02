@@ -24,10 +24,10 @@ class Vector
 
 		//Task 3
 		bool operator==(Vector v);
-		void operator*(double scalar);
 		void operator+(Vector v);
 		void operator-(Vector v);
-		Vector Vector::operator/(double num);
+		void operator*(double s);
+		void operator/(double s);
 	
 };
 #endif

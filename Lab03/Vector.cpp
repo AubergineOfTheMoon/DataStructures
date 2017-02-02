@@ -42,29 +42,28 @@ bool Vector::operator==(Vector v)
 	return abs(diffX) < p && abs(diffY) < p;
 }
 
-// Multiplication Vector Operator
+// Multiplication and division Vector Operator
 void Vector::operator*(double s) 
 {
-	setX(xVal*s);
-	setY(yVal*s);
+	xVal *= s;
+	yVal *= s;
 }
 
-Vector Vector::operator/(double num) {
-	double a = num;
-	Vector vectQuot = Vector(xVal / a, yVal / a);
-	return vectQuot;
+void Vector::operator/(double s) 
+{
+	xVal /= s;
+	yVal /= s;
 }
 //Adding and subtraction Vector Operator
 void Vector::operator+(Vector v)
 {
-	setX(v.getX() + xVal); 
-
-	setY(v.getY() + yVal);
+	xVal += v.getX();
+	yVal += v.getY();
 }
 
 void Vector::operator-(Vector v)
 {
-	setX(v.getX() - xVal);
-	setY(v.getY() - yVal);
+	xVal -= v.getX();
+	yVal -= v.getY();
 }
 
