@@ -27,6 +27,7 @@ class Vector
 		void operator*(double scalar);
 		void operator+(Vector v);
 		void operator-(Vector v);
+		Vector Vector::operator/(double num);
 	
 };
 #endif

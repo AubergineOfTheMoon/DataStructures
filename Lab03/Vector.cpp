@@ -49,6 +49,11 @@ void Vector::operator*(double s)
 	setY(yVal*s);
 }
 
+Vector Vector::operator/(double num) {
+	double a = num;
+	Vector vectQuot = Vector(xVal / a, yVal / a);
+	return vectQuot;
+}
 //Adding and subtraction Vector Operator
 void Vector::operator+(Vector v)
 {
