@@ -48,3 +48,18 @@ void Vector::operator*(double s)
 	setX(xVal*s);
 	setY(yVal*s);
 }
+
+//Adding and subtraction Vector Operator
+void Vector::operator+(Vector v)
+{
+	setX(v.getX() + xVal); 
+
+	setY(v.getY() + yVal);
+}
+
+void Vector::operator-(Vector v)
+{
+	setX(v.getX() - xVal);
+	setY(v.getY() - yVal);
+}
+

@@ -25,5 +25,8 @@ class Vector
 		//Task 3
 		bool operator==(Vector v);
 		void operator*(double scalar);
+		void operator+(Vector v);
+		void operator-(Vector v);
+	
 };
 #endif
