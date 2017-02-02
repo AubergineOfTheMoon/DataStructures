@@ -30,7 +30,7 @@ double Vector::getY() { return yVal; }
 void Vector::setY(double y) { yVal=y; }
 
 double Vector::getMagnitude() { return sqrt(xVal*xVal + yVal*yVal); }
-float Vector::getAngle() { return float(atan(yVal / xVal));}
+float Vector::getAngle() { return float(atan(yVal / xVal) * 180/PI);}
 void Vector::print() { cout << "Rectangular coordinates: (" + to_string(xVal) + "," + to_string(yVal) + ")" << endl; }
 
 //Task 3
