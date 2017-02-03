@@ -20,5 +20,5 @@ Die::Die(int s)
 
 void Die::setSides(int s) { sides = s; };
 int Die::roll() { return rand() % sides + 1; };
-int Die::getSides(){ return sides; };
+int Die::getSides() { return sides; };
 
