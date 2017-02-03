@@ -9,5 +9,7 @@ class Die
 		Die(int sides);
 		int roll();
 		void setSides(int s);
+		int getSides();
+		friend float playGame(Die diePlayer, Die dieHouse, float w);
 };
 #endif

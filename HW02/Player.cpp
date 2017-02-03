@@ -4,17 +4,17 @@
 
 using namespace std;
 
-Player::Player() 
-{
-	money = 0.00;
-	playerDie = Die();
-}
-
 Player::Player(float m) 
 {
 	money = m;
 	playerDie = Die();
 }
 
+void Player::setWager(float w) { money -= w; }
+void Player::depositMoney(float w) { money += w; }
 
 void Player::setMoney(float m) { money = m; };
+
+float Player::getBalance() { return money; };
+
+

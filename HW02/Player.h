@@ -9,9 +9,10 @@ class Player
 	public:
 		
 		Die playerDie;
-		Player();
 		Player(float money);
 		void setMoney(float m);
-		
+		void setWager(float w);
+		void depositMoney(float w);
+		float getBalance();
 };
 #endif
