@@ -145,6 +145,7 @@
     <ClCompile Include="Animal.cpp" />
     <ClCompile Include="Fish.cpp" />
     <ClCompile Include="Horse.cpp" />
+    <ClCompile Include="TestProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animal.h" />

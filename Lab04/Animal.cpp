@@ -4,15 +4,17 @@
 
 using namespace std;
 
-Animal::Animal() {}
+Animal::Animal() {
+	name = "";
+	age = 0.0;
+}
 Animal::Animal(string n, float a) {
 	name = n;
 	age = a;
 }
 
-void Animal::eat() {
-	cout << "Yummy";
-}
+void Animal::eat() { cout << "Yummy" << endl; }
+void Animal::move() { cout << "Move" << endl; }
 
 string Animal::getName() { return name; }
 float Animal::getAge() { return age; }
