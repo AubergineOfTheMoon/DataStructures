@@ -18,6 +18,8 @@ int main()
 		cin >> op;
 		cout << endl;
 		switch (op) {
+		
+		// Input another vector and perform addition operation
 		case '+':
 			cout << "Enter x value for added vector: ";
 			cin >> x2;
@@ -27,6 +29,8 @@ int main()
 			v2.setY(y2);
 			v + v2;
 			break;
+
+		// Input another vector and perform subtraction operation
 		case '-':
 			cout << "Enter x value for subtracted vector: ";
 			cin >> x2;
@@ -36,16 +40,22 @@ int main()
 			v2.setY(y2);
 			v - v2;
 			break;
+
+		// Input a scalar and perform multiplication operation
 		case '*':
 			cout << "Enter scalar: ";
 			cin >> s;
 			v * s;
 			break;
+
+		// Input a scalar and perform division operation
 		case '/':
 			cout << "Enter scalar: ";
 			cin >> s;
 			v / s;
 			break;
+
+		// Input another vector and compare both vectors
 		case '=':
 			cout << "Enter x value for comparison vector: ";
 			cin >> x2;
@@ -59,20 +69,27 @@ int main()
 			else
 				cout << "Vectors are not equal" << endl;
 			break;
+
+		// User chooses to quit
 		case 'q':
 			break;
+
+		// Default option: Operation is invalid
 		default:
 			cout << op << " is not a valid operation" << endl;
 		}
+
+		//Print vector information
 		v.print();
 		cout << "Magnitude " << v.getMagnitude() << " angle " << v.getAngle() << endl;
-	} while (op != 'q');
+
+	} while (op != 'q'); //Performs operations until user chooses to quit by entering q
 
 	// Testing remaining functions	
 	double mag = 4.0;
 	float angleTheta = 30.0;
-	Vector vTest = Vector(mag, angleTheta);
+	Vector vTest = Vector(mag, angleTheta); // Test magnitude and angle constructor
 	cout << "\nVector with polar coordinates magnitude " << mag << " units and " << angleTheta << " degrees are: ";
-	cout << vTest.getX() << " and " << vTest.getY() << endl;
+	cout << vTest.getX() << " and " << vTest.getY() << endl; // Test getters for x and y coordinates vector
 
 };
