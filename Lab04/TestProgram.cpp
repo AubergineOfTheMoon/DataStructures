@@ -26,7 +26,7 @@ int main()
 		cout << "Press 4 for an instance of fish declared as an animal." << endl;
 		cout << "Press 5 for an instance of horse declared as an animal." << endl;
 		cin >> choice;
-		string n="";
+		string n;
 		float a=0.0;
 		Animal animal1;
 		Fish fish1;
@@ -38,7 +38,7 @@ int main()
 		{
 		case 1:
 			cout << "Enter the name of the animal: ";
-			cin >> n;
+			getline(cin.ignore(), n);
 			cout << endl;
 			cout << "Enter the age of the animal: ";
 			cin >> a;
@@ -49,7 +49,7 @@ int main()
 			break;
 		case 2:
 			cout << "Enter the name of the fish: ";
-			cin >> n;
+			getline(cin.ignore(), n);
 			cout << endl;
 			cout << "Enter the age of the fish: ";
 			cin >> a;
@@ -64,7 +64,7 @@ int main()
 			break;
 		case 3:
 			cout << "Enter the name of the horse: ";
-			cin >> n;
+			getline(cin.ignore(), n);
 			cout << endl;
 			cout << "Enter the age of the horse: ";
 			cin >> a;
@@ -79,7 +79,7 @@ int main()
 			break;
 		case 4:
 			cout << "Enter the name of the fishde declared as an animal: ";
-			cin >> n;
+			getline(cin.ignore(), n);
 			cout << endl;
 			cout << "Enter the age of the fish declared as an animal: ";
 			cin >> a;
@@ -94,7 +94,7 @@ int main()
 			break;
 		case 5:
 			cout << "Enter the name of the horse: ";
-			cin >> n;
+			getline(cin.ignore(), n);
 			cout << endl;
 			cout << "Enter the age of the horse: ";
 			cin >> a;
