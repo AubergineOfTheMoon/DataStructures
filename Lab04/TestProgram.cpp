@@ -39,18 +39,19 @@ int main()
 		case 1:
 			cout << "Enter the name of the animal: ";
 			getline(cin.ignore(), n);
-			cout << endl;
 			cout << "Enter the age of the animal: ";
 			cin >> a;
 			animal1 = Animal(n, a);
+			cout << "Name " << animal1.getName() << " age " << animal1.getAge() << endl;
+			cout << "Derived move and eat" << endl;
 			animal1.move();
 			animal1.eat();
+			cout << "Base move and eat" << endl;
 			callClassFunc(&animal1);
 			break;
 		case 2:
 			cout << "Enter the name of the fish: ";
 			getline(cin.ignore(), n);
-			cout << endl;
 			cout << "Enter the age of the fish: ";
 			cin >> a;
 			cout << endl;
@@ -58,14 +59,20 @@ int main()
 			cin >> f;
 			fresh = (bool)f;
 			fish1 = Fish(n, a, fresh);
+			cout << "Name " << fish1.getName() << " age " << fish1.getAge() << endl;
+			cout << "Derived move and eat" << endl;
 			fish1.move();
 			fish1.eat();
+			cout << "Base move and eat" << endl;
 			callClassFunc(&fish1);
+			if (fish1.getFreshWater())
+				cout << "It is freshwater" << endl;
+			else
+				cout << "It is not freshwater" << endl;
 			break;
 		case 3:
 			cout << "Enter the name of the horse: ";
 			getline(cin.ignore(), n);
-			cout << endl;
 			cout << "Enter the age of the horse: ";
 			cin >> a;
 			cout << endl;
@@ -73,14 +80,19 @@ int main()
 			cin >> m;
 			mini = (bool)m;
 			horse1 = Horse(n, a, mini);
+			cout << "Name " << horse1.getName() << " age " << horse1.getAge() << endl;
+			cout << "Derived move and eat" << endl;
 			horse1.move();
 			horse1.eat();
+			cout << "Base move and eat" << endl;
 			callClassFunc(&horse1);
-			break;
+			if (horse1.getIsMini())
+				cout << "It is mini" << endl;
+			else
+				cout << "It is not mini" << endl;			break;
 		case 4:
-			cout << "Enter the name of the fishde declared as an animal: ";
+			cout << "Enter the name of the fish declared as an animal: ";
 			getline(cin.ignore(), n);
-			cout << endl;
 			cout << "Enter the age of the fish declared as an animal: ";
 			cin >> a;
 			cout << endl;
@@ -88,14 +100,20 @@ int main()
 			cin >> f;
 			fresh = (bool)f;
 			fish1 = Fish(n, a, fresh);
+			cout << "Name " << fish1.getName() << " age " << fish1.getAge() << endl;
+			cout << "Derived move and eat" << endl;
 			fish1.move();
 			fish1.eat();
+			cout << "Base move and eat" << endl;
 			callClassFunc(&fish1);
+			if (fish1.getFreshWater())
+				cout << "It is freshwater" << endl;
+			else
+				cout << "It is not freshwater" << endl;
 			break;
 		case 5:
 			cout << "Enter the name of the horse: ";
 			getline(cin.ignore(), n);
-			cout << endl;
 			cout << "Enter the age of the horse: ";
 			cin >> a;
 			cout << endl;
@@ -103,9 +121,16 @@ int main()
 			cin >> m;
 			mini = (bool)m;
 			horse1 = Horse(n, a, mini);
+			cout << "Name " << horse1.getName() << " age " << horse1.getAge() << endl;
+			cout << "Derived move and eat" << endl;
 			horse1.move();
 			horse1.eat();
+			cout << "Base move and eat" << endl;
 			callClassFunc(&horse1);
+			if (horse1.getIsMini())
+				cout << "It is mini" << endl;
+			else
+				cout << "It is not mini" << endl;
 			break;
 		default: cout << "Invalid input. Please enter 1, 2, 3, 4 or 5 to select a choice." << endl;
 			break;
