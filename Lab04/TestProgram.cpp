@@ -28,7 +28,7 @@ int main()
 		cin >> choice;
 		string n;
 		float a=0.0;
-		Animal animal1;
+		Animal animal1, fish2, horse2;
 		Fish fish1;
 		Horse horse1;
 		bool mini = false;
@@ -89,7 +89,8 @@ int main()
 			if (horse1.getIsMini())
 				cout << "It is mini" << endl;
 			else
-				cout << "It is not mini" << endl;			break;
+				cout << "It is not mini" << endl;
+			break;
 		case 4:
 			cout << "Enter the name of the fish declared as an animal: ";
 			getline(cin.ignore(), n);
@@ -99,38 +100,30 @@ int main()
 			cout << "Enter 1 if the fish declared as an animal is freshwater. Enter 0 if it is not: ";
 			cin >> f;
 			fresh = (bool)f;
-			fish1 = Fish(n, a, fresh);
-			cout << "Name " << fish1.getName() << " age " << fish1.getAge() << endl;
+			fish2 = Fish(n, a, fresh);
+			cout << "Name " << fish2.getName() << " age " << fish2.getAge() << endl;
 			cout << "Derived move and eat" << endl;
-			fish1.move();
-			fish1.eat();
+			fish2.move();
+			fish2.eat();
 			cout << "Base move and eat" << endl;
-			callClassFunc(&fish1);
-			if (fish1.getFreshWater())
-				cout << "It is freshwater" << endl;
-			else
-				cout << "It is not freshwater" << endl;
+			callClassFunc(&fish2);
 			break;
 		case 5:
-			cout << "Enter the name of the horse: ";
+			cout << "Enter the name of the horse as an animal: ";
 			getline(cin.ignore(), n);
-			cout << "Enter the age of the horse: ";
+			cout << "Enter the age of the horse as an animal: ";
 			cin >> a;
 			cout << endl;
 			cout << "Enter 1 if the horse is miniature. Enter 0 if it is not: ";
 			cin >> m;
 			mini = (bool)m;
-			horse1 = Horse(n, a, mini);
-			cout << "Name " << horse1.getName() << " age " << horse1.getAge() << endl;
+			horse2 = Horse(n, a, mini);
+			cout << "Name " << horse2.getName() << " age " << horse2.getAge() << endl;
 			cout << "Derived move and eat" << endl;
-			horse1.move();
-			horse1.eat();
+			horse2.move();
+			horse2.eat();
 			cout << "Base move and eat" << endl;
-			callClassFunc(&horse1);
-			if (horse1.getIsMini())
-				cout << "It is mini" << endl;
-			else
-				cout << "It is not mini" << endl;
+			callClassFunc(&horse2);
 			break;
 		default: cout << "Invalid input. Please enter 1, 2, 3, 4 or 5 to select a choice." << endl;
 			break;
