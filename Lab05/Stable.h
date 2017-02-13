@@ -11,7 +11,7 @@ private:
 	int currentHorseNum;
 public:
 	Stable();
-	void addHorse(Horse);
+	void addHorse(Horse*);
 	Horse removeHorse();
 	int getHorseNum();
 };

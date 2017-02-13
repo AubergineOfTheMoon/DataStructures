@@ -12,8 +12,8 @@ Stable::Stable() {
 	currentHorseNum = 0;
 }
 
-void Stable::addHorse(Horse h) {
-	horsesInStable[currentHorseNum] = h;
+void Stable::addHorse(Horse* h) {
+	horsesInStable[currentHorseNum] = *h;
 	currentHorseNum++;
 }
 
