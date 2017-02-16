@@ -13,13 +13,25 @@ Stable::Stable() {
 }
 
 void Stable::addHorse(Horse* h) {
-	horsesInStable[currentHorseNum] = *h;
-	currentHorseNum++;
+	if (currentHorseNum < maxHorses) {
+		horsesInStable[currentHorseNum] = *h;
+		currentHorseNum++;
+	}
+	else {
+		throw FullStable(currentHorseNum + 1);
+	}
+
 }
 
 Horse Stable::removeHorse() {
-	currentHorseNum--;
-	return horsesInStable[currentHorseNum];
+	if (currentHorseNum > 0) {
+		currentHorseNum--;
+		return horsesInStable[currentHorseNum];
+	}
+	else {
+		throw EmptyStable();
+	}
+
 }
 
 int Stable::getHorseNum() {

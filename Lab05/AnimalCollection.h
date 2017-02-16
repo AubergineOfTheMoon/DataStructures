@@ -1,4 +1,6 @@
 #pragma once
+// TODO: Task 4 needs completion Change this 
+//		 header file to take in the needs of task 4
 #ifndef STABLE_H
 #define STABLE_H
 #include "Horse.h"
@@ -16,7 +18,7 @@ public:
 	int getHorseNum();
 	class FullStable;
 	class EmptyStable;
-	
+
 	//FullStable Class Definition
 	class FullStable {
 	private:
