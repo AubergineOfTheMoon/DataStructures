@@ -27,6 +27,12 @@
     <ClCompile Include="Lab05.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Lab04\Fish.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lab05_Task04.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Lab04\Animal.h">
@@ -36,6 +42,15 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Stable.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Lab04\Fish.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Lab05_Task04.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimalCollection.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

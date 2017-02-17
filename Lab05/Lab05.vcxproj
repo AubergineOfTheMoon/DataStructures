@@ -143,13 +143,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Lab04\Animal.cpp" />
+    <ClCompile Include="..\Lab04\Fish.cpp" />
     <ClCompile Include="..\Lab04\Horse.cpp" />
     <ClCompile Include="Lab05.cpp" />
+    <ClCompile Include="Lab05_Task04.cpp" />
     <ClCompile Include="Stable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Lab04\Animal.h" />
+    <ClInclude Include="..\Lab04\Fish.h" />
     <ClInclude Include="..\Lab04\Horse.h" />
+    <ClInclude Include="AnimalCollection.h" />
+    <ClInclude Include="Lab05_Task04.h" />
     <ClInclude Include="Stable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

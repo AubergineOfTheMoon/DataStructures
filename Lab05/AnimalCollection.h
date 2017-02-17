@@ -1,37 +1,70 @@
 #pragma once
-// TODO: Task 4 needs completion Change this 
-//		 header file to take in the needs of task 4
-#ifndef STABLE_H
-#define STABLE_H
-#include "Horse.h"
+#ifndef ANIMALCOLLECTION_H
+#define ANIMALCOLLECTION_H
 
-const int maxHorses = 2;
+const int maxAnimals = 2;
 
-class Stable {
+template <class T> class AnimalCollection {
 private:
-	Horse horsesInStable[maxHorses];
-	int currentHorseNum;
+	T *animalsInCollection;
+	int currentAnimalNum;
 public:
-	Stable();
-	void addHorse(Horse*);
-	Horse removeHorse();
-	int getHorseNum();
-	class FullStable;
-	class EmptyStable;
+	AnimalCollection();
+	void addAnimal(T*);
+	T removeAnimal();
+	int getAnimalNum();
+	class FullCollection;
+	class EmptyCollection;
 
-	//FullStable Class Definition
-	class FullStable {
+	//FullCollection Class Definition
+	class FullAnimalCollection {
 	private:
 		int index;
 	public:
-		FullStable(int i) { index = i; }
+		FullAnimalCollection(int i) { index = i; }
 		int getValue() { return index; }
 	};
-	//EmptyStable Class Definition
-	class EmptyStable {
+	//EmptyCollection Class Definition
+	class EmptyAnimalCollection {
 	public:
-		EmptyStable() { }
+		EmptyAnimalCollection() { }
 	};
 };
 
 #endif
+template <class T>
+inline AnimalCollection<T>::AnimalCollection() {
+	animalsInCollection = new T[maxAnimals];
+	currentAnimalNum = 0;
+};
+
+
+template<class T>
+inline void AnimalCollection<T>::addAnimal(T* h) {
+	if (currentAnimalNum < maxAnimals) {
+		animalsInCollection[currentAnimalNum] = *h;
+		currentAnimalNum++;
+	}
+	else {
+		throw FullAnimalCollection(currentAnimalNum + 1);
+	}
+
+};
+
+template<class T>
+inline T AnimalCollection<T>::removeAnimal() {
+	if (currentAnimalNum > 0) {
+		currentAnimalNum--;
+		return animalsInCollection[currentAnimalNum];
+	}
+	else {
+		throw EmptyAnimalCollection();
+	}
+
+};
+
+template<class T>
+inline int AnimalCollection<T>::getAnimalNum() {
+	return currentAnimalNum;
+};
+
