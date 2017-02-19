@@ -7,7 +7,8 @@
 using namespace std;
 
 int main() {
-	int action, m, age;
+	int action, m;
+	double age;
 	string name;
 	bool fresh;
 	AnimalCollection<Fish> happyFarms = AnimalCollection<Fish>();
@@ -22,8 +23,10 @@ int main() {
 			cout << "What is the name of this fish?" << endl;
 			getline(cin.ignore(), name);
 			cout << "Enter the age of the fish" << endl;
+			cin.clear();
 			cin >> age;
 			cout << "Is the fish freshwater? Enter 1 for yes and 0 for no" << endl;
+			cin.clear();
 			cin >> m;
 			fresh = bool(m);
 			// TODO: Set fishname and age
@@ -40,10 +43,10 @@ int main() {
 				cout << "I hate to see you go!\nRemoved fish: \nName- " + removedFish.getName() << endl;
 				cout << "Age: " << removedFish.getAge() << endl;
 				if (removedFish.getFreshWater()) {
-					cout << "Goodbye Mini fish!" << endl;
+					cout << "Goodbye fresh fish!" << endl;
 				}
 				else {
-					cout << "Goodbye Big fish" << endl;
+					cout << "Goodbye salty fish" << endl;
 				}
 			}
 			catch (AnimalCollection<Fish>::EmptyAnimalCollection) {

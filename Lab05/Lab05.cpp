@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int mainRENAME() {
+int main() {
 	int action, m, age;
 	string name;
 	bool mini;
