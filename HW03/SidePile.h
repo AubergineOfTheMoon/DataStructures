@@ -8,12 +8,14 @@ using namespace std;
 class SidePile {
 private:
 	int sidePile[5];
-	int cardsInSidePile;
+	int numCards;
 public:
 	SidePile();
-	void Push(int c);
-	int Pop();
-	int numCards();
+	void addCard(int c);
+	int playCard();
+	int getNumCards();
+	bool isEmpty();
+	bool isFull();
 };
 
 

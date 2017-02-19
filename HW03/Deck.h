@@ -10,9 +10,10 @@ public:
 	Deck();
 	int getCardsLeft();
 	int playCard();
-	void getWinnings(int y, int o);
+	void addCard(int);
+	void getWinnings(int, int, int, int );
 	bool isEmpty();
-	void Peek();
+	int Peek();
 
 };
 
