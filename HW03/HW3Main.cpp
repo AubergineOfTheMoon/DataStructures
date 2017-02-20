@@ -80,7 +80,7 @@ int main() {
 			cout << "Your card will come from your side pile." << endl;
 			userCardsPlayed[0] = userPlayer.sidepile.playCard();
 			userCardTotal = userCardsPlayed[0];
-			cout << "Your card is " << userCardsPlayed[0] << endl;
+			cout << "Your card's value is " << userCardsPlayed[0] << endl;
 
 			// If the side pile is not empty, play from the side pile.
 			if (!userPlayer.sidepile.isEmpty()) {
@@ -124,17 +124,33 @@ int main() {
 				switch (ans) {
 				case 1: userCardsPlayed[0] = userPlayer.deck.playCard();
 					break;
-				case 2:userCardsPlayed[0] = userPlayer.deck.playCard();
-					userCardsPlayed[1] = userPlayer.sidepile.playCard();
+				case 2:
+					// checks if the side pile is empty
+					if (!userPlayer.sidepile.isEmpty()) {
+						userCardsPlayed[0] = userPlayer.deck.playCard();
+						userCardsPlayed[1] = userPlayer.sidepile.playCard();
+					}
+					else {
+						cout << "Your side pile is empty!" << endl;
+						ans == 0;
+					}
 					break;
-				case 3:userPlayer.sidepile.addCard(userPlayer.deck.playCard());
-					userCardsPlayed[0] = userPlayer.deck.playCard();
-					cout << "The card has been placed in your sidepile. You have drawn the following card from your deck: " << userCardsPlayed[0] << endl;
+				case 3:
+					// Checks if the side pile is full
+					if (!userPlayer.sidepile.isFull()) {
+						userPlayer.sidepile.addCard(userPlayer.deck.playCard());
+						userCardsPlayed[0] = userPlayer.deck.playCard();
+						cout << "The card has been placed in your sidepile. You have drawn the following card from your deck: " << userCardsPlayed[0] << endl;
+					}
+					else {
+						cout << "Your side pile is full!" << endl;
+						ans == 0;
+					}
 					break;
 				default:
 					cout << "Please read the instructions on the screen and enter 1, 2 or 3." << endl;
 					ans = 0;
-				} //TODO: Add error handling for if user enters a number without having that option available.
+				} 
 			} while (ans == 0);
 		}
 		userCardTotal = userCardsPlayed[0] + userCardsPlayed[1];
@@ -143,7 +159,7 @@ int main() {
 		if (!compPlayer.deck.isEmpty()) {
 			compCardTotal = compPlayer.deck.playCard();
 		}
-		else {
+		else { // if deck is empty, use up the side pile
 			compCardTotal = compPlayer.sidepile.playCard();
 		}
 
@@ -170,10 +186,10 @@ int main() {
 		cout << "Congratulations, " << userPlayer.getPlayerName() << "! You have won the game." << endl;
 	}
 	else if ((maxRounds != 10000000) && (userPlayer.roundsWon == compPlayer.roundsWon)) {
-		cout << "You and the computer have tied." << endl;
+		cout << endl << "You and the computer have tied." << endl;
 	}
 	else {	
-		cout << "The computer has won. The computer apocalypse is nearer. Be warned." << endl;
+		cout << endl << "The computer has won. The computer apocalypse is nearer. Be warned." << endl;
 	}
 	getchar();
 	return 0;
@@ -211,7 +227,8 @@ int selectGameStyle() {
 }
 
 int* shuffleCards() {
-	int cards[] = { 1,2,3,4,5,6,7,8,9,10,11,12,13, 1,2,3,4,5,6,7,8,9,10,11,12,13, 1,2,3,4,5,6,7,8,9,10,11,12,13, 1,2,3,4,5,6,7,8,9,10,11,12,13 };
+	// 2 - 14, 2 - Ace values
+	int cards[] = { 2,3,4,5,6,7,8,9,10,11,12,13,14, 2,3,4,5,6,7,8,9,10,11,12,13,14, 2,3,4,5,6,7,8,9,10,11,12,13,14, 2,3,4,5,6,7,8,9,10,11,12,13,14 };
 	int card1, card2, index, card;
 
 	// Shuffle cards

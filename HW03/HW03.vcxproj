@@ -143,10 +143,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Deck.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="SidePile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Deck.cpp" />
+    <ClCompile Include="HW3Main.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="SidePile.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
