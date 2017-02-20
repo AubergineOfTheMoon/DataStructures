@@ -2,6 +2,9 @@
 #ifndef STACK_H
 #define STACK_H
 
+template <class T>
+string returnStackValues(T* a[]);
+
 template <class T> class Stack {
 
 private:
@@ -16,7 +19,7 @@ public:
 	T* top();
 	int length();
 	void empty();
-	// friend string returnStackValues();
+	friend string returnStackValues(T* a[]);
 	// TODO: friend friendFunction();
 };
 
