@@ -6,12 +6,12 @@ template <class T> class Stack {
 
 private:
 	int max;
-	T *list[];
+	T** list;
 	int topOfList;
 	
 public:
 	Stack(int);
-	void push(T*);
+	void push(T *ptr);
 	T* pop();
 	T* top();
 	int length();
@@ -26,8 +26,8 @@ template <class T>
 inline Stack<T>::Stack(int m) {
 	topOfList = 0;
 	max = m;
-	list = new list[max];
-};
+	list = new T*[max];
+}
 
 template <class T>
 inline void Stack<T>::push(T* ptr) {
