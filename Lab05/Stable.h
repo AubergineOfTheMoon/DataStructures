@@ -3,7 +3,7 @@
 #define STABLE_H
 #include "Horse.h"
 
-const int maxHorses = 2;
+const int maxHorses = 10;
 
 class Stable {
 private:

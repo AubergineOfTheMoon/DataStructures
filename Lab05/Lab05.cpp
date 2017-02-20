@@ -6,7 +6,8 @@
 using namespace std;
 
 int main() {
-	int action, m, age;
+	int action, m;
+	double age;
 	string name;
 	bool mini;
 	Stable happyFarms;

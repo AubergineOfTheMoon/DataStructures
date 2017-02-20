@@ -2,7 +2,7 @@
 #ifndef ANIMALCOLLECTION_H
 #define ANIMALCOLLECTION_H
 
-const int maxAnimals = 2;
+const int maxAnimals = 10;
 
 template <class T> class AnimalCollection {
 private:
