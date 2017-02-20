@@ -9,7 +9,7 @@ using namespace std;
 #include "Player.h"
 
 int selectGameStyle();
-int* shuffleCards();
+int* shuffleCards(int [52]);
 
 int main() {
 	srand(time(NULL));
@@ -25,13 +25,13 @@ int main() {
 	userPlayer.deck = Deck();
 	compPlayer.deck = Deck();
 
-	Player players[] = { userPlayer, compPlayer };
 	//Select Game Style Preference (to the death or by number of rounds to win)
 	maxRounds = selectGameStyle();
 
 	// Shuffle cards.
-	int* cards =shuffleCards();
-	
+	int cardsUnshuffled[52] = { 2,3,4,5,6,7,8,9,10,11,12,13,14, 2,3,4,5,6,7,8,9,10,11,12,13,14, 2,3,4,5,6,7,8,9,10,11,12,13,14, 2,3,4,5,6,7,8,9,10,11,12,13,14 };
+	int* cards = shuffleCards(cardsUnshuffled);
+
 	// Deal cards.
 	for (int j = 0; j < 52; j++) {
 		// Add cards to sidepile of user
@@ -54,7 +54,6 @@ int main() {
 			compPlayer.deck.addCard(cards[j]);
 		}
 	}
-
 
 	int userSideCard=0, userMainCard=0, playerNum=0, userCardTotal, compCardTotal;
 	int userCardsPlayed[] = {0, 0}; // Stores the cards played by the user in a round
@@ -132,7 +131,7 @@ int main() {
 					}
 					else {
 						cout << "Your side pile is empty!" << endl;
-						ans == 0;
+						ans = 0;
 					}
 					break;
 				case 3:
@@ -144,7 +143,7 @@ int main() {
 					}
 					else {
 						cout << "Your side pile is full!" << endl;
-						ans == 0;
+						ans = 0;
 					}
 					break;
 				default:
@@ -226,10 +225,9 @@ int selectGameStyle() {
 	return maxRounds;
 }
 
-int* shuffleCards() {
+int* shuffleCards(int cards[52]) {
 	// 2 - 14, 2 - Ace values
-	int cards[] = { 2,3,4,5,6,7,8,9,10,11,12,13,14, 2,3,4,5,6,7,8,9,10,11,12,13,14, 2,3,4,5,6,7,8,9,10,11,12,13,14, 2,3,4,5,6,7,8,9,10,11,12,13,14 };
-	int card1, card2, index, card;
+	int card1, card2, index;
 
 	// Shuffle cards
 	for (int i = 0; i < 52; i++) {

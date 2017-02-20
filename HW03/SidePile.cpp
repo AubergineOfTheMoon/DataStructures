@@ -21,8 +21,8 @@ void SidePile::addCard(int c) {
 
 int SidePile::playCard() {
 	// Remove and return the first card in the Side Pile.
-	int retCard = sidePile[numCards];
 	numCards--;
+	int retCard = sidePile[numCards];
 	return retCard;
 }
 
