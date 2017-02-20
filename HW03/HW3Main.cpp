@@ -87,15 +87,24 @@ int main() {
 				do {
 					cout << "You have " << userPlayer.deck.getCardsLeft() << " cards in your deck and " << userPlayer.sidepile.getNumCards() << " cards in your side pile." << endl;
 					cout << "You have the following moves. " << endl;
-					cout << "1. You can play another card from your side pile." << endl;
-					cout << "2. You can stick with playing the card you have." << endl;
-					cout << "Please enter 1 or 2 to choose your move: ";
+					cout << "1. You can stick with playing the card you have." << endl;
+					if (userPlayer.sidepile.getNumCards() > 1) {
+						cout << "2. You can play another card from your side pile." << endl;
+					}
+					cout << "Please enter a number to choose your move: ";
 					cin >> ans;
 					cout << endl;
 					switch (ans) {
-					case 1: userCardsPlayed[1] = userPlayer.sidepile.playCard();
+					case 1: break;
+					case 2: 
+						if (userPlayer.sidepile.getNumCards() > 1) {
+							userCardsPlayed[1] = userPlayer.sidepile.playCard();
+						}
+						else {
+							cout << "You do not have enough cards in your side pile for this option. Choose another option." << endl;
+							ans = 0;
+						}
 						break;
-					case 2: break;
 					default: ans = 0;
 						break;
 					}
@@ -113,7 +122,7 @@ int main() {
 				if (!userPlayer.sidepile.isEmpty()) { // If the side pile is not empty, the user has the option of playing a card from the side pile.
 					cout << "2. You can play this card along with another card from your side pile" << endl;
 				}
-				if (!userPlayer.sidepile.isFull()) { // If the side pile is not full, the user can add a card to the side pile.
+				if (!userPlayer.sidepile.isFull() && (userPlayer.deck.getCardsLeft() > 1)) { // If the side pile is not full, the user can add a card to the side pile.
 					cout << "3. You can add this card to your side pile." << endl;
 				}
 				cout << "Enter a number based on your choice: ";
@@ -125,7 +134,7 @@ int main() {
 					break;
 				case 2:
 					// checks if the side pile is empty
-					if (!userPlayer.sidepile.isEmpty()) {
+					if (!userPlayer.sidepile.isEmpty() && (userPlayer.deck.getCardsLeft() > 1)) {
 						userCardsPlayed[0] = userPlayer.deck.playCard();
 						userCardsPlayed[1] = userPlayer.sidepile.playCard();
 					}
@@ -202,7 +211,7 @@ int selectGameStyle() {
 		cout << "Which style would you like to play?" << endl;
 		cout << "1. Until one player is out of cards" << endl;
 		cout << "2. For a particular number of rounds of your choice." << endl;
-		cout << "Enter 1 or 2 to indicate your choice: ";
+		cout << "Enter a number to indicate your choice: ";
 		cin >> choice;
 		cout << endl;
 		switch (choice) {
