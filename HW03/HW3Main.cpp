@@ -134,7 +134,7 @@ int main() {
 					break;
 				case 2:
 					// checks if the side pile is empty
-					if (!userPlayer.sidepile.isEmpty() && (userPlayer.deck.getCardsLeft() > 1)) {
+					if (!userPlayer.sidepile.isEmpty()) {
 						userCardsPlayed[0] = userPlayer.deck.playCard();
 						userCardsPlayed[1] = userPlayer.sidepile.playCard();
 					}
@@ -145,13 +145,13 @@ int main() {
 					break;
 				case 3:
 					// Checks if the side pile is full
-					if (!userPlayer.sidepile.isFull()) {
+					if (!userPlayer.sidepile.isFull()&& (userPlayer.deck.getCardsLeft()>1)) {
 						userPlayer.sidepile.addCard(userPlayer.deck.playCard());
 						userCardsPlayed[0] = userPlayer.deck.playCard();
 						cout << "The card has been placed in your sidepile. You have drawn the following card from your deck: " << userCardsPlayed[0] << endl;
 					}
 					else {
-						cout << "Your side pile is full!" << endl;
+						cout << "This is not a valid option. Either your side pile is full or you only have 1 card in your deck." << endl;
 						ans = 0;
 					}
 					break;
