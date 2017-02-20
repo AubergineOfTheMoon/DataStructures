@@ -8,12 +8,16 @@ const int maxHorses = 2;
 class Stable {
 private:
 	Horse horsesInStable[maxHorses];
-	int currentHorseNum;
+	int currentHorseNum; // This number represents the number of horses in the stable 
+	                     // and indicates the next open space in the stable.
+
 public:
 	Stable();
 	void addHorse(Horse*);
 	Horse removeHorse();
 	int getHorseNum();
+
+	// Exception classes for a full stable and an empty stable
 	class FullStable;
 	class EmptyStable;
 	
@@ -25,6 +29,7 @@ public:
 		FullStable(int i) { index = i; }
 		int getValue() { return index; }
 	};
+
 	//EmptyStable Class Definition
 	class EmptyStable {
 	public:

@@ -6,13 +6,17 @@ const int maxAnimals = 2;
 
 template <class T> class AnimalCollection {
 private:
-	T *animalsInCollection;
-	int currentAnimalNum;
+	T *animalsInCollection; // array of animals in animal collection
+	int currentAnimalNum;   // Variable that stores number of animals in the collection
+	                        // and the next open space in the animal collection. 
+
 public:
-	AnimalCollection();
+	AnimalCollection(); 
 	void addAnimal(T*);
 	T removeAnimal();
 	int getAnimalNum();
+	
+	// Exception classes
 	class FullCollection;
 	class EmptyCollection;
 
@@ -32,8 +36,11 @@ public:
 };
 
 #endif
+
+
 template <class T>
 inline AnimalCollection<T>::AnimalCollection() {
+	// Default constructor for animal collection
 	animalsInCollection = new T[maxAnimals];
 	currentAnimalNum = 0;
 };
@@ -41,6 +48,7 @@ inline AnimalCollection<T>::AnimalCollection() {
 
 template<class T>
 inline void AnimalCollection<T>::addAnimal(T* h) {
+	// Add animal to animal collection
 	if (currentAnimalNum < maxAnimals) {
 		animalsInCollection[currentAnimalNum] = *h;
 		currentAnimalNum++;
@@ -53,6 +61,7 @@ inline void AnimalCollection<T>::addAnimal(T* h) {
 
 template<class T>
 inline T AnimalCollection<T>::removeAnimal() {
+	// Remove animal from animal collection
 	if (currentAnimalNum > 0) {
 		currentAnimalNum--;
 		return animalsInCollection[currentAnimalNum];
@@ -65,6 +74,6 @@ inline T AnimalCollection<T>::removeAnimal() {
 
 template<class T>
 inline int AnimalCollection<T>::getAnimalNum() {
+	// Return number of animals in the collection.
 	return currentAnimalNum;
 };
-
