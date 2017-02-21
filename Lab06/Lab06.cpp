@@ -7,18 +7,28 @@ using namespace std;
 int main() {
 	Stack<string> ptrStack = Stack<string>(4);// This is currently overriden 
 	string a = "20", b = "big", c = "blue", d = "30, 000";
-	cout << "Push: " << endl;
+	cout << "Push: " << a << endl;
 	ptrStack.push(&a);
-	cout << "Top: \n"<< *ptrStack.top() << endl;
-	cout << "Pop: \n" << ptrStack.pop() << endl;
+	cout << "Top: " << *ptrStack.top() << endl;
+	cout << "Pop: " << ptrStack.pop() << endl;
 	ptrStack.push(&a);
 	ptrStack.push(&b);
 	ptrStack.push(&c);
 	ptrStack.push(&d);
+	try {
+		ptrStack.push(&d);
+		ptrStack.push(&d);
+		ptrStack.push(&d);
+	}
+	catch (Stack<string>::StackOverflow e) {
+		cout << "ERROR: Cannot have " << e.getValue() << " items in the stack" << endl;
+	}
 	cout << ptrStack.returnStackString() << endl;
-	cout << "Length: "<< ptrStack.length() << endl;
+	cout << "Length: " << ptrStack.length() << endl;
 	ptrStack.empty();
 	cout << ptrStack.length() << endl;
+
+	cout << endl;
 
 	Stack<int> ptrStackint = Stack<int>(4);// This is currently overriden 
 	int a1 = 20, b1 = 0, c1 = 4001, d1 = 1234321;
@@ -34,4 +44,10 @@ int main() {
 	cout << "Length: " << ptrStackint.length() << endl;
 	ptrStackint.empty();
 	cout << ptrStackint.length() << endl;
+	try {
+		ptrStackint.pop();
+	}
+	catch (Stack<int>::StackUnderflow){
+		cout << "ERROR: StackUnderflow, stack is empty" << endl;
+	}
 }

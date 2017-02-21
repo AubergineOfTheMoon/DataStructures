@@ -6,6 +6,11 @@
 using namespace std;
 
 template <class T> class Stack {
+private:
+	int max = 4;
+	int topOfList;
+	T** list = new T*[4];
+
 public:
 	Stack(int);
 	void push(T *ptr);
@@ -14,10 +19,23 @@ public:
 	int length();
 	void empty();
 	string returnStackString();
-private:
-	int max;
-	int topOfList;
-	T** list = new T*[4];
+
+
+	//FullStable Class Definition
+	class StackOverflow {
+	private:
+		int index;
+	public:
+		StackOverflow(int i) { index = i; }
+		int getValue() { return index; }
+	};
+
+
+	//StackUnderflow Class Definition
+	class StackUnderflow {
+	public:
+		StackUnderflow() { }
+	};
 };
 
 #endif
@@ -26,26 +44,40 @@ private:
 template <class T>
 inline Stack<T>::Stack(int m) {
 	topOfList = 0;
-	max = m;
+	//max = m;
 	//list = new T*[m];
 }
 
 template <class T>
 inline void Stack<T>::push(T* ptr) {
-	list[topOfList] = ptr;
-	topOfList++;
-}; // TODO: Check for stack overflow
+	if (topOfList == max) {
+		throw StackOverflow(topOfList + 1);
+	}
+	else {
+		list[topOfList] = ptr;
+		topOfList++;
+	}
+};
 
 template <class T>
 inline T* Stack<T>::pop() {
-	topOfList--;
-	return list[topOfList];
-}; //TODO: Check for stack underflow
+	if (topOfList < 1) {
+		throw StackUnderflow();
+	}else{
+		topOfList--;
+		return list[topOfList];
+	}
+}; 
 
 template <class T>
 inline T* Stack<T>::top() {
-	return list[topOfList - 1];
-}; // TODO: Error checking i.e. Empty
+	if (topOfList < 1) {
+		throw StackUnderflow();
+	}
+	else {
+		return list[topOfList - 1];
+	}
+}; 
 
 template <class T>
 inline int Stack<T>::length() {
@@ -76,3 +108,6 @@ inline string Stack<string>::returnStackString() {
 	}
 	return rtn;
 }
+
+
+
