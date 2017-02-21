@@ -7,9 +7,9 @@ using namespace std;
 
 template <class T> class Stack {
 private:
-	int max = 4;
-	int topOfList;
-	T** list = new T*[4];
+	int max = 6; // the last available spot + 1
+	int topOfList; // the top of the stack
+	T** list = new T*[6]; // pointer array
 
 public:
 	Stack(int);
@@ -18,7 +18,9 @@ public:
 	T* top();
 	int length();
 	void empty();
-	string returnStackString();
+	T* returnStackListItem(int);
+	bool isEmpty();
+	bool isFull();
 
 
 	//FullStable Class Definition
@@ -44,6 +46,9 @@ public:
 template <class T>
 inline Stack<T>::Stack(int m) {
 	topOfList = 0;
+	for (int i = 0; i < max; i++) {
+		list[i] = nullptr;
+	}
 	//max = m;
 	//list = new T*[m];
 }
@@ -93,21 +98,19 @@ inline void Stack<T>::empty() {
 };
 
 template <class T>
-inline string Stack<T>::returnStackString() {
-	string rtn = "";
-	for (int i = 0; i < topOfList; i++) {
-		rtn += to_string(*list[i]) + " ";
+inline T*  Stack<T>::returnStackListItem(int index) {
+	if (index >= topOfList) { //if the stack's top is less than the requested index, return a nullptr instead
+		return nullptr;
 	}
-	return rtn;
+	return list[index];
 }
 
-inline string Stack<string>::returnStackString() {
-	string rtn = "";
-	for (int i = 0; i < topOfList; i++) {
-		rtn += *list[i] + " ";
-	}
-	return rtn;
+template <class T>
+inline bool Stack<T>::isEmpty() {
+	return topOfList == 0;
 }
 
-
-
+template <class T>
+inline bool Stack<T>::isFull() {
+	return topOfList == max;
+}
