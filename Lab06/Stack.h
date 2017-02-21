@@ -6,9 +6,6 @@
 using namespace std;
 
 template <class T> class Stack {
-
-
-	
 public:
 	Stack(int);
 	void push(T *ptr);
@@ -20,7 +17,7 @@ public:
 private:
 	int max;
 	int topOfList;
-	T** list;
+	T** list = new T*[4];
 };
 
 #endif
@@ -30,7 +27,7 @@ template <class T>
 inline Stack<T>::Stack(int m) {
 	topOfList = 0;
 	max = m;
-	list = new T*[m];
+	//list = new T*[m];
 }
 
 template <class T>
@@ -58,7 +55,6 @@ inline int Stack<T>::length() {
 template <class T>
 inline void Stack<T>::empty() {
 	for (int i = 0; i < topOfList; i++) {
-		delete list[i];
 		list[i] = nullptr;
 	}
 	topOfList = 0;
@@ -66,6 +62,14 @@ inline void Stack<T>::empty() {
 
 template <class T>
 inline string Stack<T>::returnStackString() {
+	string rtn = "";
+	for (int i = 0; i < topOfList; i++) {
+		rtn += to_string(*list[i]) + " ";
+	}
+	return rtn;
+}
+
+inline string Stack<string>::returnStackString() {
 	string rtn = "";
 	for (int i = 0; i < topOfList; i++) {
 		rtn += *list[i] + " ";
