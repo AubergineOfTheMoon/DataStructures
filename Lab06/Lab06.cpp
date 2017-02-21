@@ -4,16 +4,6 @@
 
 using namespace std;
 
-template<class T>
-string Stack<T>::returnStackValues()
-{
-	string rtn = "";
-	for (int i = 0; i < top; i++) {
-		rtn += *list[i] + " ";
-	}
-	return rtn;
-}
-
 int main() {
 	Stack<int> ptrStack = Stack<int>(4);
 	int a = 3;
@@ -28,15 +18,8 @@ int main() {
 	ptrStack.push(&b);
 	ptrStack.push(&c);
 	ptrStack.push(&d);
-	cout << ptrStack.returnStackValues() << endl;
+	cout << ptrStack.returnStackString() << endl;
 	cout << "Length: "<< ptrStack.length() << endl;
 	ptrStack.empty();
 	cout << ptrStack.length() << endl;
 }
-
-
-/*string rtn = "";
-	for (int i = 0; i < T.top; i++) {
-		rtn += *T.list[i] + " ";
-	}
-	return rtn;*/

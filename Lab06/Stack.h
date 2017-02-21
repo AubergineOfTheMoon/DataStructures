@@ -2,15 +2,12 @@
 #ifndef STACK_H
 #define STACK_H
 
-template <class T>
-string returnStackValues(T* a[]);
+#include <string>
+using namespace std;
 
 template <class T> class Stack {
 
-private:
-	int max;
-	T** list;
-	int topOfList;
+
 	
 public:
 	Stack(int);
@@ -19,17 +16,21 @@ public:
 	T* top();
 	int length();
 	void empty();
-	friend string returnStackValues(T* a[]);
-	// TODO: friend friendFunction();
+	string returnStackString();
+private:
+	int max;
+	int topOfList;
+	T** list;
 };
 
 #endif
+#include <string>
 
 template <class T>
 inline Stack<T>::Stack(int m) {
 	topOfList = 0;
 	max = m;
-	list = new T*[max];
+	list = new T*[m];
 }
 
 template <class T>
@@ -63,3 +64,11 @@ inline void Stack<T>::empty() {
 	topOfList = 0;
 };
 
+template <class T>
+inline string Stack<T>::returnStackString() {
+	string rtn = "";
+	for (int i = 0; i < topOfList; i++) {
+		rtn += *list[i] + " ";
+	}
+	return rtn;
+}
