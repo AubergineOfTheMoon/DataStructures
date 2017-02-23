@@ -4,32 +4,32 @@
 
 using namespace std;
 
-void displayTowers(Stack<int> l, Stack<int> m, Stack<int> r, int size) { //size is numDisks
+void displayTowers(Stack<int> &l, Stack<int> &m, Stack<int> &r, int size) { //size is numDisks
 
 	// adds first line
 	string t = "\t|\t|\t|";
 	string ls, ms, rs;
 
 	// gets the appropriate values from the stack
-	// if it is a nullptr or a 0 make it a | 
+	// if it is a nullptr make it a | 
 	for (int i = size-1; i >= 0; i--) {
-		if (l.returnStackListItem(i) == nullptr || *l.returnStackListItem(i) == 0) {
+		if (getItem(l, i) == nullptr) { // || getItem(l, i) == 0
 			ls = "|";
 		}
 		else {
-			ls = to_string(*l.returnStackListItem(i));
+			ls = to_string(*getItem(l, i));
 		}
-		if (m.returnStackListItem(i) == nullptr || *m.returnStackListItem(i) == 0) {
+		if (getItem(m, i) == nullptr) {
 			ms = "|";
 		}
 		else {
-			ms = to_string(*m.returnStackListItem(i));
+			ms = to_string(*getItem(m, i));
 		}
-		if (r.returnStackListItem(i) == nullptr || *r.returnStackListItem(i) == 0) {
+		if (getItem(r, i) == nullptr) {
 			rs = "|";
 		}
 		else {
-			rs = to_string(*r.returnStackListItem(i));
+			rs = to_string(*getItem(r, i));
 		}
 		t += "\n\t" + ls +"\t" + ms + "\t" + rs;
 	}
@@ -41,39 +41,30 @@ void displayTowers(Stack<int> l, Stack<int> m, Stack<int> r, int size) { //size 
 	cout << t;
 }
 
-bool canMove(int val, int tower) {
-	switch (val)
-	return true;
-}
-
 int main() {
 	cout << "Welcome to Towers of Hanoi!" << endl << endl;
 	cout << "How many disks would you like to use?: ";
 	int numDisks;
 	cin >> numDisks;
 
-	Stack<int> lTower = Stack<int>(6); //Should be num disks
-	Stack<int> mTower = Stack<int>(6);
-	Stack<int> rTower = Stack<int>(6);
+	Stack<int> lTower = Stack<int>(numDisks); //Should be num disks
+	Stack<int> mTower = Stack<int>(numDisks);
+	Stack<int> rTower = Stack<int>(numDisks);
 
-	int disks[] = { 1,2,3,4,5,6 };
-
-	lTower.push(&disks[5]);
-	lTower.push(&disks[4]);
-	lTower.push(&disks[3]);
-	lTower.push(&disks[2]);
-	lTower.push(&disks[1]);
-	lTower.push(&disks[0]);
+	int *disks = new int[numDisks];
+	for (int i = numDisks; i > 0; i--) {
+		disks[i] = i;
+		lTower.push(&disks[i]);
+	}
 
 	bool stillPlaying = true;
 	int tower;
 	Stack<int>* fromTower;
 	Stack<int>* toTower;
-	int* disk;
 
 	while (stillPlaying) {
 		cout << endl;
-		displayTowers(lTower, mTower, rTower, 6);
+		displayTowers(lTower, mTower, rTower, numDisks);
 		do {
 			// Pick up the disk
 			cout << "Choose the tower you would like to pick from: ";
@@ -121,11 +112,13 @@ int main() {
 			}
 			else if (toTower->isEmpty()) {
 				toTower->push(fromTower->pop());
+				// log move
 			}
 			else if (fromTower->top() > toTower->top()) {
 				cout << "That's an illegal move" << endl;
 			}else {
 				toTower->push(fromTower->pop());
+				// log move
 			}
 			if (mTower.isFull() || rTower.isFull()) {
 				cout << "A tower is full" << endl;
@@ -134,7 +127,5 @@ int main() {
 		} while (!(tower != 0 || tower != 2 || tower != 2) && toTower == fromTower);
 	}
 	cout << "Congratulations, you have won!" << endl;
+	displayTowers(lTower, mTower, rTower, numDisks);
 }
-
-
-
