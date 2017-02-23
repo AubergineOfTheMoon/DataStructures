@@ -55,7 +55,7 @@ template <class T>
 inline Stack<T>::Stack(int m) {
 	topOfList = 0;
 	max = m;
-	list = new T*[m];
+	list = new T*[max];
 	for (int i = 0; i < max; i++) {
 		list[i] = nullptr;
 	}

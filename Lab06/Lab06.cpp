@@ -43,10 +43,14 @@ void displayTowers(Stack<int> &l, Stack<int> &m, Stack<int> &r, int size) { //si
 
 int main() {
 	cout << "Welcome to Towers of Hanoi!" << endl << endl;
-	cout << "How many disks would you like to use?: ";
 	int numDisks;
-	cin >> numDisks;
-
+	do {
+		cout << "How many disks would you like to use?: ";
+		cin >> numDisks;
+		if (numDisks < 1) {
+			cout << "Please choose a positive number of disks" << endl;
+		}
+	} while (numDisks < 1);
 	Stack<int> lTower = Stack<int>(numDisks); //Should be num disks
 	Stack<int> mTower = Stack<int>(numDisks);
 	Stack<int> rTower = Stack<int>(numDisks);
@@ -84,9 +88,11 @@ int main() {
 					cout << "Choose a valid tower" << endl;
 					break;
 				}
+				fromTower->top();
 			}
 			catch (Stack<int>::StackUnderflow) {
 				cout << "This tower is empty, there are no disks to pick up" << endl;
+				continue;
 			}
 
 			// Put down the disk
@@ -107,8 +113,9 @@ int main() {
 				break;
 			}
 			
+
 			if (toTower == fromTower) {
-				cout << "I wouldn't recommend that move" << endl;
+				cout << "It's not really a move to pick up the disk and put it down in the same spot" << endl;
 			}
 			else if (toTower->isEmpty()) {
 				toTower->push(fromTower->pop());
