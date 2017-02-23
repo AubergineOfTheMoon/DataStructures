@@ -38,37 +38,43 @@ void displayTowers(Stack<int> &l, Stack<int> &m, Stack<int> &r, int size) { //si
 	t += "\n    |  (1)     (2)     (3)  |";
 	t += "\n    -------------------------\n";
 
+	// print the board
 	cout << t;
 }
 
 int main() {
 	cout << "Welcome to Towers of Hanoi!" << endl << endl;
 	int numDisks;
-	do {
+	
+	// get valid int
+	do { 
 		cout << "How many disks would you like to use?: ";
 		cin >> numDisks;
 		if (numDisks < 1) {
 			cout << "Please choose a positive number of disks" << endl;
 		}
 	} while (numDisks < 1);
-	Stack<int> lTower = Stack<int>(numDisks); //Should be num disks
+
+	// make 3 stacks, one for each tower
+	Stack<int> lTower = Stack<int>(numDisks); 
 	Stack<int> mTower = Stack<int>(numDisks);
 	Stack<int> rTower = Stack<int>(numDisks);
 
+	// makes a pointer array of disks, and pushes it to the left tower
 	int *disks = new int[numDisks];
 	for (int i = numDisks; i > 0; i--) {
-		disks[i] = i;
-		lTower.push(&disks[i]);
+		disks[i] = i; // fill the disk array
+		lTower.push(&disks[i]); // push the disk to the left tower
 	}
 
 	bool stillPlaying = true;
 	int tower;
-	Stack<int>* fromTower;
-	Stack<int>* toTower;
+	Stack<int>* fromTower; // the tower the disk comes from
+	Stack<int>* toTower; // the tower the disk goes
 
 	while (stillPlaying) {
 		cout << endl;
-		displayTowers(lTower, mTower, rTower, numDisks);
+		displayTowers(lTower, mTower, rTower, numDisks); 
 		do {
 			// Pick up the disk
 			cout << "Choose the tower you would like to pick from: ";
@@ -86,11 +92,12 @@ int main() {
 					break;
 				default:
 					cout << "Choose a valid tower" << endl;
+					continue; // restart the loop
 					break;
 				}
 				fromTower->top();
 			}
-			catch (Stack<int>::StackUnderflow) {
+			catch (Stack<int>::StackUnderflow) { // if the tower is empty, tell the user
 				cout << "This tower is empty, there are no disks to pick up" << endl;
 				continue;
 			}
@@ -110,22 +117,23 @@ int main() {
 				break;
 			default:
 				cout << "Choose a valid tower" << endl;
+				continue;
 				break;
 			}
 			
 
-			if (toTower == fromTower) {
+			if (toTower == fromTower) { // if you put the disk on the same tower it was picked up from
 				cout << "It's not really a move to pick up the disk and put it down in the same spot" << endl;
 			}
-			else if (toTower->isEmpty()) {
+			else if (toTower->isEmpty()) { // if toTower is empty, put the disk there
 				toTower->push(fromTower->pop());
-				// log move
+				// TODO Task 4: log move
 			}
 			else if (fromTower->top() > toTower->top()) {
 				cout << "That's an illegal move" << endl;
-			}else {
+			}else { // the last scenario is when you take a disk from a tower and put it on a non empty tower
 				toTower->push(fromTower->pop());
-				// log move
+				// TODO Task 4: log move
 			}
 			if (mTower.isFull() || rTower.isFull()) {
 				cout << "A tower is full" << endl;
