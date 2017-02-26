@@ -4,13 +4,13 @@
 
 using namespace std;
 
-struct Disk{
+struct Disk {
 	int diskNum;
 	string color;
 };
 void displayTowers(Stack<Disk> &l, Stack<Disk> &m, Stack<Disk> &r, int size) { //size is numDisks
 
-																			// adds first line
+																			   // adds first line
 	string t = "\t|\t|\t|";
 	string ls, ms, rs;
 
@@ -21,7 +21,7 @@ void displayTowers(Stack<Disk> &l, Stack<Disk> &m, Stack<Disk> &r, int size) { /
 			ls = "|";
 		}
 		else {
-			ls = to_string((*getItem(l, i)).diskNum)+" "+ (*getItem(l, i)).color;
+			ls = to_string((*getItem(l, i)).diskNum) + " " + (*getItem(l, i)).color;
 		}
 		if (getItem(m, i) == nullptr) {
 			ms = "|";
@@ -70,17 +70,18 @@ int main() {
 	Stack<Disk> rTower = Stack<Disk>(numDisks);
 
 	// makes a pointer array of disks, and pushes it to the left tower
-	Disk **disks = new Disk*[numDisks];
+	Disk *disks = new Disk[numDisks];
+	Disk *disks2 = new Disk[numDisks];
 	for (int i = numDisks; i > 0; i--) {
-		(*disks[i-1]).diskNum = i; // fill the disk array
-		(*disks[i-1]).color = "Blue";
-		lTower.push(disks[i-1]); // push the disk to the left tower
+		disks[i - 1].diskNum = i; // fill the disk array
+		disks[i - 1].color = "Blue";
+		lTower.push(&disks[i - 1]); // push the disk to the left tower
 	}
 	if (twoPlayer == 2) {
 		for (int i = numDisks; i > 0; i--) {
-			disks[i]->diskNum = i;
-			disks[i]->color = "Red ";
-			rTower.push(disks[i]);
+			disks2[i - 1].diskNum = i;
+			disks2[i - 1].color = "Red ";
+			rTower.push(&disks2[i - 1]);
 		}
 	}
 
@@ -153,12 +154,21 @@ int main() {
 				toTower->push(fromTower->pop());
 				// TODO Task 4: log move
 			}
-			if (mTower.isFull() || rTower.isFull()) {
-				cout << "A tower is full" << endl;
-				stillPlaying = false;
+			if (lTower.isFull() || rTower.isFull()) {
+				if ((lTower.top()->color.length() == 3) || (rTower.top()->color.length() == 4)) {
+					cout << "A tower is full" << endl;
+					stillPlaying = false;
+				}
 			}
 		} while (!(tower != 0 || tower != 2 || tower != 2) && toTower == fromTower);
 	}
-	cout << "Congratulations, you have won!" << endl;
+	string winner;
+	if (lTower.isFull()) {
+		winner = "Red";
+	}
+	else if (rTower.isFull()) {
+		winner = "Blue";
+	}
+	cout << "Congratulations " << winner << " has won!" << endl;
 	displayTowers(lTower, mTower, rTower, numDisks);
 }
