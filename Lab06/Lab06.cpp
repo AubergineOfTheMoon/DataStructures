@@ -1,8 +1,15 @@
 #include <iostream>
 #include <string>
 #include "Stack.h"
-
+#include "Queue.h"
 using namespace std;
+
+struct Move {
+	int from;
+	int to;
+	int diskMoved;
+	string description;
+};
 
 void displayTowers(Stack<int> &l, Stack<int> &m, Stack<int> &r, int size) { //size is numDisks
 
@@ -59,7 +66,7 @@ int main() {
 	Stack<int> lTower = Stack<int>(numDisks); 
 	Stack<int> mTower = Stack<int>(numDisks);
 	Stack<int> rTower = Stack<int>(numDisks);
-
+	Queue<Move> movesQueue = Queue<Move>();
 	// makes a pointer array of disks, and pushes it to the left tower
 	int *disks = new int[numDisks];
 	for (int i = numDisks; i > 0; i--) {
@@ -69,6 +76,9 @@ int main() {
 
 	bool stillPlaying = true;
 	int tower;
+	int toTowerNum = 0;
+	int fromTowerNum = 0;
+	Move movePlayed;
 	Stack<int>* fromTower; // the tower the disk comes from
 	Stack<int>* toTower; // the tower the disk goes
 
@@ -83,12 +93,15 @@ int main() {
 				switch (tower) {
 				case 1:
 					fromTower = &lTower;
+					fromTowerNum = 1;
 					break;
 				case 2:
 					fromTower = &mTower;
+					fromTowerNum = 2;
 					break;
 				case 3:
 					fromTower = &rTower;
+					fromTowerNum = 3;
 					break;
 				default:
 					cout << "Choose a valid tower" << endl;
@@ -108,12 +121,15 @@ int main() {
 			switch (tower) {
 			case 1:
 				toTower = &lTower;
+				toTowerNum = 1;
 				break;
 			case 2:
 				toTower = &mTower;
+				toTowerNum = 2;
 				break;
 			case 3:
 				toTower = &rTower;
+				toTowerNum = 3;
 				break;
 			default:
 				cout << "Choose a valid tower" << endl;
@@ -124,16 +140,23 @@ int main() {
 
 			if (toTower == fromTower) { // if you put the disk on the same tower it was picked up from
 				cout << "It's not really a move to pick up the disk and put it down in the same spot" << endl;
+				movePlayed = {fromTowerNum, toTowerNum, *(fromTower->top()), "Disk cannot be moved to same spot. Invalid move not allowed."};
+				movesQueue.enqueue(movePlayed);
 			}
 			else if (toTower->isEmpty()) { // if toTower is empty, put the disk there
 				toTower->push(fromTower->pop());
-				// TODO Task 4: log move
+				movePlayed = { fromTowerNum, toTowerNum, *(toTower->top()), "" };
+				movesQueue.enqueue(movePlayed);
 			}
 			else if (fromTower->top() > toTower->top()) {
 				cout << "That's an illegal move" << endl;
-			}else { // the last scenario is when you take a disk from a tower and put it on a non empty tower
+				movePlayed = { fromTowerNum, toTowerNum, *(fromTower->top()), "Illegal move. Invalid move not allowed." };
+				movesQueue.enqueue(movePlayed);
+			}
+			else { // the last scenario is when you take a disk from a tower and put it on a non empty tower
 				toTower->push(fromTower->pop());
-				// TODO Task 4: log move
+				movePlayed = { fromTowerNum, toTowerNum, *(toTower->top()), "" };
+				movesQueue.enqueue(movePlayed);
 			}
 			if (mTower.isFull() || rTower.isFull()) {
 				cout << "A tower is full" << endl;
@@ -143,4 +166,12 @@ int main() {
 	}
 	cout << "Congratulations, you have won!" << endl;
 	displayTowers(lTower, mTower, rTower, numDisks);
+	cout << "The moves that led to victory were: " << endl;
+	int numMoves = movesQueue.length();
+	for (int i = 0; i < numMoves; i++) {
+		Move movePlayed = movesQueue.dequeue();
+		cout << "Moved disk " << movePlayed.diskMoved << " from tower " << movePlayed.from << " to tower " << movePlayed.to << " " << movePlayed.description << endl;
+	}
+
+	return 0;
 }

@@ -265,7 +265,7 @@ int main() {
 	int numMoves = movesQueue.length();
 	for (int i = 0; i < numMoves; i++) {
 		Move movePlayed = movesQueue.dequeue();
-		cout << "Player " << movePlayed.diskMoved.color << " moved disk "<<movePlayed.diskMoved.diskNum<< " from tower " << movePlayed.from << " to tower " << movePlayed.to << " " << movePlayed.description << endl;;
+		cout << "Player " << movePlayed.diskMoved.color << " moved disk "<<movePlayed.diskMoved.diskNum<< " from tower " << movePlayed.from << " to tower " << movePlayed.to << " " << movePlayed.description << endl;
 	
 	}
 	return 0;
