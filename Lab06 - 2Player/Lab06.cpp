@@ -104,24 +104,28 @@ int main() {
 		if (!lTower.isEmpty() && !mTower.isEmpty() && rTower.isEmpty()) {
 			if ((lTower.top()->color != playerColors[currentPlayer]) && (mTower.top()->color != playerColors[currentPlayer])) {
 				cout << "You have no possible moves." << endl;
+				currentPlayer = changePlayer(currentPlayer);
 				continue;
 			}
 		}
 		else if (!lTower.isEmpty() && mTower.isEmpty() && !rTower.isEmpty()) {
 			if ((lTower.top()->color != playerColors[currentPlayer]) && (rTower.top()->color != playerColors[currentPlayer])) {
 				cout << "You have no possible moves." << endl;
+				currentPlayer = changePlayer(currentPlayer);
 				continue;
 			}
 		}
 		else if (lTower.isEmpty() && !mTower.isEmpty() && !rTower.isEmpty()) {
 			if ((mTower.top()->color != playerColors[currentPlayer]) && (rTower.top()->color != playerColors[currentPlayer])) {
 				cout << "You have no possible moves." << endl;
+				currentPlayer = changePlayer(currentPlayer);
 				continue;
 			}
 		}
 		else if (!lTower.isEmpty() && !mTower.isEmpty() && !rTower.isEmpty()) {
 			if ((lTower.top()->color != playerColors[currentPlayer]) && (mTower.top()->color != playerColors[currentPlayer]) && (rTower.top()->color != playerColors[currentPlayer])) {
 				cout << "You have no possible moves." << endl;
+				currentPlayer = changePlayer(currentPlayer);
 				continue;
 			}
 		}
