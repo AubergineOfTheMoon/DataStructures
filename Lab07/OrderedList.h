@@ -212,13 +212,11 @@ inline bool OrderedList<T>::operator==(OrderedList lst) {
 
 // Derived Class With Back Linear Search
 
-template<class T>
-template <class OrderedList> class OrderedListBack{
+template <class T> class OrderedListBack : public OrderedList<T> {
 	void AddItem(T*);
 };
 
 template<class T>
-template<class OrderedList>
 inline void OrderedListBack<OrderedList>::AddItem(T*) {
 	if (pos >= max) {
 		throw OrderedListOverflow(topOfList + 1);
@@ -237,25 +235,3 @@ inline void OrderedListBack<OrderedList>::AddItem(T*) {
 
 // Task 3 Derived Class
 
-template<class T>
-template <class OrderedList> class OrderedListBack {
-	void AddItem(T*);
-};
-
-template<class T>
-template<class OrderedList>
-inline void OrderedListBack<OrderedList>::AddItem(T*) {
-	if (pos >= max) {
-		throw OrderedListOverflow(topOfList + 1);
-	}
-	else {
-		int counter = pos - 1;
-		while ((*ptr > *list[counter]) && (counter >= 0)) {
-			counter--;
-		}
-		for (int i = pos; i > counter; i--) { //TODO: Please check the code that Kyle and I wrote while we were sleepy @Evan
-			list[i + 1] = list[i];
-		}
-		list[counter] = ptr;
-	}
-}
