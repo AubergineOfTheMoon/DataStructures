@@ -1,9 +1,8 @@
 #pragma once
 #ifndef STOrderedListCK_H
 #define STOrderedListCK_H
-
 #include <string>
-using namespace std;
+// using namespace std;
 
 // Task 1
 template <class T> class OrderedList {
@@ -60,7 +59,7 @@ public:
 
 template <class T> class OrderedListBack : public OrderedList<T> {
 public:
-	OrderedListBack(int m);
+//	OrderedListBack(int m);
 	void AddItem(T*);
 };
 
@@ -69,12 +68,13 @@ public:
 template <class T> class OrderedListEmptySpace : public OrderedList<T> {
 	// pos indicates the number of items in the array in the empty space ordered list
 public:
-	OrderedListEmptySpace(int m);
+//	OrderedListEmptySpace(int m);
 	void AddItem(T*);
 	T* RemoveItem(int itemIndex);
 };
 #endif
 #include <string>
+#include<cmath>
 
 template <class T>
 inline OrderedList<T>::OrderedList(int m) {
@@ -164,7 +164,7 @@ inline T* OrderedList<T>::peekItem(int a) {
 		return list[a];
 	}
 	else {
-		throw OrderedListOutOfRangeIndex;
+		throw OrderedListOutOfRangeIndex();
 	}
 }
 
@@ -223,7 +223,7 @@ inline bool OrderedList<T>::operator==(OrderedList lst) {
 
 
 //Derived Class Back linear Search Functions and Constructor
-
+/*
 template<class T>
 inline void OrderedListBack<OrderedList>::OrderedListBack(int m) {
 	pos = 0;
@@ -233,7 +233,7 @@ inline void OrderedListBack<OrderedList>::OrderedListBack(int m) {
 		list[i] = nullptr;
 	}
 }
-
+*/
 template<class T>
 inline void OrderedListBack<OrderedList>::AddItem(T*) {
 	if (pos >= max) {
@@ -251,7 +251,7 @@ inline void OrderedListBack<OrderedList>::AddItem(T*) {
 }
 
 //Derived class functions for empty space ordered list
-
+/*
 template<class T>
 inline void OrderedListEmptySpace<OrderedList>::OrderedListEmptySpace(int m) {
 	pos = 0;
@@ -261,51 +261,52 @@ inline void OrderedListEmptySpace<OrderedList>::OrderedListEmptySpace(int m) {
 		list[i] = nullptr;
 	}
 }
-
+*/
 template<class T>
 inline void OrderedListEmptySpace<OrderedList>::AddItem(T* ptr) {
 	if (pos >= max) { throw OrderedListOverflow(pos + 1); }
+	
+	int counterLow = 0;
+	int counterHigh = max - 1;
+
+	// Finds closest value from left to where the item should be inserted
+	for (int i = 0; i < max; i++) {
+		if (list[i] != nullptr) { if ((*list[i]) <= (*ptr)) { counterLow = i; } }
+	}
+
+	// Finds closest value from right to where the item should be inserted		
+	for (int i = (max - 1); i >= 0; i--) {
+		if (list[i] != nullptr) { if ((*list[i]) >= (*ptr)) { counterHigh = i; } }
+	}
+	// Item should be inserted halfway between 2 items where it belongs
+	int indexToInsert = (counterHigh + counterLow) / 2;
+		
+	// If there is no pointer at that position, insert the item.
+	if (list[indexToInsert] == nullptr) { list[indexToInsert] = ptr; }
+		
 	else {
-		int counterLow = 0;
-		int counterHigh = max - 1;
+		// Finds nearest null space to the right and left. 
+		int closestNullIndexHigh = max * 2;
+		int closestNullIndexLow = max * 2;
 
-		// Finds closest value from left to where the item should be inserted
-		for (int i = 0; i < max; i++) {
-			if (list[i] != nullptr) { if ((*list[i]) <= (*ptr)) { counterLow = i; } }
+		for (int i = max - 1; i > counterHigh; i--) {
+			if (list[i] == nullptr) { closestNullIndexHigh = i; }
+		}
+		for (int i = 0; i < counterLow; i++) {
+			if (list[i] == nullptr) { closestNullIndexLow = i; }
 		}
 
-		// Finds closest value from right to where the item should be inserted		
-		for (int i = max - 1; i >= 0; i--) {
-			if (list[i] != nullptr) { if ((*list[i]) >= (*ptr)) { counterHigh = i; } }
+		// Determine closest null space and move items to the left or right
+		int diffLow = abs(indexToInsert - closestNullIndexLow);
+		int diffHigh = abs(indexToInsert - closestNullIndexHigh);
+		if (diffHigh < diffLow) {
+			for (int i = indexToInsert; i < closestNullIndexHigh; i++) { list[i + 1] = list[i]; }
 		}
-		// Item should be inserted halfway between 2 items where it belongs
-		int indexToInsert = (counterHigh +counterLow) / 2; 
-		
-		// If there is no pointer at that position, insert the item.
-		if(list[indexToInsert] == nullptr) { list[indexToInsert] = ptr; }
-		
 		else {
-			// Finds nearest null space to the right and left
-			int closestNullIndexHigh = 40; 
-			int closestNullIndexLow = 40;
-
-			for (int i = max - 1; i > counterHigh; i--) {
-				if (list[i] == nullptr) { closestNullIndexHigh = i; }
-			}
-			for (int i = 0; i < counterLow; i++) {
-				if (list[i] == nullptr) { closestNullIndexLow = i; }
-			}
-
-			// Determine closest null space and move items to the left or right
-			if(abs(indexToInsert - closestNullIndexHigh) < abs(indexToInsert - closestNullIndexLow)) {
-				for (int i = indexToInsert; i < closestNullIndexHigh; i++) { list[i + 1] = list[i]; }
-			}
-			else {
-				for (int i = closestNullIndexLow; i < indexToInsert; i++) { list[i] = list[i + 1]; }
-			}
-			// Insert pointer at the required index
-			list[indexToInsert] = ptr;		
+			for (int i = closestNullIndexLow; i < indexToInsert; i++) { list[i] = list[i + 1]; }
 		}
+		// Insert pointer at the required index
+		list[indexToInsert] = ptr;		
 	}
 }
 
