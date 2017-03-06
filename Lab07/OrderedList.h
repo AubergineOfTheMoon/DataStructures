@@ -11,6 +11,7 @@ protected:
 	int pos; // the next available spot in the OrderedList
 	T* *list; // pointer array
 public:
+	OrderedList();
 	OrderedList(int);
 	void AddItem(T *ptr);
 	T* RemoveItem(T *ptr);
@@ -57,6 +58,15 @@ public:
 
 #endif
 #include <string>
+template <class T>
+inline OrderedList<T>::OrderedList() {
+	pos = 0;
+	max = 20;
+	list = new T*[max];
+	for (int i = 0; i < max; i++) {
+		list[i] = nullptr;
+	}
+}
 
 template <class T>
 inline OrderedList<T>::OrderedList(int m) {
