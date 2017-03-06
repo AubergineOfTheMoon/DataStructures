@@ -1,19 +1,19 @@
 #pragma once
 #ifndef STOrderedListCK_H
 #define STOrderedListCK_H
-#include <string>
-// using namespace std;
 
-// Task 1
+#include <string>
+using namespace std;
+
 template <class T> class OrderedList {
 protected:
 	int max; // maximum number of items in the OrderedList
 	int pos; // the next available spot in the OrderedList
-	T* *list[]; // pointer array
+	T* *list; // pointer array
 public:
-	OrderedList(int m);
+	OrderedList(int);
 	void AddItem(T *ptr);
-	T* RemoveItem(int itemIndex);
+	T* RemoveItem(T *ptr);
 	void MakeEmpty();
 	bool isEmpty();
 	bool isFull();
@@ -55,11 +55,8 @@ public:
 	};
 };
 
-
 #endif
-
 #include <string>
-#include<cmath>
 
 template <class T>
 inline OrderedList<T>::OrderedList(int m) {
@@ -74,7 +71,7 @@ inline OrderedList<T>::OrderedList(int m) {
 template <class T>
 inline void OrderedList<T>::AddItem(T* ptr) {
 	if (pos >= max) {
-		throw OrderedListOverflow(pos + 1);
+		throw OrderedListOverflow(topOfList + 1);
 	}
 	else {
 		int counter = 0;
@@ -82,29 +79,35 @@ inline void OrderedList<T>::AddItem(T* ptr) {
 			counter++;
 		}
 		for (int i = pos; i > counter; i--) {
-			list[i] = list[i - 1];
+			list[i + 1] = list[i];
 		}
 		list[counter] = ptr;
 	}
 }
 
 template <class T>
-inline T* OrderedList<T>::RemoveItem(int itemIndex) {
+inline T* OrderedList<T>::RemoveItem(T* ptr) {
 	if (pos < 1) {
 		throw OrderedListUnderflow();
 	}
-	else if ((itemIndex >= pos) || (itemIndex < 0)) {
-		throw OrderedListOutOfRangeIndex();
-	}
 	else {
-		T retVal = list[itemIndex];
-		for (int i = itemIndex; i < (pos-1); i++) {
-			list[i] = list[i + 1];
+		int counter = 0;
+		while ((*list[counter] != *ptr) && (counter < pos)) {
+			counter++;
 		}
+		if (counter != pos) {
+			for (int i = counter; i < pos; i++) {
+				list[i + 1] = list[i];
+			}
+		}
+		else {
+			throw OrderedListItemNotFound();
+		}
+		
 		pos--;
-		return retVal;
+		return list[counter];
 	}
-}
+};
 
 
 template <class T>
@@ -114,9 +117,9 @@ inline int OrderedList<T>::length() {
 
 template <class T>
 inline void OrderedList<T>::MakeEmpty() {
-	for (int i = 0; i < pos; i++) {
-		list[i] = nullptr;
-	}
+	// for (int i = 0; i < topOfList; i++) {
+	// 	list[i] = nullptr;
+	// }
 	pos = 0;
 }
 
@@ -155,7 +158,7 @@ inline T* OrderedList<T>::peekItem(int a) {
 
 
 template <class T>
-inline OrderedList OrderedList<T>::operator<(OrderedList lst) {
+inline OrderedList<T> OrderedList<T>::operator< (OrderedList lst) {
 	if (pos < lst.length()) {
 		return this;
 	}
@@ -193,7 +196,7 @@ inline OrderedList<T> OrderedList<T>::operator>(OrderedList lst) {
 template<class T>
 inline bool OrderedList<T>::operator==(OrderedList lst) {
 	if (pos == lst.length()) {
-		bool flag = true; // flag for whether the ordered lists are equal 
+		bool flag = true; // flag for ordered lists not equal 
 		for (int i = 0; i < max; i++) {
 			if (list[i] != lst.peekItem(i)) {
 				flag = false;
@@ -206,41 +209,29 @@ inline bool OrderedList<T>::operator==(OrderedList lst) {
 	}
 }
 
+
 // Derived Class With Back Linear Search
 
 template <class T> class OrderedListBack : public OrderedList<T> {
-public:
-	// OrderedListBack(int m);
 	void AddItem(T*);
 };
-//Derived Class Back linear Search Functions and Constructor
-/*
-template<class T>
-inline void OrderedListBack<OrderedList>::OrderedListBack(int m) {
-	pos = 0;
-	max = m;
-	list = new T*[max];
-	for (int i = 0; i < max; i++) {
-		list[i] = nullptr;
-	}
-}*/
 
 template<class T>
-inline void OrderedListBack<OrderedList>::AddItem(T*) {
+inline void OrderedListBack<T>::AddItem(T*) {
 	if (pos >= max) {
-		throw OrderedListOverflow(pos + 1);
+		throw OrderedListOverflow(topOfList + 1);
 	}
 	else {
-		int counter = pos - 1;
+		int counter = pos-1;
 		while ((*ptr > *list[counter]) && (counter >= 0)) {
 			counter--;
 		}
-		//TODO: Please check the code that Kyle and I wrote while we were sleepy @Evan
-		for (int i = pos; i > counter; i--) { list[i] = list[i - 1]; }
+		for (int i = pos; i > counter; i--) { //TODO: Please check the code that Kyle and I wrote while we were sleepy @Evan
+			list[i] = list[i + 1];
+		}
 		list[counter] = ptr;
 	}
 }
-
 
 // Task 3 Derived Class
 template <class T> class OrderedListEmptySpace : public OrderedList<T> {
@@ -254,19 +245,19 @@ public:
 //Derived class functions for empty space ordered list
 /*
 template<class T>
-inline void OrderedListEmptySpace<OrderedList>::OrderedListEmptySpace(int m) {
+inline void OrderedListEmptySpace<T>::OrderedListEmptySpace(int m) {
 	pos = 0;
 	max = m;
 	list = new T*[max];
 	for (int i = 0; i < max; i++) {
-		list[i] = nullptr;
+	list[i] = nullptr;
 	}
 }*/
 
 template<class T>
-inline void OrderedListEmptySpace<OrderedList>::AddItem(T* ptr) {
+inline void OrderedListEmptySpace<T>::AddItem(T* ptr) {
 	if (pos >= max) { throw OrderedListOverflow(pos + 1); }
-	
+
 	int counterLow = 0;
 	int counterHigh = max - 1;
 
@@ -281,10 +272,10 @@ inline void OrderedListEmptySpace<OrderedList>::AddItem(T* ptr) {
 	}
 	// Item should be inserted halfway between 2 items where it belongs
 	int indexToInsert = (counterHigh + counterLow) / 2;
-		
+
 	// If there is no pointer at that position, insert the item.
 	if (list[indexToInsert] == nullptr) { list[indexToInsert] = ptr; }
-		
+
 	else {
 		// Finds nearest null space to the right and left. 
 		int closestNullIndexHigh = max * 2;
@@ -307,12 +298,12 @@ inline void OrderedListEmptySpace<OrderedList>::AddItem(T* ptr) {
 			for (int i = closestNullIndexLow; i < indexToInsert; i++) { list[i] = list[i + 1]; }
 		}
 		// Insert pointer at the required index
-		list[indexToInsert] = ptr;		
+		list[indexToInsert] = ptr;
 	}
 }
 
 template<class T>
-inline void OrderedListEmptySpace<OrderedList>::RemoveItem(int itemIndex) {
+inline T* OrderedListEmptySpace<T>::RemoveItem(int itemIndex) {
 	if (pos < 1) {
 		throw OrderedListUnderflow();
 	}
