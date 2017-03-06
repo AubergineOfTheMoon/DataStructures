@@ -213,8 +213,31 @@ inline bool OrderedList<T>::operator==(OrderedList lst) {
 // Derived Class With Back Linear Search
 
 template <class T> class OrderedListBack : public OrderedList<T> {
+public:
+	OrderedListBack();
+	OrderedListBack(int m);
 	void AddItem(T*);
 };
+
+template<class T>
+inline OrderedListBack<T>::OrderedListBack() {
+	pos = 0;
+	max = 20;
+	list = new T*[max];
+	for (int i = 0; i < max; i++) {
+		list[i] = nullptr;
+	}
+}
+
+template<class T>
+inline OrderedListBack<T>::OrderedListBack(int m) {
+	pos = 0;
+	max = m;
+	list = new T*[max];
+	for (int i = 0; i < max; i++) {
+		list[i] = nullptr;
+	}
+}
 
 template<class T>
 inline void OrderedListBack<T>::AddItem(T*) {
@@ -237,22 +260,32 @@ inline void OrderedListBack<T>::AddItem(T*) {
 template <class T> class OrderedListEmptySpace : public OrderedList<T> {
 	// pos indicates the number of items in the array in the empty space ordered list
 public:
-	// OrderedListEmptySpace(int m);
+	OrderedListEmptySpace();
+	OrderedListEmptySpace(int m);
 	void AddItem(T*);
 	T* RemoveItem(int itemIndex);
 };
 
 //Derived class functions for empty space ordered list
-/*
 template<class T>
-inline void OrderedListEmptySpace<T>::OrderedListEmptySpace(int m) {
+inline OrderedListEmptySpace<T>::OrderedListEmptySpace() {
+	pos = 0;
+	max = 20;
+	list = new T*[max];
+	for (int i = 0; i < max; i++) {
+		list[i] = nullptr;
+	}
+}
+
+template<class T>
+inline OrderedListEmptySpace<T>::OrderedListEmptySpace(int m) {
 	pos = 0;
 	max = m;
 	list = new T*[max];
 	for (int i = 0; i < max; i++) {
-	list[i] = nullptr;
+		list[i] = nullptr;
 	}
-}*/
+}
 
 template<class T>
 inline void OrderedListEmptySpace<T>::AddItem(T* ptr) {
