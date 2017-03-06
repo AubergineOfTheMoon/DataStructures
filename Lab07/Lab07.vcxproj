@@ -144,6 +144,9 @@
   <ItemGroup>
     <ClInclude Include="OrderedList.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Lab7-Task4-TestProgram.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

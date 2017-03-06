@@ -1,12 +1,47 @@
 #include<string>
 #include<iostream>
+#include<time.h>
 #include "OrderedList.h"
 using namespace std;
 
 int main() {
+	srand(time(NULL));
 	int size = 30;
-	OrderedList<int> list1 = OrderedList<int>(size);
-	OrderedListBack<int> list2 = OrderedListBack<int>(size);
-	OrderedListEmptySpace<int> list3 = OrderedListEmptySpace<int>(size);
-	cout << "List";
+	int choice;
+	//cout << "Which test would you like to perform: 1 (OrderedList), 2 (OrderedListBack), 3 (OrderedListEmptySpace): ";
+	//cin >> choice;
+	OrderedListEmptySpace<int> list3;
+	OrderedListBack<int> list2;
+	OrderedList<int> list1;
+	
+	list1 = OrderedList<int>(size);
+	list2 = OrderedListBack<int>(size);
+	list3 = OrderedListEmptySpace<int>(size);
+
+	int randomInts[30];
+	string output = "";
+	/*for (int i = 0; i < 30; i++) {
+		randomInts[i] = rand() % 100 + 1;
+		list1.AddItem(&randomInts[i]);
+		//list2.AddItem(&randomInts[i]);
+		//list3.AddItem(&randomInts[i]);
+		cout << "List2 " << list2.getListContents() << endl;
+
+		output += to_string(randomInts[i]) + " ";
+	}*/
+	int a, b, c;
+	a = 1;
+	b = 3;
+	c = 2;
+	list2.AddItem(&a);
+	list2.AddItem(&b);
+	list2.AddItem(&c);
+	cout << "Random inputs " << output << endl;
+	cout << "List1 " << list1.getListContents() << endl;
+	cout << "List2 " << list2.getListContents() << endl;
+	cout << "List3 " << list3.getListContents() << endl;
+	
+
+
+	
 }
