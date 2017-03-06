@@ -29,19 +29,23 @@ int main() {
 
 		output += to_string(randomInts[i]) + " ";
 	}*/
-	int a, b, c;
+	int a, b, c, d, e;
 	a = 1;
 	b = 3;
 	c = 2;
+	d = 2;
+	e = 4;
 	list2.AddItem(&a);
 	list2.AddItem(&b);
 	list2.AddItem(&c);
+	list2.AddItem(&d);
+	list2.AddItem(&e);
 	cout << "Random inputs " << output << endl;
 	cout << "List1 " << list1.getListContents() << endl;
 	cout << "List2 " << list2.getListContents() << endl;
 	cout << "List3 " << list3.getListContents() << endl;
 	
-
-
+	char z;
+	cin >> z;
 	
 }

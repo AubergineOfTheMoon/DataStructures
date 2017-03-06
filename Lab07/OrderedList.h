@@ -283,11 +283,15 @@ inline void OrderedListBack<T>::AddItem(T* ptr) {
 		throw OrderedListOverflow(pos + 1);
 	}
 	else {
-		int counter = pos-1;
-		while ((counter > 0) && (*ptr > *list[counter])) {
+		int compCounter = pos-1;
+		int counter = pos;
+		if (pos == 0) { counter = 0; }
+		while ((counter > 0) && (*ptr >= *list[compCounter])) {
 			numOps++;
+			compCounter--;
 			counter--;
 		}
+		// if (counter < 0) { counter = 0; }
 		for (int i = pos; i > counter; i--) { //TODO: Please check the code that Kyle and I wrote while we were sleepy @Evan
 			list[i] = list[i-1];
 			numOps++;
@@ -297,7 +301,23 @@ inline void OrderedListBack<T>::AddItem(T* ptr) {
 		pos++;
 	}
 }
-
+/*numOps++;
+if (pos >= max) {
+	throw OrderedListOverflow(pos + 1);
+}
+else {
+	int counter = 0;
+	while ((counter < pos) && (*ptr < *list[counter])) {
+		numOps++;
+		counter++;
+	}
+	for (int i = pos; i > counter; i--) {
+		list[i] = list[i - 1];
+		numOps++;
+	}
+	list[counter] = ptr;
+	pos++;
+}*/
 // Task 3 Derived Class
 template <class T> class OrderedListEmptySpace : public OrderedList<T> {
 	// pos indicates the number of items in the array in the empty space ordered list
