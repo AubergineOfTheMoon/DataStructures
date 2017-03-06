@@ -55,24 +55,9 @@ public:
 	};
 };
 
-// Derived Class With Back Linear Search
 
-template <class T> class OrderedListBack : public OrderedList<T> {
-public:
-//	OrderedListBack(int m);
-	void AddItem(T*);
-};
-
-// Task 3 Derived Class
-
-template <class T> class OrderedListEmptySpace : public OrderedList<T> {
-	// pos indicates the number of items in the array in the empty space ordered list
-public:
-//	OrderedListEmptySpace(int m);
-	void AddItem(T*);
-	T* RemoveItem(int itemIndex);
-};
 #endif
+
 #include <string>
 #include<cmath>
 
@@ -89,7 +74,7 @@ inline OrderedList<T>::OrderedList(int m) {
 template <class T>
 inline void OrderedList<T>::AddItem(T* ptr) {
 	if (pos >= max) {
-		throw OrderedListOverflow(topOfList + 1);
+		throw OrderedListOverflow(pos + 1);
 	}
 	else {
 		int counter = 0;
@@ -129,7 +114,7 @@ inline int OrderedList<T>::length() {
 
 template <class T>
 inline void OrderedList<T>::MakeEmpty() {
-	for (int i = 0; i < topOfList; i++) {
+	for (int i = 0; i < pos; i++) {
 		list[i] = nullptr;
 	}
 	pos = 0;
@@ -221,7 +206,13 @@ inline bool OrderedList<T>::operator==(OrderedList lst) {
 	}
 }
 
+// Derived Class With Back Linear Search
 
+template <class T> class OrderedListBack : public OrderedList<T> {
+public:
+	// OrderedListBack(int m);
+	void AddItem(T*);
+};
 //Derived Class Back linear Search Functions and Constructor
 /*
 template<class T>
@@ -232,15 +223,15 @@ inline void OrderedListBack<OrderedList>::OrderedListBack(int m) {
 	for (int i = 0; i < max; i++) {
 		list[i] = nullptr;
 	}
-}
-*/
+}*/
+
 template<class T>
 inline void OrderedListBack<OrderedList>::AddItem(T*) {
 	if (pos >= max) {
-		throw OrderedListOverflow(topOfList + 1);
+		throw OrderedListOverflow(pos + 1);
 	}
 	else {
-		int counter = pos-1;
+		int counter = pos - 1;
 		while ((*ptr > *list[counter]) && (counter >= 0)) {
 			counter--;
 		}
@@ -249,6 +240,16 @@ inline void OrderedListBack<OrderedList>::AddItem(T*) {
 		list[counter] = ptr;
 	}
 }
+
+
+// Task 3 Derived Class
+template <class T> class OrderedListEmptySpace : public OrderedList<T> {
+	// pos indicates the number of items in the array in the empty space ordered list
+public:
+	// OrderedListEmptySpace(int m);
+	void AddItem(T*);
+	T* RemoveItem(int itemIndex);
+};
 
 //Derived class functions for empty space ordered list
 /*
@@ -260,8 +261,8 @@ inline void OrderedListEmptySpace<OrderedList>::OrderedListEmptySpace(int m) {
 	for (int i = 0; i < max; i++) {
 		list[i] = nullptr;
 	}
-}
-*/
+}*/
+
 template<class T>
 inline void OrderedListEmptySpace<OrderedList>::AddItem(T* ptr) {
 	if (pos >= max) { throw OrderedListOverflow(pos + 1); }
