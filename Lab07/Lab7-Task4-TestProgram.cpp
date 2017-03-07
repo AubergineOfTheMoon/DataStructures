@@ -20,30 +20,36 @@ int main() {
 
 	int randomInts[30];
 	string output = "";
-	/*for (int i = 0; i < 30; i++) {
+	for (int i = 0; i < 30; i++) {
 		randomInts[i] = rand() % 100 + 1;
 		list1.AddItem(&randomInts[i]);
-		//list2.AddItem(&randomInts[i]);
-		//list3.AddItem(&randomInts[i]);
-		cout << "List2 " << list2.getListContents() << endl;
+		list2.AddItem(&randomInts[i]);
+		list3.AddItem(&randomInts[i]);
+		cout << ".."<<to_string(randomInts[i])<<".." << list3.getListContents() << endl;
 
 		output += to_string(randomInts[i]) + " ";
-	}*/
+	}
 	int a, b, c, d, e;
 	a = 1;
 	b = 3;
 	c = 2;
 	d = 2;
 	e = 4;
-	list2.AddItem(&a);
-	list2.AddItem(&b);
-	list2.AddItem(&c);
-	list2.AddItem(&d);
-	list2.AddItem(&e);
-	cout << "Random inputs " << output << endl;
-	cout << "List1 " << list1.getListContents() << endl;
-	cout << "List2 " << list2.getListContents() << endl;
-	cout << "List3 " << list3.getListContents() << endl;
+	/*list3.AddItem(&a);
+	cout << list3.getListContents() << endl;
+	list3.AddItem(&b);
+	cout << list3.getListContents() << endl;
+	list3.AddItem(&c);
+	cout << list3.getListContents() << endl;
+	list3.AddItem(&d);
+	cout << list3.getListContents() << endl;
+	list3.AddItem(&e);
+	cout << list3.getListContents() << endl;
+	*/cout << "Random inputs " << output << endl;
+	cout << "List1 operations " << list1.getNumOps() << endl << list1.getListContents() << endl;
+	cout << "List2 operations " << list2.getNumOps() << endl << list2.getListContents() << endl;
+	cout << "List3 operations " << list3.length() << endl;
+	cout << list3.getListContents() << endl;
 	
 	char z;
 	cin >> z;

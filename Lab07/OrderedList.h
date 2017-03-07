@@ -3,6 +3,7 @@
 #define STOrderedListCK_H
 
 #include <string>
+#include <iostream>
 using namespace std;
 
 template <class T> class OrderedList {
@@ -89,8 +90,14 @@ inline int OrderedList<T>::getNumOps() {
 template <class T>
 inline string OrderedList<T>::getListContents() {
 	string output = "";
-	for (int i = 0; i < pos; i++) {
-		output += to_string(*list[i]) + " ";
+	int p = pos;
+	for (int i = 0; i < max; i++) {
+		if (list[i] != nullptr) {
+			output += to_string(*list[i]) + " ";
+		}
+		else {
+			output += "- ";
+		}
 	}
 	return output;
 }
@@ -283,12 +290,12 @@ inline void OrderedListBack<T>::AddItem(T* ptr) {
 		throw OrderedListOverflow(pos + 1);
 	}
 	else {
-		int compCounter = pos-1;
+		//int compCounter = pos-1;
 		int counter = pos;
 		if (pos == 0) { counter = 0; }
-		while ((counter > 0) && (*ptr >= *list[compCounter])) {
+		while ((counter > 0) && (*ptr >= *list[counter-1])) {
 			numOps++;
-			compCounter--;
+			// compCounter--;
 			counter--;
 		}
 		// if (counter < 0) { counter = 0; }
@@ -353,7 +360,9 @@ inline OrderedListEmptySpace<T>::OrderedListEmptySpace(int m) {
 template<class T>
 inline void OrderedListEmptySpace<T>::AddItem(T* ptr) {
 	numOps++;
-	if (pos >= max) { throw OrderedListOverflow(pos + 1); }
+	if (pos >= max) { 
+		throw OrderedListOverflow(pos + 1); 
+	}
 
 	int counterLow = 0;
 	int counterHigh = max - 1;
@@ -380,8 +389,13 @@ inline void OrderedListEmptySpace<T>::AddItem(T* ptr) {
 		}
 	}
 	// Item should be inserted halfway between 2 items where it belongs
-	int indexToInsert = (counterHigh + counterLow) / 2;
-
+	int indexToInsert;
+	if (list[counterLow] != nullptr && list[counterHigh] == nullptr) {
+		indexToInsert = (counterHigh + counterLow) / 2 + 1;
+	}
+	else {
+		indexToInsert = (counterHigh + counterLow) / 2;
+	}
 	// If there is no pointer at that position, insert the item.
 	numOps++;
 	if (list[indexToInsert] == nullptr) { 
@@ -409,14 +423,20 @@ inline void OrderedListEmptySpace<T>::AddItem(T* ptr) {
 		// Determine closest null space and move items to the left or right
 		int diffLow = abs(indexToInsert - closestNullIndexLow);
 		int diffHigh = abs(indexToInsert - closestNullIndexHigh);
-		if (diffHigh < diffLow) {
+		if (diffHigh < diffLow) {//right
+			//cout << "right ";
 			numOps++;
-			for (int i = indexToInsert; i < closestNullIndexHigh; i++) { 
+			//for (int i = indexToInsert; i < closestNullIndexHigh; i++) { 
+			for (int i = closestNullIndexHigh; i > indexToInsert; i--) {
 				numOps++;
-				list[i + 1] = list[i]; 
+				list[i] = list[i-1]; 
+			}
+			if (indexToInsert == 0) {
+				list[1] = list[0];
 			}
 		}
-		else {
+		else {//left
+			//cout << "left  ";
 			for (int i = closestNullIndexLow; i < indexToInsert; i++) { 
 				numOps++;
 				list[i] = list[i + 1];
