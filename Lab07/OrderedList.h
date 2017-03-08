@@ -329,6 +329,7 @@ public:
 	OrderedListEmptySpace();
 	OrderedListEmptySpace(int m);
 	void AddItem(T*);
+	string getListContents();
 	T* RemoveItem(int itemIndex);
 };
 
@@ -447,13 +448,16 @@ inline void OrderedListEmptySpace<T>::AddItem(T* ptr) {
 
 template<class T>
 inline T* OrderedListEmptySpace<T>::RemoveItem(int itemIndex) {
+	numOps++;
 	if (pos < 1) {
 		throw OrderedListUnderflow();
 	}
 	else if ((itemIndex >= pos) || (itemIndex < 0)) {
+		
 		throw OrderedListOutOfRangeIndex();
 	}
 	else {
+		numOps++;
 		T* retVal = list[itemIndex];
 		list[itemIndex] = nullptr;
 		return retVal;
@@ -467,9 +471,6 @@ inline string OrderedListEmptySpace<T>::getListContents() {
 	for (int i = 0; i < max; i++) {
 		if (list[i] != nullptr) {
 			output += to_string(*list[i]) + " ";
-		}
-		else {
-			output += "- ";
 		}
 	}
 	return output;
