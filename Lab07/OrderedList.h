@@ -91,7 +91,7 @@ template <class T>
 inline string OrderedList<T>::getListContents() {
 	string output = "";
 	int p = pos;
-	for (int i = 0; i < max; i++) {
+	for (int i = 0; i < pos; i++) {
 		if (list[i] != nullptr) {
 			output += to_string(*list[i]) + " ";
 		}
@@ -110,7 +110,7 @@ inline void OrderedList<T>::AddItem(T* ptr) {
 	}
 	else {
 		int counter = 0;
-		while ((counter < pos) && (*ptr < *list[counter])) {
+		while ((counter < pos) && (*ptr > *list[counter])) {
 			numOps++;
 			counter++;
 		}
@@ -138,17 +138,14 @@ inline T* OrderedList<T>::RemoveItem(T* ptr) {
 		}
 		if (counter != pos) {
 			numOps++;
-			for (int i = counter; i < pos; i++) {
-				list[i + 1] = list[i];
+			for (int i = counter; i < pos-1; i++) {
+				list[i] = list[i+1];
 				numOps++;
 			}
+			pos--;
+			return list[counter];
 		}
-		else {
-			throw OrderedListItemNotFound();
-		}
-		
-		pos--;
-		return list[counter];
+		throw OrderedListItemNotFound();
 	}
 };
 
@@ -293,7 +290,7 @@ inline void OrderedListBack<T>::AddItem(T* ptr) {
 		//int compCounter = pos-1;
 		int counter = pos;
 		if (pos == 0) { counter = 0; }
-		while ((counter > 0) && (*ptr >= *list[counter-1])) {
+		while ((counter > 0) && (*ptr < *list[counter-1])) {
 			numOps++;
 			// compCounter--;
 			counter--;
@@ -408,13 +405,13 @@ inline void OrderedListEmptySpace<T>::AddItem(T* ptr) {
 		int closestNullIndexLow = max * 2;
 
 		for (int i = max - 1; i > counterHigh; i--) {
-			//numOps++;
+			numOps++;
 			if (list[i] == nullptr) { 
 				closestNullIndexHigh = i; 
 			}
 		}
 		for (int i = 0; i < counterLow; i++) {
-			//numOps++;
+			numOps++;
 			if (list[i] == nullptr) { 
 				closestNullIndexLow = i; 
 			}
@@ -428,7 +425,7 @@ inline void OrderedListEmptySpace<T>::AddItem(T* ptr) {
 			numOps++;
 			//for (int i = indexToInsert; i < closestNullIndexHigh; i++) { 
 			for (int i = closestNullIndexHigh; i > indexToInsert; i--) {
-				numOps++;
+				//numOps++;
 				list[i] = list[i-1]; 
 			}
 			if (indexToInsert == 0) {
@@ -438,7 +435,7 @@ inline void OrderedListEmptySpace<T>::AddItem(T* ptr) {
 		else {//left
 			//cout << "left  ";
 			for (int i = closestNullIndexLow; i < indexToInsert; i++) { 
-				numOps++;
+				//numOps++;
 				list[i] = list[i + 1];
 			}
 		}
@@ -458,7 +455,22 @@ inline T* OrderedListEmptySpace<T>::RemoveItem(int itemIndex) {
 	}
 	else {
 		T* retVal = list[itemIndex];
-		listItemIndex = nullptr;
+		list[itemIndex] = nullptr;
 		return retVal;
 	}
+}
+
+template <class T>
+inline string OrderedListEmptySpace<T>::getListContents() {
+	string output = "";
+	int p = pos;
+	for (int i = 0; i < max; i++) {
+		if (list[i] != nullptr) {
+			output += to_string(*list[i]) + " ";
+		}
+		else {
+			output += "- ";
+		}
+	}
+	return output;
 }

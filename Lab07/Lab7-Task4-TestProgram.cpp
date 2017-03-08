@@ -25,9 +25,24 @@ int main() {
 		list1.AddItem(&randomInts[i]);
 		list2.AddItem(&randomInts[i]);
 		list3.AddItem(&randomInts[i]);
-		cout << ".."<<to_string(randomInts[i])<<".." << list3.getListContents() << endl;
+		//cout << ".."<<to_string(randomInts[i])<<".." << list3.getListContents() << endl;
 
 		output += to_string(randomInts[i]) + " ";
+	}
+	int index;
+	string remove = "";
+	for (int i = 0; i < 25; i++) {
+		index = rand() % 30;
+		
+		try {
+			list1.RemoveItem(&randomInts[index]);
+			//list2.RemoveItem(&randomInts[index]);
+			//list3.RemoveItem(index);
+			//cout << ".."<<to_string(randomInts[i])<<".." << list3.getListContents() << endl;
+		}
+		catch(...){}
+		remove += to_string(randomInts[i]) + " ";
+		
 	}
 	int a, b, c, d, e;
 	a = 1;
@@ -46,9 +61,10 @@ int main() {
 	list3.AddItem(&e);
 	cout << list3.getListContents() << endl;
 	*/cout << "Random inputs " << output << endl;
+	cout << "Removed inputs " << remove << endl;
 	cout << "List1 operations " << list1.getNumOps() << endl << list1.getListContents() << endl;
 	cout << "List2 operations " << list2.getNumOps() << endl << list2.getListContents() << endl;
-	cout << "List3 operations " << list3.length() << endl;
+	cout << "List3 operations " << list3.getNumOps() << endl;
 	cout << list3.getListContents() << endl;
 	
 	char z;
