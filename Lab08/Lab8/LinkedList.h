@@ -18,12 +18,14 @@ private:
 	string firstName;
 	string lastName;
 	string mNumber;
+	int mIndex;
 	float GPA;
 	int birthday[3];
 public:
-	Student(string f, string l, string m, int bMonth, int bDay, int bYear, float g);
+	Student(string f, string l, int m, int bMonth, int bDay, int bYear, float g);
 	string getName();
 	string getMNumber();
+	int getMIndex();
 	int getAge();
 	float getGPA();
 	string getBirthday();
@@ -33,28 +35,32 @@ public:
 	Student* next;
 };
 
-inline Student::Student(string f, string l, string m, int bMonth, int bDay, int bYear, float g = 0.0) {
+inline Student::Student(string f, string l, int m, int bMonth, int bDay, int bYear, float g = 0.0) {
 	firstName = f;
 	lastName = l;
-	mNumber = m;
+	mNumber = "M" + to_string(m);
+	mIndex = m;
 	birthday[0] = bMonth;
 	birthday[1] = bDay;
-	birthday[0] = bYear;
+	birthday[2] = bYear;
 	GPA = g;
 	next = nullptr;
 }
 
 inline string Student::getName() {
 	string fullName ="";
-	cout << firstName;
-	/*fullName += firstName;
+	fullName += firstName;
 	fullName.append(" ");
-	fullName += lastName;*/
+	fullName += lastName;
 	return fullName;
 }
 
 inline string Student::getMNumber() {
 	return mNumber;
+}
+
+inline int Student::getMIndex() {
+	return mIndex;
 }
 
 inline int Student::getAge() {
@@ -80,24 +86,21 @@ string Student::getBirthday() {
 }
 
 inline bool Student::operator>(Student s) {
-	int numSame, numOther;
-	istringstream (mNumber.substr(1)) >> numSame;
-	istringstream(s.getMNumber().substr(1)) >> numOther;
-	return numSame > numOther;
+	
+	return mIndex > s.getMIndex();
 }
 
 inline bool Student::operator<(Student s) {
-	int numSame, numOther;
-	istringstream(mNumber.substr(1)) >> numSame;
-	istringstream(s.getMNumber().substr(1)) >> numOther;
-	return numSame < numOther;
+	return mIndex < s.getMIndex();
 }
 
 inline bool Student::operator==(Student s) {
 	int numSame, numOther;
-	istringstream(mNumber.substr(1)) >> numSame;
+	/*istringstream(mNumber.substr(1)) >> numSame;
 	istringstream(s.getMNumber().substr(1)) >> numOther;
-	return numSame == numOther;
+	numSame = atoi(mNumber.substr(1).c_str());
+	numOther = atoi(s.getMNumber().substr(1).c_str());*/
+	return mIndex == s.getMIndex();
 }
 
 
@@ -165,15 +168,21 @@ inline T * LinkedList<T>::RemoveItem(T * ptr)
 	int findPos;
 	bool itemFound=false;
 	for (int i = 0; i < size; i++) {
-		if (SeeAt(i) == ptr){
+		if (*SeeAt(i) == *ptr){
 			findPos = i;
 			itemFound = true;
 		}
 	}
+	cout << itemFound;
 	if (itemFound) {
 		retItem = SeeAt(findPos);
 		retItem->next = nullptr;
-		SeeAt(findPos - 1)->next = SeeAt(findPos)->next;
+		if (findPos == 0) {
+			head = SeeAt(findPos)->next;
+		}
+		else {
+			SeeAt(findPos - 1)->next = SeeAt(findPos)->next;
+		}
 		size--;
 		return retItem;
 	}
@@ -222,11 +231,11 @@ inline T * LinkedList<T>::SeeAt(int index)
 	}
 	T* retItem;
 	retItem = head;
-	for (int i = 0; i <=index; i++) {
+	for (int i = 0; i <index; i++) {
 		retItem = retItem->next;
 	}
 	pos = index;
-	if (pos == 0) {
+	if (size == 0) {
 		next = nullptr;
 	}
 	else {

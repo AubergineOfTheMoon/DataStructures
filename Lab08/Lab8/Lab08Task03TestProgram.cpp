@@ -6,10 +6,11 @@ using namespace std;
 int main() {
 	int choice = 0;
 	LinkedList<Student> StudentDirectory(nullptr);
-	string firstName = "", lastName = "", mNumber="M0";
-	int bmonth = 0, bday = 0, byear = 0;
+	string firstName = "", lastName = "";
+	int bmonth = 0, bday = 0, byear = 0, mNumber;
 	float gpa = 0.0;
 	Student* tempStudent;
+	Student* removedStudent;
 	do {
 		cout << "Please select the the action you would like to complete" << endl;
 		cout << "1. Add student to directory" << endl;
@@ -41,9 +42,10 @@ int main() {
 			cin >> gpa;
 			tempStudent = new Student(firstName, lastName, mNumber, bmonth, bday, byear, gpa);
 			StudentDirectory.AddItem(tempStudent);
+			tempStudent = nullptr;
 			firstName = "";
 			lastName = "";
-			mNumber = "M0";
+			mNumber = 0;
 			bmonth = 0;
 			bday = 0;
 			byear = 0;
@@ -53,12 +55,13 @@ int main() {
 		case 2: cout << "Enter the M Number of the Student you would like to find" << endl;
 			cin >> mNumber;
 			cout << "Size: " << StudentDirectory.Size() << endl;
-			tempStudent = StudentDirectory.RemoveItem(tempStudent);
+		    tempStudent = new Student(firstName, lastName, mNumber, bmonth, bday, byear, gpa);
+			removedStudent = StudentDirectory.RemoveItem(tempStudent);
 			cout << "Here are details of the removed student: " << endl;
-			cout << "Student Name: " << tempStudent->getName() << endl;
-			cout << "Student M Number: " << tempStudent->getMNumber() << endl;
-			cout << "Student Birthday: " << tempStudent->getBirthday() << endl;
-			cout << "Student Age: " << tempStudent->getAge() << endl;
+			cout << "Student Name: " << removedStudent->getName() << endl;
+			cout << "Student M Number: " << removedStudent->getMNumber() << endl;
+			cout << "Student Birthday: " << removedStudent->getBirthday() << endl;
+			cout << "Student Age: " << removedStudent->getAge() << endl;
 			// delete tempStudent;
 			break;
 		case 3: cout << "Enter the M Number of the student to check if they are in the directory." << endl;
