@@ -4,7 +4,11 @@
 #define LINKEDLIST_H
 
 #include <string>
+#include<ctime>
+#include<sstream>
+#include<iostream>
 using namespace std;
+
 
 /*******************************************************************
 *Student
@@ -13,53 +17,87 @@ class Student {
 private:
 	string firstName;
 	string lastName;
-	int mNumber;
+	string mNumber;
 	float GPA;
-	string byear; // just year
+	int birthday[3];
 public:
-	Student(string f, string l, int m, int b, float g = 0.0);
+	Student(string f, string l, string m, int bMonth, int bDay, int bYear, float g);
 	string getName();
-	int getMNumber();
+	string getMNumber();
 	int getAge();
+	float getGPA();
+	string getBirthday();
 	bool operator>(Student s);
 	bool operator<(Student s);
 	bool operator==(Student s);
-
 	Student* next;
 };
 
-inline Student::Student(string f, string l, int m, int b, float g = 0.0) {
+inline Student::Student(string f, string l, string m, int bMonth, int bDay, int bYear, float g = 0.0) {
 	firstName = f;
 	lastName = l;
 	mNumber = m;
-	byear = b;
+	birthday[0] = bMonth;
+	birthday[1] = bDay;
+	birthday[0] = bYear;
 	GPA = g;
 	next = nullptr;
 }
 
 inline string Student::getName() {
-	return firstName + " " + lastName;
+	string fullName ="";
+	cout << firstName;
+	/*fullName += firstName;
+	fullName.append(" ");
+	fullName += lastName;*/
+	return fullName;
 }
 
-inline int Student::getMNumber() {
+inline string Student::getMNumber() {
 	return mNumber;
 }
 
 inline int Student::getAge() {
 	// Only get year
-	return 2017 byear;
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int currentYear = timePtr->tm_year + 1900;
+	int currentMonth = timePtr->tm_mon;
+	int currentDay = timePtr->tm_mday;
+	int age = currentYear - birthday[2];
+	if ((currentMonth < birthday[0]) || ((currentMonth==birthday[0]) && (currentDay < birthday[1]))) {
+		age--;
+	}
+	return age;
+}
+
+float Student::getGPA() {
+	return GPA;
+}
+
+string Student::getBirthday() {
+	return to_string(birthday[0]) + "/" + to_string(birthday[1]) + "/" + to_string(birthday[2]);
 }
 
 inline bool Student::operator>(Student s) {
-	return mNumber > s.getMNumber();
+	int numSame, numOther;
+	istringstream (mNumber.substr(1)) >> numSame;
+	istringstream(s.getMNumber().substr(1)) >> numOther;
+	return numSame > numOther;
 }
 
 inline bool Student::operator<(Student s) {
-	return mNumber < s.getMNumber();
+	int numSame, numOther;
+	istringstream(mNumber.substr(1)) >> numSame;
+	istringstream(s.getMNumber().substr(1)) >> numOther;
+	return numSame < numOther;
 }
 
 inline bool Student::operator==(Student s) {
-	return mNumber == s.getMNumber();
+	int numSame, numOther;
+	istringstream(mNumber.substr(1)) >> numSame;
+	istringstream(s.getMNumber().substr(1)) >> numOther;
+	return numSame == numOther;
 }
 
 
@@ -71,10 +109,9 @@ template <class T>
 class LinkedList {
 private:
 	int size;
-	LinkedList next;
+	T* next;
 	int pos;
 	T* head;
-
 
 public:
 	LinkedList(T* item);
@@ -86,6 +123,10 @@ public:
 	T* SeeNext();
 	T* SeeAt(int index);
 	void Reset();
+	class ItemNotFound {
+	public:
+		ItemNotFound() {};
+	};
 };
 
 #endif // !1
@@ -103,25 +144,49 @@ inline void LinkedList<T>::AddItem(T * ptr)
 {
 	if (head == nullptr) {
 		head = ptr;
+		head->next = nullptr;
 	}
 	else {
-		SeeAt(size - 1).next = ptr;
+		int findPos = 0;
+		while ((SeeAt(findPos) < ptr) && (findPos < size)) {
+			findPos++;
+		}
+		T* nextTemp = SeeAt(findPos - 1)->next;
+		SeeAt(findPos - 1)->next = ptr;
+		SeeAt(findPos)->next = nextTemp;
 	}
 	size++;
 }
 
 template<class T>
 inline T * LinkedList<T>::RemoveItem(T * ptr)
-{
-	
-	return NULL;
+{	
+	T* retItem;
+	int findPos;
+	bool itemFound=false;
+	for (int i = 0; i < size; i++) {
+		if (SeeAt(i) == ptr){
+			findPos = i;
+			itemFound = true;
+		}
+	}
+	if (itemFound) {
+		retItem = SeeAt(findPos);
+		retItem->next = nullptr;
+		SeeAt(findPos - 1)->next = SeeAt(findPos)->next;
+		size--;
+		return retItem;
+	}
+	else {
+		return NULL;
+	}
 }
 
 template<class T>
 inline bool LinkedList<T>::IsInList(T * ptr)
 {
 	for (int i = 0; i < size; i++) {
-		if (SeeAt(i)) == ptr){
+		if (SeeAt(i) == ptr){
 			return true;
 		}
 	}
@@ -142,18 +207,38 @@ inline int LinkedList<T>::Size()
 
 template<class T>
 inline T * LinkedList<T>::SeeNext()
-{
-	return next;
+{	
+	T* nextTemp = next;
+	next = next->next;
+	pos++;
+	return nextTemp;
 }
 
 template<class T>
 inline T * LinkedList<T>::SeeAt(int index)
-{
-	return NULL;
+{	
+	if ((index >= size) || (index < 0)) {
+		throw ItemNotFound();
+	}
+	T* retItem;
+	retItem = head;
+	for (int i = 0; i <=index; i++) {
+		retItem = retItem->next;
+	}
+	pos = index;
+	if (pos == 0) {
+		next = nullptr;
+	}
+	else {
+		next = retItem->next;
+	}
+	return retItem;
 }
 
 template<class T>
 inline void LinkedList<T>::Reset()
 {
 	pos = 0;
+	next = head;
 }
+
