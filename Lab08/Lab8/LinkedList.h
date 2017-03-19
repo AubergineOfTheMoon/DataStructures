@@ -5,7 +5,6 @@
 
 #include <string>
 #include<ctime>
-#include<sstream>
 #include<iostream>
 using namespace std;
 
@@ -68,9 +67,13 @@ inline int Student::getAge() {
 	time_t t = time(NULL);
 	tm* timePtr = localtime(&t);
 	int currentYear = timePtr->tm_year + 1900;
-	int currentMonth = timePtr->tm_mon;
+	int currentMonth = timePtr->tm_mon + 1;
 	int currentDay = timePtr->tm_mday;
 	int age = currentYear - birthday[2];
+	/*cout << currentMonth << "/" << currentDay << "/" << currentYear << endl;
+	bool b1 = currentMonth < birthday[0];
+	bool b2 = (currentMonth == birthday[0]) && (currentDay < birthday[1]);
+	cout << b1 << " " << b2 << endl;*/
 	if ((currentMonth < birthday[0]) || ((currentMonth==birthday[0]) && (currentDay < birthday[1]))) {
 		age--;
 	}
@@ -95,11 +98,6 @@ inline bool Student::operator<(Student s) {
 }
 
 inline bool Student::operator==(Student s) {
-	int numSame, numOther;
-	/*istringstream(mNumber.substr(1)) >> numSame;
-	istringstream(s.getMNumber().substr(1)) >> numOther;
-	numSame = atoi(mNumber.substr(1).c_str());
-	numOther = atoi(s.getMNumber().substr(1).c_str());*/
 	return mIndex == s.getMIndex();
 }
 
@@ -115,7 +113,7 @@ private:
 	T* next;
 	int pos;
 	T* head;
-
+	T* SeeAtSamePos(int index);
 public:
 	LinkedList(T* item);
 	void AddItem(T* ptr);
@@ -130,6 +128,10 @@ public:
 	public:
 		ItemNotFound() {};
 	};
+	class EmptyList {
+	public:
+		EmptyList() {};
+	};
 };
 
 #endif // !1
@@ -140,6 +142,7 @@ inline LinkedList<T>::LinkedList(T * item = nullptr)
 	size = 0;
 	pos = 0;
 	head = item;
+	next = head;
 }
 
 template<class T>
@@ -148,17 +151,28 @@ inline void LinkedList<T>::AddItem(T * ptr)
 	if (head == nullptr) {
 		head = ptr;
 		head->next = nullptr;
+		next = head;
+		size++;
 	}
 	else {
 		int findPos = 0;
-		while ((SeeAt(findPos) < ptr) && (findPos < size)) {
+		while ((findPos < size) && (*SeeAtSamePos(findPos) < *ptr)) {
 			findPos++;
 		}
-		T* nextTemp = SeeAt(findPos - 1)->next;
-		SeeAt(findPos - 1)->next = ptr;
-		SeeAt(findPos)->next = nextTemp;
+		if (findPos == 0) {
+			T* nextTemp = head;
+			head = ptr;
+			next = head;
+			size++;
+			head->next = nextTemp;
+		}
+		else {
+			T* nextTemp = SeeAtSamePos(findPos - 1)->next;
+			SeeAtSamePos(findPos - 1)->next = ptr;
+			size++;
+			SeeAtSamePos(findPos)->next = nextTemp;
+		}
 	}
-	size++;
 }
 
 template<class T>
@@ -168,26 +182,30 @@ inline T * LinkedList<T>::RemoveItem(T * ptr)
 	int findPos;
 	bool itemFound=false;
 	for (int i = 0; i < size; i++) {
-		if (*SeeAt(i) == *ptr){
+		if (*SeeAtSamePos(i) == *ptr){
 			findPos = i;
 			itemFound = true;
 		}
 	}
-	cout << itemFound;
 	if (itemFound) {
-		retItem = SeeAt(findPos);
+		retItem = SeeAtSamePos(findPos);
 		retItem->next = nullptr;
 		if (findPos == 0) {
-			head = SeeAt(findPos)->next;
+			T* newHead = head->next;
+			head = newHead;
+			// head = SeeAtSamePos(findPos)->next;
+			/*if (head != nullptr) { 
+				head->next = tempNext; 
+			}*/
 		}
 		else {
-			SeeAt(findPos - 1)->next = SeeAt(findPos)->next;
+			SeeAtSamePos(findPos - 1)->next = SeeAtSamePos(findPos)->next;
 		}
 		size--;
 		return retItem;
 	}
 	else {
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -195,7 +213,7 @@ template<class T>
 inline bool LinkedList<T>::IsInList(T * ptr)
 {
 	for (int i = 0; i < size; i++) {
-		if (SeeAt(i) == ptr){
+		if ((*SeeAtSamePos(i)) == (*ptr)){
 			return true;
 		}
 	}
@@ -217,7 +235,14 @@ inline int LinkedList<T>::Size()
 template<class T>
 inline T * LinkedList<T>::SeeNext()
 {	
+	if (head == nullptr) {
+		throw EmptyList();
+		return nullptr;
+	}
 	T* nextTemp = next;
+	if (next == nullptr) {
+		return nullptr;
+	}
 	next = next->next;
 	pos++;
 	return nextTemp;
@@ -228,20 +253,40 @@ inline T * LinkedList<T>::SeeAt(int index)
 {	
 	if ((index >= size) || (index < 0)) {
 		throw ItemNotFound();
-	}
-	T* retItem;
-	retItem = head;
-	for (int i = 0; i <index; i++) {
-		retItem = retItem->next;
-	}
-	pos = index;
-	if (size == 0) {
-		next = nullptr;
+		return nullptr;
 	}
 	else {
-		next = retItem->next;
+		T* retItem;
+		retItem = head;
+		for (int i = 0; i < index; i++) {
+			retItem = retItem->next;
+		}
+		pos = index;
+		if (size == 0) {
+			next = nullptr;
+		}
+		else {
+			next = retItem->next;
+		}
+		return retItem;
 	}
-	return retItem;
+}
+
+template<class T>
+inline T * LinkedList<T>::SeeAtSamePos(int index)
+{
+	if ((index >= size) || (index < 0)) {
+		throw ItemNotFound();
+		return nullptr;
+	}
+	else {
+		T* retItem;
+		retItem = head;
+		for (int i = 0; i < index; i++) {
+			retItem = retItem->next;
+		}
+		return retItem;
+	}
 }
 
 template<class T>
