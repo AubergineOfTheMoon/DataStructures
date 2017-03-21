@@ -31,6 +31,7 @@ public:
 	bool operator>(Student s);
 	bool operator<(Student s);
 	bool operator==(Student s);
+	string toString();
 	Student* next;
 };
 
@@ -101,6 +102,31 @@ inline bool Student::operator==(Student s) {
 	return mIndex == s.getMIndex();
 }
 
+inline string Student::toString()
+{
+	
+	string t = "";
+	t += "\n/------------------------------------------------";
+	t += "\n| ***************************                    ";
+	t += "\n| *                         *                    ";
+	t += "\n| *           .-:-.         * Name: " + firstName + " " + lastName+"             ";
+	t += "\n| *        -ossssso-        *                    ";
+	t += "\n| *       .sssssssss.       *                    ";
+	t += "\n| *       `ossssssso`       *                    ";
+	t += "\n| *        .+ossso+.        *                    ";
+	t += "\n| *          `...`          *                    ";
+	t += "\n| *        `.-:::-.`        * MNumber: "+mNumber+"          ";
+	t += "\n| *     `:+ossssssso+:`     *                    ";
+	t += "\n| *    -ossssssssssssso:    *                    ";
+	t += "\n| *   -sssssssssssssssss:   *                    ";
+	t += "\n| *   ./+ossssssssssso+/-   *                    ";
+	t += "\n| *        ```...```        *                    ";
+	t += "\n| ***************************                    ";
+	t += "\n\------------------------------------------------\n";
+	return t;
+}
+
+
 
 /*******************************************************************
 *Linked List
@@ -124,6 +150,7 @@ public:
 	T* SeeNext();
 	T* SeeAt(int index);
 	void Reset();
+	void DisplayAll();
 	class ItemNotFound {
 	public:
 		ItemNotFound() {};
@@ -295,5 +322,18 @@ inline void LinkedList<T>::Reset()
 {
 	pos = 0;
 	next = head;
+}
+
+template<class Student>
+inline void LinkedList<Student>::DisplayAll()
+{
+	int tPos = pos;
+	pos = 0;
+	Student* s;
+	for (int i = 0; i < size; i++) {
+		s = SeeNext();
+		cout << (*s).toString();
+	}
+	pos = tPos;
 }
 

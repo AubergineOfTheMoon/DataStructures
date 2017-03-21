@@ -23,6 +23,7 @@ int main() {
 		cout << "6. See the next student in the directory" << endl;
 		cout << "7. See a student at a location in the directory" << endl;
 		cout << "8. Reset the location. " << endl;
+		cout << "9. Print ASCII art of all students. " << endl;
 		cout << "0. Exit" << endl;
 		cout << "Enter the number of the choice you wish to select: ";
 		cin >> choice;
@@ -147,6 +148,9 @@ int main() {
 			StudentDirectory.Reset();
 			break;
 		case 0: cout << "You have chosen to exit." << endl;
+			break;
+		case 9:
+			StudentDirectory.DisplayAll();
 			break;
 		default: cout << "You have entered an invalid choice." << endl;
 			break;
