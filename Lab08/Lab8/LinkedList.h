@@ -134,7 +134,7 @@ public:
 	};
 };
 
-#endif // !1
+#endif 
 
 template<class T>
 inline LinkedList<T>::LinkedList(T * item = nullptr)
@@ -189,7 +189,7 @@ inline T * LinkedList<T>::RemoveItem(T * ptr)
 	}
 	if (itemFound) {
 		retItem = SeeAtSamePos(findPos);
-		retItem->next = nullptr;
+		// retItem->next = nullptr;
 		if (findPos == 0) {
 			T* newHead = head->next;
 			head = newHead;
@@ -201,6 +201,7 @@ inline T * LinkedList<T>::RemoveItem(T * ptr)
 		else {
 			SeeAtSamePos(findPos - 1)->next = SeeAtSamePos(findPos)->next;
 		}
+		retItem->next = nullptr;
 		size--;
 		return retItem;
 	}

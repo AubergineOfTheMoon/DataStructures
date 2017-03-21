@@ -111,7 +111,7 @@ int main() {
 				cout << "You cannot see the next item in an empty list." << endl;
 			}
 			if (tempStudent == nullptr) {
-				cout << "There is no next student. You have reached the end of the directory. Please reset the starting location. " << endl;
+				cout << "There is no next student. You either have an empty directory or have reached the end of the directory. Please check whether the directory is empty and/or reset the starting location. " << endl;
 			}
 			else {
 				cout << "Here are details of the next student: " << endl;
