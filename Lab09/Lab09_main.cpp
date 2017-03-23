@@ -5,6 +5,11 @@ using namespace std;
 
 int main() {
 	int choice = 0;
+	int size;
+	do {
+		cout << "How big would you like the hash table: ";
+		cin >> size;
+	} while (size < 1);
 	HashTable<Student> StudentDirectory(3);
 	string firstName = "", lastName = "";
 	int bmonth = 0, bday = 0, byear = 0, mNumber;
@@ -20,10 +25,10 @@ int main() {
 		cout << "3. Check if a student is in the directory" << endl;
 		cout << "4. Check if directory is empty" << endl;
 		cout << "5. Get the number of students in the directory." << endl;
-		cout << "6. See the next student in the directory" << endl;
-		cout << "7. See a student at a location in the directory" << endl;
-		cout << "8. Reset the location. " << endl;
-		cout << "9. Print ASCII art of all students. " << endl;
+		//cout << "6. See the next student in the directory" << endl;
+		//cout << "7. See a student at a location in the directory" << endl;
+		//cout << "8. Reset the location. " << endl;
+		//cout << "9. Print ASCII art of all students. " << endl;
 		cout << "0. Exit" << endl;
 		cout << "Enter the number of the choice you wish to select: ";
 		cin >> choice;
@@ -63,7 +68,7 @@ int main() {
 			break;
 		case 2: cout << "Enter the M Number of the Student you would like to remove: ";
 			cin >> mNumber;
-			cout << "Size: " << StudentDirectory.GetLength() << endl;
+			//cout << "Size: " << StudentDirectory.GetLength() << endl;
 		    tempStudent = new Student(firstName, lastName, mNumber, bmonth, bday, byear, gpa);
 			removedStudent = StudentDirectory.RemoveItem(tempStudent);
 			if (removedStudent == nullptr) {
@@ -104,9 +109,9 @@ int main() {
 			break;
 		case 5: cout << "The number of students in the directory: " << StudentDirectory.GetLength() << endl;
 			break;
-		case 6: 
+		/*case 6: 
 			try{
-				//tempStudent = StudentDirectory.SeeNext();
+				tempStudent = StudentDirectory.SeeNext();
 			}
 			catch(exception EmptyList){
 				cout << "You cannot see the next item in an empty list." << endl;
@@ -142,15 +147,15 @@ int main() {
 			}
 			catch (exception ItemNotFound) {
 				cout << "That index is not in the directory." << endl;
-			}*/
+			}
 			break;
 		case 8: cout << "The positions in the list have been reset." << endl;
 			//StudentDirectory.Reset();
 			break;
-		case 0: cout << "You have chosen to exit." << endl;
-			break;
 		case 9:
 			//StudentDirectory.DisplayAll();
+			break;*/
+		case 0: cout << "You have chosen to exit." << endl;
 			break;
 		default: cout << "You have entered an invalid choice." << endl;
 			break;
