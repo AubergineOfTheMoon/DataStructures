@@ -99,18 +99,18 @@ inline bool Student::operator==(Student s) {
 
 */
 /*******************************************************************
-*Linked List
+*Hash table
 ********************************************************************/
 
 template <class T>
 class HashTable {
 private:
-
-	int length;
-	T* dataTable[];
-	int Hash(T*);
+	int max;
+	int size;
+	T* *dataTable;
+	int Hash(string);
 public:
-	HashTable(T* item);
+	HashTable(int size);
 	void AddItem(T* ptr);
 	T* RemoveItem(T* ptr);
 	T* GetItem(T* ptr);
@@ -120,163 +120,81 @@ public:
 #endif 
 
 template<class T>
-inline LinkedList<T>::LinkedList(T * item = nullptr)
+inline int HashTable<T>::Hash(string s)
 {
-	size = 0;
-	pos = 0;
-	head = item;
-	next = head;
+	int h = 0;
+	for (int i = 0; i < s.size(); i++) {
+		h += (int)s.substr(i, 1);
+	}
+	return h % max;
 }
 
 template<class T>
-inline void LinkedList<T>::AddItem(T * ptr)
+inline HashTable<T>::HashTable(int length=100)
 {
-	if (head == nullptr) {
-		head = ptr;
-		head->next = nullptr;
-		next = head;
-		size++;
-	}
-	else {
-		int findPos = 0;
-		while ((findPos < size) && (*SeeAtSamePos(findPos) < *ptr)) {
-			findPos++;
-		}
-		if (findPos == 0) {
-			T* nextTemp = head;
-			head = ptr;
-			next = head;
-			size++;
-			head->next = nextTemp;
-		}
-		else {
-			T* nextTemp = SeeAtSamePos(findPos - 1)->next;
-			SeeAtSamePos(findPos - 1)->next = ptr;
-			size++;
-			SeeAtSamePos(findPos)->next = nextTemp;
-		}
-	}
+	dataTable = new T*[max];
 }
 
 template<class T>
-inline T * LinkedList<T>::RemoveItem(T * ptr)
+inline void HashTable<T>::AddItem(T * ptr)
 {
-	T* retItem;
-	int findPos;
-	bool itemFound = false;
-	for (int i = 0; i < size; i++) {
-		if (*SeeAtSamePos(i) == *ptr) {
-			findPos = i;
-			itemFound = true;
-		}
+	if (size == max) {
+		// TODO Error checking
 	}
-	if (itemFound) {
-		retItem = SeeAtSamePos(findPos);
-		// retItem->next = nullptr;
-		if (findPos == 0) {
-			T* newHead = head->next;
-			head = newHead;
-			// head = SeeAtSamePos(findPos)->next;
-			/*if (head != nullptr) {
-			head->next = tempNext;
-			}*/
-		}
-		else {
-			SeeAtSamePos(findPos - 1)->next = SeeAtSamePos(findPos)->next;
-		}
-		retItem->next = nullptr;
-		size--;
-		return retItem;
-	}
-	else {
-		return nullptr;
-	}
+
+	int h = Hash(*T);
+	bool spotOccupied;
+	while (dataTable[h] != nullptr) {
+		h = (h + 1) / length;
+	} 
+	dataTable[h] = ptr;
 }
 
 template<class T>
-inline bool LinkedList<T>::IsInList(T * ptr)
+inline T * HashTable<T>::RemoveItem(T * ptr)
 {
-	for (int i = 0; i < size; i++) {
-		if ((*SeeAtSamePos(i)) == (*ptr)) {
-			return true;
-		}
+	if (size == 0) {
+		// TODO Maybe error checking
 	}
-	return false;
+	int h = Hash(*T);
+	bool spotOccupied;
+	int count = 0;
+	// Check by value, not by pointer
+	while (*dataTable[h] != *ptr && count < size) {
+		h = (h + 1) / length;
+		count++;
+	}
+	if (*dataTable[h] == *ptr) {
+		T* retPtr = dataTable[h];
+		dataTable[h] = nullptr;
+		return retPtr;
+	}
+	return nullptr;
 }
 
 template<class T>
-inline bool LinkedList<T>::IsEmpty()
+inline T * HashTable<T>::GetItem(T * ptr)
 {
-	return size == 0;
+	if (size == 0) {
+		// TODO Maybe error checking
+	}
+	int h = Hash(*T);
+	bool spotOccupied;
+	int count = 0;
+	// Check by value, not by pointer
+	while (*dataTable[h] != *ptr && count < size) {
+		h = (h + 1) / length;
+		count++;
+	}
+	if (*dataTable[h] == *ptr) {
+		T* retPtr = dataTable[h];
+		return retPtr;
+	}
+	return nullptr;
 }
 
 template<class T>
-inline int LinkedList<T>::Size()
+inline int HashTable<T>::GetLength()
 {
 	return size;
 }
-
-template<class T>
-inline T * LinkedList<T>::SeeNext()
-{
-	if (head == nullptr) {
-		throw EmptyList();
-		return nullptr;
-	}
-	T* nextTemp = next;
-	if (next == nullptr) {
-		return nullptr;
-	}
-	next = next->next;
-	pos++;
-	return nextTemp;
-}
-
-template<class T>
-inline T * LinkedList<T>::SeeAt(int index)
-{
-	if ((index >= size) || (index < 0)) {
-		throw ItemNotFound();
-		return nullptr;
-	}
-	else {
-		T* retItem;
-		retItem = head;
-		for (int i = 0; i < index; i++) {
-			retItem = retItem->next;
-		}
-		pos = index;
-		if (size == 0) {
-			next = nullptr;
-		}
-		else {
-			next = retItem->next;
-		}
-		return retItem;
-	}
-}
-
-template<class T>
-inline T * LinkedList<T>::SeeAtSamePos(int index)
-{
-	if ((index >= size) || (index < 0)) {
-		throw ItemNotFound();
-		return nullptr;
-	}
-	else {
-		T* retItem;
-		retItem = head;
-		for (int i = 0; i < index; i++) {
-			retItem = retItem->next;
-		}
-		return retItem;
-	}
-}
-
-template<class T>
-inline void LinkedList<T>::Reset()
-{
-	pos = 0;
-	next = head;
-}
-
