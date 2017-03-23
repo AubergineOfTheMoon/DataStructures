@@ -8,10 +8,10 @@
 #include<iostream>
 using namespace std;
 
-/*
-******************************************************************
+
+/*******************************************************************
 *Student
-*******************************************************************
+********************************************************************/
 class Student {
 private:
 	string firstName;
@@ -31,6 +31,7 @@ public:
 	bool operator>(Student s);
 	bool operator<(Student s);
 	bool operator==(Student s);
+	string toString();
 	Student* next;
 };
 
@@ -70,6 +71,10 @@ inline int Student::getAge() {
 	int currentMonth = timePtr->tm_mon + 1;
 	int currentDay = timePtr->tm_mday;
 	int age = currentYear - birthday[2];
+	/*cout << currentMonth << "/" << currentDay << "/" << currentYear << endl;
+	bool b1 = currentMonth < birthday[0];
+	bool b2 = (currentMonth == birthday[0]) && (currentDay < birthday[1]);
+	cout << b1 << " " << b2 << endl;*/
 	if ((currentMonth < birthday[0]) || ((currentMonth == birthday[0]) && (currentDay < birthday[1]))) {
 		age--;
 	}
@@ -97,7 +102,12 @@ inline bool Student::operator==(Student s) {
 	return mIndex == s.getMIndex();
 }
 
-*/
+inline string Student::toString()
+{
+	return mNumber;
+}
+
+
 /*******************************************************************
 *Hash table
 ********************************************************************/
@@ -123,16 +133,23 @@ template<class T>
 inline int HashTable<T>::Hash(string s)
 {
 	int h = 0;
-	for (int i = 0; i < s.size(); i++) {
-		h += (int)s.substr(i, 1);
+	const char *cArray = s.c_str();
+	for (int i = 0; i < s.length(); i++) {
+		h += (int)cArray[i];
 	}
+	
 	return h % max;
 }
 
 template<class T>
 inline HashTable<T>::HashTable(int length=100)
 {
+	max = length;
+	size = 0;
 	dataTable = new T*[max];
+	for (int i = 0; i < max; i++) {
+		dataTable[i] = nullptr;
+	}
 }
 
 template<class T>
@@ -142,12 +159,13 @@ inline void HashTable<T>::AddItem(T * ptr)
 		// TODO Error checking
 	}
 
-	int h = Hash(*T);
-	bool spotOccupied;
+	int h = Hash(ptr->toString());
+	// bool spotOccupied;
 	while (dataTable[h] != nullptr) {
-		h = (h + 1) / length;
+		h = (h + 1) % max;
 	} 
 	dataTable[h] = ptr;
+	size++;
 }
 
 template<class T>
@@ -155,18 +173,20 @@ inline T * HashTable<T>::RemoveItem(T * ptr)
 {
 	if (size == 0) {
 		// TODO Maybe error checking
+		return nullptr;
 	}
-	int h = Hash(*T);
-	bool spotOccupied;
+	int h = Hash(ptr->toString());
+	// bool spotOccupied;
 	int count = 0;
 	// Check by value, not by pointer
-	while (*dataTable[h] != *ptr && count < size) {
-		h = (h + 1) / length;
+	while ((dataTable[h] == nullptr || !(*dataTable[h] == *ptr)) && count < size) {
+		h = (h + 1) % max;
 		count++;
 	}
 	if (*dataTable[h] == *ptr) {
 		T* retPtr = dataTable[h];
 		dataTable[h] = nullptr;
+		size--;
 		return retPtr;
 	}
 	return nullptr;
@@ -177,16 +197,17 @@ inline T * HashTable<T>::GetItem(T * ptr)
 {
 	if (size == 0) {
 		// TODO Maybe error checking
+		return nullptr;
 	}
-	int h = Hash(*T);
-	bool spotOccupied;
+	int h = Hash(ptr->toString());
+	// bool spotOccupied;
 	int count = 0;
 	// Check by value, not by pointer
-	while (*dataTable[h] != *ptr && count < size) {
-		h = (h + 1) / length;
+	while ((dataTable[h] == nullptr || !(*dataTable[h] == *ptr)) && count < size) {
+		h = (h + 1) % max;
 		count++;
 	}
-	if (*dataTable[h] == *ptr) {
+	if (*dataTable[h] == *ptr && count != size) {
 		T* retPtr = dataTable[h];
 		return retPtr;
 	}
