@@ -114,13 +114,13 @@ inline string Student::toString()
 
 template <class T>
 class HashTable {
-private:
+protected:
 	int max;
 	int size;
 	T* *dataTable;
 	int Hash(string);
 public:
-	HashTable(int size);
+	HashTable(int);
 	void AddItem(T* ptr);
 	T* RemoveItem(T* ptr);
 	T* GetItem(T* ptr);
@@ -218,4 +218,254 @@ template<class T>
 inline int HashTable<T>::GetLength()
 {
 	return size;
+}
+
+/*********************************************************************
+                   Derived Chain Hash
+*********************************************************************/
+template <class T>
+class LinkedList {
+private:
+	int size;
+	T* next;
+	int pos;
+	T* head;
+	T* SeeAtSamePos(int index);
+public:
+	LinkedList(T* item);
+	void AddItem(T* ptr);
+	T* RemoveItem(T* ptr);
+	bool IsInList(T* ptr);
+	bool IsEmpty();
+	int Size();
+	T* SeeNext();
+	T* SeeAt(int index);
+	void Reset();
+	class ItemNotFound {
+	public:
+		ItemNotFound() {};
+	};
+	class EmptyList {
+	public:
+		EmptyList() {};
+	};
+};
+ 
+
+template<class T>
+inline LinkedList<T>::LinkedList(T * item = nullptr)
+{
+	size = 0;
+	pos = 0;
+	head = item;
+	next = head;
+}
+
+template<class T>
+inline void LinkedList<T>::AddItem(T * ptr)
+{
+	if (head == nullptr) {
+		head = ptr;
+		head->next = nullptr;
+		next = head;
+		size++;
+	}
+	else {
+		int findPos = 0;
+		while ((findPos < size) && (*SeeAtSamePos(findPos) < *ptr)) {
+			findPos++;
+		}
+		if (findPos == 0) {
+			T* nextTemp = head;
+			head = ptr;
+			next = head;
+			size++;
+			head->next = nextTemp;
+		}
+		else {
+			T* nextTemp = SeeAtSamePos(findPos - 1)->next;
+			SeeAtSamePos(findPos - 1)->next = ptr;
+			size++;
+			SeeAtSamePos(findPos)->next = nextTemp;
+		}
+	}
+}
+
+template<class T>
+inline T * LinkedList<T>::RemoveItem(T * ptr)
+{
+	T* retItem;
+	int findPos;
+	bool itemFound = false;
+	for (int i = 0; i < size; i++) {
+		if (*SeeAtSamePos(i) == *ptr) {
+			findPos = i;
+			itemFound = true;
+		}
+	}
+	if (itemFound) {
+		retItem = SeeAtSamePos(findPos);
+		// retItem->next = nullptr;
+		if (findPos == 0) {
+			T* newHead = head->next;
+			head = newHead;
+			// head = SeeAtSamePos(findPos)->next;
+			/*if (head != nullptr) {
+			head->next = tempNext;
+			}*/
+		}
+		else {
+			SeeAtSamePos(findPos - 1)->next = SeeAtSamePos(findPos)->next;
+		}
+		retItem->next = nullptr;
+		size--;
+		return retItem;
+	}
+	else {
+		return nullptr;
+	}
+}
+
+template<class T>
+inline bool LinkedList<T>::IsInList(T * ptr)
+{
+	for (int i = 0; i < size; i++) {
+		if ((*SeeAtSamePos(i)) == (*ptr)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+template<class T>
+inline bool LinkedList<T>::IsEmpty()
+{
+	return size == 0;
+}
+
+template<class T>
+inline int LinkedList<T>::Size()
+{
+	return size;
+}
+
+template<class T>
+inline T * LinkedList<T>::SeeNext()
+{
+	if (head == nullptr) {
+		throw EmptyList();
+		return nullptr;
+	}
+	T* nextTemp = next;
+	if (next == nullptr) {
+		return nullptr;
+	}
+	next = next->next;
+	pos++;
+	return nextTemp;
+}
+
+template<class T>
+inline T * LinkedList<T>::SeeAt(int index)
+{
+	if ((index >= size) || (index < 0)) {
+		throw ItemNotFound();
+		return nullptr;
+	}
+	else {
+		T* retItem;
+		retItem = head;
+		for (int i = 0; i < index; i++) {
+			retItem = retItem->next;
+		}
+		pos = index;
+		if (size == 0) {
+			next = nullptr;
+		}
+		else {
+			next = retItem->next;
+		}
+		return retItem;
+	}
+}
+
+template<class T>
+inline T * LinkedList<T>::SeeAtSamePos(int index)
+{
+	if ((index >= size) || (index < 0)) {
+		throw ItemNotFound();
+		return nullptr;
+	}
+	else {
+		T* retItem;
+		retItem = head;
+		for (int i = 0; i < index; i++) {
+			retItem = retItem->next;
+		}
+		return retItem;
+	}
+}
+
+template<class T>
+inline void LinkedList<T>::Reset()
+{
+	pos = 0;
+	next = head;
+}
+
+template <class T> class ChainedHashTable : public HashTable<T> {
+public:
+	ChainedHashTable(int);
+	void AddItem(T* ptr); //overload
+	T* RemoveItem(T* ptr); //overload
+	T* GetItem(T* ptr);// overload
+	// DO not need to change int GetLength();
+};
+
+template <class T>
+inline ChainedHashTable<T>::ChainedHashTable(int length = 100) {
+	max = length;
+	size = 0;
+	// LinkedList<Student> StudentDirectory(nullptr);
+	dataTable = new LinkedList<T>[max];
+	for (int i = 0;i < max;i++) {
+		dataTable[i] = LinkedList(nullptr);
+	}
+}
+
+template <class T>
+inline void ChainedHashTable<T>::AddItem(T* ptr) {
+
+	int h = Hash(ptr->toString());
+	dataTable[h].AddItem(ptr);
+	size++;
+}
+
+template <class T>
+inline T* ChainedHashTable<T>::RemoveItem(T* ptr) {
+
+	if (size == 0) {
+		return nullptr;
+	}
+
+	int h = Hash(ptr->toString());
+	retItem = dataTable[h].RemoveItem(ptr);
+	if (retItem != nullptr)
+	{
+		size--;
+	}
+	return retItem;
+}
+
+template <class T>
+inline T* ChainedHashTable<T>::GetItem(T* ptr) {
+
+	int h = Hash(ptr->toString());
+	T* retPtr = nullptr;
+	for (int i = 0; i < dataTable[h].Size(); i++) {
+		if (dataTable[h].SeeAt(i) == ptr) {
+			retPtr = dataTable[h].SeeAt(i);
+		} 
+	}
+	return retPtr;
 }
