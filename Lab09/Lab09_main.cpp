@@ -4,13 +4,24 @@
 using namespace std;
 
 int main() {
-	int choice = 0;
+	
+	bool task4 = false; // If true it will use the class for task 4
+	
+	
 	int size;
 	do {
 		cout << "How big would you like the hash table: ";
 		cin >> size;
 	} while (size < 1);
+
 	HashTable<Student> StudentDirectory(3);
+	if (task4) {
+		HashTableLinked<Student> StudentDirectory(3);
+
+	}
+	int choice = 0;
+
+
 	string firstName = "", lastName = "";
 	int bmonth = 0, bday = 0, byear = 0, mNumber;
 	float gpa = 0.0;

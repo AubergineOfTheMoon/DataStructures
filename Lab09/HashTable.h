@@ -220,8 +220,84 @@ inline int HashTable<T>::GetLength()
 	return size;
 }
 
+
+
 /*********************************************************************
-                   Derived Chain Hash
+Derived Chain Hash
+*********************************************************************/
+
+template <class T>
+class HashTableLinked : HashTable<T>{
+protected:
+	int max;
+	int size;
+	LinkedList<T>* *dataTable;
+public:
+	HashTableLinked(int);
+	void AddItem(T* ptr);
+	T* RemoveItem(T* ptr);
+	T* GetItem(T* ptr);
+	int GetLength();
+};
+
+template<class T>
+inline HashTableLinked<T>::HashTableLinked(int length = 100)
+{
+	max = length;
+	size = 0;
+	dataTable = new LinkedList<T>*[max];
+	for (int i = 0; i < max; i++) {
+		dataTable[i] = nullptr;
+	}
+}
+
+template<class T>
+inline void HashTableLinked<T>::AddItem(T * ptr)
+{
+	if (size == max) {
+		// TODO Error checking
+	}
+	int h = Hash(ptr->toString());
+	dataTable[h].AddItem(ptr);
+	size++;
+}
+
+template<class T>
+inline T * HashTableLinked<T>::RemoveItem(T * ptr)
+{
+	if (size == 0) {
+		// TODO Maybe error checking
+		return nullptr;
+	}
+	int h = Hash(ptr->toString());
+	T* t = dataTable[h].RemoveItem(ptr);
+	if (t != nullptr) {
+		size--;
+	}
+	return t;
+}
+
+template<class T>
+inline T * HashTableLinked<T>::GetItem(T * ptr)
+{
+	if (size == 0) {
+		// TODO Maybe error checking
+		return nullptr;
+	}
+	int h = Hash(ptr->toString());
+	T* t = dataTable[h].GetItem(ptr);
+	return t;
+}
+
+template<class T>
+inline int HashTableLinked<T>::GetLength()
+{
+	return size;
+}
+
+
+/*********************************************************************
+Linked List
 *********************************************************************/
 template <class T>
 class LinkedList {
@@ -250,7 +326,7 @@ public:
 		EmptyList() {};
 	};
 };
- 
+
 
 template<class T>
 inline LinkedList<T>::LinkedList(T * item = nullptr)
@@ -419,7 +495,7 @@ public:
 	void AddItem(T* ptr); //overload
 	T* RemoveItem(T* ptr); //overload
 	T* GetItem(T* ptr);// overload
-	// DO not need to change int GetLength();
+					   // DO not need to change int GetLength();
 };
 
 template <class T>
@@ -428,7 +504,7 @@ inline ChainedHashTable<T>::ChainedHashTable(int length = 100) {
 	size = 0;
 	// LinkedList<Student> StudentDirectory(nullptr);
 	dataTable = new LinkedList<T>[max];
-	for (int i = 0;i < max;i++) {
+	for (int i = 0; i < max; i++) {
 		dataTable[i] = LinkedList(nullptr);
 	}
 }
@@ -465,7 +541,7 @@ inline T* ChainedHashTable<T>::GetItem(T* ptr) {
 	for (int i = 0; i < dataTable[h].Size(); i++) {
 		if (dataTable[h].SeeAt(i) == ptr) {
 			retPtr = dataTable[h].SeeAt(i);
-		} 
+		}
 	}
 	return retPtr;
 }
