@@ -107,195 +107,6 @@ inline string Student::toString()
 	return mNumber;
 }
 
-
-/*******************************************************************
-*Hash table
-********************************************************************/
-
-template <class T>
-class HashTable {
-protected:
-	int max;
-	int size;
-	T* *dataTable;
-	int Hash(string);
-public:
-	HashTable(int);
-	void AddItem(T* ptr);
-	T* RemoveItem(T* ptr);
-	T* GetItem(T* ptr);
-	int GetLength();
-};
-
-#endif 
-
-template<class T>
-inline int HashTable<T>::Hash(string s)
-{
-	int h = 0;
-	const char *cArray = s.c_str();
-	for (int i = 0; i < s.length(); i++) {
-		h += (int)cArray[i];
-	}
-	
-	return h % max;
-}
-
-template<class T>
-inline HashTable<T>::HashTable(int length=100)
-{
-	max = length;
-	size = 0;
-	dataTable = new T*[max];
-	for (int i = 0; i < max; i++) {
-		dataTable[i] = nullptr;
-	}
-}
-
-template<class T>
-inline void HashTable<T>::AddItem(T * ptr)
-{
-	if (size == max) {
-		// TODO Error checking
-	}
-
-	int h = Hash(ptr->toString());
-	// bool spotOccupied;
-	while (dataTable[h] != nullptr) {
-		h = (h + 1) % max;
-	} 
-	dataTable[h] = ptr;
-	size++;
-}
-
-template<class T>
-inline T * HashTable<T>::RemoveItem(T * ptr)
-{
-	if (size == 0) {
-		// TODO Maybe error checking
-		return nullptr;
-	}
-	int h = Hash(ptr->toString());
-	// bool spotOccupied;
-	int count = 0;
-	// Check by value, not by pointer
-	while ((dataTable[h] == nullptr || !(*dataTable[h] == *ptr)) && count < size) {
-		h = (h + 1) % max;
-		count++;
-	}
-	if (*dataTable[h] == *ptr) {
-		T* retPtr = dataTable[h];
-		dataTable[h] = nullptr;
-		size--;
-		return retPtr;
-	}
-	return nullptr;
-}
-
-template<class T>
-inline T * HashTable<T>::GetItem(T * ptr)
-{
-	if (size == 0) {
-		// TODO Maybe error checking
-		return nullptr;
-	}
-	int h = Hash(ptr->toString());
-	// bool spotOccupied;
-	int count = 0;
-	// Check by value, not by pointer
-	while ((dataTable[h] == nullptr || !(*dataTable[h] == *ptr)) && count < size) {
-		h = (h + 1) % max;
-		count++;
-	}
-	if (*dataTable[h] == *ptr && count != size) {
-		T* retPtr = dataTable[h];
-		return retPtr;
-	}
-	return nullptr;
-}
-
-template<class T>
-inline int HashTable<T>::GetLength()
-{
-	return size;
-}
-
-
-
-/*********************************************************************
-Derived Chain Hash
-*********************************************************************/
-
-template <class T>
-class HashTableLinked : HashTable<T>{
-protected:
-	int max;
-	int size;
-	LinkedList<T>* *dataTable;
-public:
-	HashTableLinked(int);
-	void AddItem(T* ptr);
-	T* RemoveItem(T* ptr);
-	T* GetItem(T* ptr);
-	int GetLength();
-};
-
-template<class T>
-inline HashTableLinked<T>::HashTableLinked(int length = 100)
-{
-	max = length;
-	size = 0;
-	dataTable = new LinkedList<T>*[max];
-	for (int i = 0; i < max; i++) {
-		dataTable[i] = nullptr;
-	}
-}
-
-template<class T>
-inline void HashTableLinked<T>::AddItem(T * ptr)
-{
-	if (size == max) {
-		// TODO Error checking
-	}
-	int h = Hash(ptr->toString());
-	dataTable[h].AddItem(ptr);
-	size++;
-}
-
-template<class T>
-inline T * HashTableLinked<T>::RemoveItem(T * ptr)
-{
-	if (size == 0) {
-		// TODO Maybe error checking
-		return nullptr;
-	}
-	int h = Hash(ptr->toString());
-	T* t = dataTable[h].RemoveItem(ptr);
-	if (t != nullptr) {
-		size--;
-	}
-	return t;
-}
-
-template<class T>
-inline T * HashTableLinked<T>::GetItem(T * ptr)
-{
-	if (size == 0) {
-		// TODO Maybe error checking
-		return nullptr;
-	}
-	int h = Hash(ptr->toString());
-	T* t = dataTable[h].GetItem(ptr);
-	return t;
-}
-
-template<class T>
-inline int HashTableLinked<T>::GetLength()
-{
-	return size;
-}
-
-
 /*********************************************************************
 Linked List
 *********************************************************************/
@@ -308,6 +119,7 @@ private:
 	T* head;
 	T* SeeAtSamePos(int index);
 public:
+	LinkedList();
 	LinkedList(T* item);
 	void AddItem(T* ptr);
 	T* RemoveItem(T* ptr);
@@ -317,6 +129,7 @@ public:
 	T* SeeNext();
 	T* SeeAt(int index);
 	void Reset();
+	string toString();
 	class ItemNotFound {
 	public:
 		ItemNotFound() {};
@@ -327,6 +140,14 @@ public:
 	};
 };
 
+template<class T>
+inline LinkedList<T>::LinkedList()
+{
+	size = 0;
+	pos = 0;
+	head = nullptr;
+	next = head;
+}
 
 template<class T>
 inline LinkedList<T>::LinkedList(T * item = nullptr)
@@ -489,6 +310,247 @@ inline void LinkedList<T>::Reset()
 	next = head;
 }
 
+template<class Student>
+inline string LinkedList<Student>::toString()
+{
+	string retString = "";
+	int tPos = pos;
+	pos = 0;
+	Student* s;
+	for (int i = 0; i < size; i++) {
+		s = SeeNext();
+		retString += (*s).toString()+ ", ";
+	}
+	pos = tPos;
+	return retString;
+}
+
+/*******************************************************************
+*Hash table
+********************************************************************/
+
+template <class T>
+class HashTable {
+protected:
+	int max;
+	int size;
+	T* *dataTable;
+	int Hash(string);
+public:
+	HashTable();
+	HashTable(int);
+	void AddItem(T* ptr);
+	T* RemoveItem(T* ptr);
+	T* GetItem(T* ptr);
+	int GetLength();
+};
+
+#endif 
+
+template<class T>
+inline int HashTable<T>::Hash(string s)
+{
+	int h = 0;
+	const char *cArray = s.c_str();
+	for (int i = 0; i < s.length(); i++) {
+		h += (int)cArray[i];
+	}
+	
+	return h % max;
+}
+
+template<class T>
+inline HashTable<T>::HashTable()
+{
+	max = 100;
+	size = 0;
+	dataTable = new T*[max];
+	for (int i = 0; i < max; i++) {
+		dataTable[i] = nullptr;
+	}
+}
+
+template<class T>
+inline HashTable<T>::HashTable(int length=100)
+{
+	max = length;
+	size = 0;
+	dataTable = new T*[max];
+	for (int i = 0; i < max; i++) {
+		dataTable[i] = nullptr;
+	}
+}
+
+template<class T>
+inline void HashTable<T>::AddItem(T * ptr)
+{
+	if (size == max) {
+		// TODO Error checking
+	}
+
+	int h = Hash(ptr->toString());
+	// bool spotOccupied;
+	while (dataTable[h] != nullptr) {
+		h = (h + 1) % max;
+	} 
+	dataTable[h] = ptr;
+	size++;
+}
+
+template<class T>
+inline T * HashTable<T>::RemoveItem(T * ptr)
+{
+	if (size == 0) {
+		// TODO Maybe error checking
+		return nullptr;
+	}
+	int h = Hash(ptr->toString());
+	// bool spotOccupied;
+	int count = 0;
+	// Check by value, not by pointer
+	while ((dataTable[h] == nullptr || !(*dataTable[h] == *ptr)) && count < size) {
+		h = (h + 1) % max;
+		count++;
+	}
+	if (*dataTable[h] == *ptr) {
+		T* retPtr = dataTable[h];
+		dataTable[h] = nullptr;
+		size--;
+		return retPtr;
+	}
+	return nullptr;
+}
+
+template<class T>
+inline T * HashTable<T>::GetItem(T * ptr)
+{
+	if (size == 0) {
+		// TODO Maybe error checking
+		return nullptr;
+	}
+	int h = Hash(ptr->toString());
+	// bool spotOccupied;
+	int count = 0;
+	// Check by value, not by pointer
+	while ((dataTable[h] == nullptr || !(*dataTable[h] == *ptr)) && count < size) {
+		h = (h + 1) % max;
+		count++;
+	}
+	if (*dataTable[h] == *ptr && count != size) {
+		T* retPtr = dataTable[h];
+		return retPtr;
+	}
+	return nullptr;
+}
+
+template<class T>
+inline int HashTable<T>::GetLength()
+{
+	return size;
+}
+
+
+
+/*********************************************************************
+Derived Chain Hash
+*********************************************************************/
+
+template <class T>
+class HashTableLinked : HashTable<T>{
+protected:
+	int max;
+	int size;
+	LinkedList<T>* dataTable;
+public:
+	HashTableLinked();
+	HashTableLinked(int);
+	void AddItem(T* ptr);
+	T* RemoveItem(T* ptr);
+	T* GetItem(T* ptr);
+	int GetLength();
+	string toString();
+};
+
+template<class T>
+inline HashTableLinked<T>::HashTableLinked()
+{
+	max = 100;
+	size = 0;
+	dataTable = new LinkedList<T>[max];
+	for (int i = 0; i < max; i++) {
+		dataTable[i] = LinkedList<T>();
+	}
+}
+
+template<class T>
+inline HashTableLinked<T>::HashTableLinked(int length = 100)
+{
+	max = length;
+	size = 0;
+	dataTable = new LinkedList<T>[max];
+	for (int i = 0; i < max; i++) {
+		dataTable[i] = LinkedList<T>();
+	}
+}
+
+template<class T>
+inline void HashTableLinked<T>::AddItem(T * ptr)
+{
+	int h = Hash(ptr->toString());
+	dataTable[h].AddItem(ptr);
+	size++;
+}
+
+template<class T>
+inline T * HashTableLinked<T>::RemoveItem(T * ptr)
+{
+	if (size == 0) {
+		// TODO Maybe error checking
+		return nullptr;
+	}
+	int h = Hash(ptr->toString());
+	T* t = dataTable[h].RemoveItem(ptr);
+	if (t != nullptr) {
+		size--;
+	}
+	return t;
+}
+
+template<class T>
+inline T * HashTableLinked<T>::GetItem(T * ptr)
+{
+	/*if (size == 0) {
+		// TODO Maybe error checking
+		return nullptr;
+	}
+	int h = Hash(ptr->toString());
+	T* t = dataTable[h].GetItem(ptr);
+	return t;*/
+	int h = Hash(ptr->toString());
+	T* retPtr = nullptr;
+	for (int i = 0; i < dataTable[h].Size(); i++) {
+		if (*dataTable[h].SeeAt(i) == *ptr) {
+			retPtr = dataTable[h].SeeAt(i);
+		}
+	}
+	return retPtr;
+}
+
+template<class T>
+inline int HashTableLinked<T>::GetLength()
+{
+	return size;
+}
+
+template<class T>
+inline string HashTableLinked<T>::toString() {
+	string retString = "";
+	for (int i = 0; i < size; i++) {
+		retString += to_string(i) + ": " + dataTable[i].toString()+"'\n'";
+	}
+	return retString;
+}
+/*
 template <class T> class ChainedHashTable : public HashTable<T> {
 public:
 	ChainedHashTable(int);
@@ -497,6 +559,17 @@ public:
 	T* GetItem(T* ptr);// overload
 					   // DO not need to change int GetLength();
 };
+
+template <class T>
+inline ChainedHashTable<T>::ChainedHashTable(int length = 100) {
+	max = length;
+	size = 0;
+	// LinkedList<Student> StudentDirectory(nullptr);
+	dataTable = new LinkedList<T>[max];
+	for (int i = 0; i < max; i++) {
+		dataTable[i] = LinkedList(nullptr);
+	}
+}
 
 template <class T>
 inline ChainedHashTable<T>::ChainedHashTable(int length = 100) {
@@ -544,4 +617,4 @@ inline T* ChainedHashTable<T>::GetItem(T* ptr) {
 		}
 	}
 	return retPtr;
-}
+}*/

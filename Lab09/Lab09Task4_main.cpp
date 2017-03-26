@@ -1,4 +1,4 @@
-/*#include<iostream>
+#include<iostream>
 #include<string>
 #include"HashTable.h"
 using namespace std;
@@ -10,7 +10,7 @@ int main() {
 		cout << "How big would you like the hash table: ";
 		cin >> size;
 	} while (size < 1);
-	HashTable<Student> StudentDirectory(3);
+	HashTableLinked<Student> StudentDirectory= HashTableLinked<Student>(size);
 	string firstName = "", lastName = "";
 	int bmonth = 0, bday = 0, byear = 0, mNumber;
 	float gpa = 0.0;
@@ -21,10 +21,11 @@ int main() {
 		cout << "***************************************" << endl;
 		cout << "Please select the the action you would like to complete" << endl;
 		cout << "1. Add student to directory" << endl;
-		cout << "2. Get a student from the directory" << endl;
+		cout << "2. Remove a student from the directory" << endl;
 		cout << "3. Check if a student is in the directory" << endl;
 		cout << "4. Check if directory is empty" << endl;
 		cout << "5. Get the number of students in the directory." << endl;
+		cout << "6. Get the information of a student in the directory." << endl;
 		//cout << "6. See the next student in the directory" << endl;
 		//cout << "7. See a student at a location in the directory" << endl;
 		//cout << "8. Reset the location. " << endl;
@@ -109,6 +110,26 @@ int main() {
 			break;
 		case 5: cout << "The number of students in the directory: " << StudentDirectory.GetLength() << endl;
 			break;
+		case 6: cout << "Enter the M Number of the Student you would like to view: ";
+			cin >> mNumber;
+			//cout << "Size: " << StudentDirectory.GetLength() << endl;
+			tempStudent = new Student(firstName, lastName, mNumber, bmonth, bday, byear, gpa);
+			removedStudent = StudentDirectory.GetItem(tempStudent);
+			if (removedStudent == nullptr) {
+				cout << "There is no student in the directory with that M Number." << endl;
+			}
+			else {
+				cout << "Here are details of the removed student: " << endl;
+				cout << "Student Name: " << removedStudent->getName() << endl;
+				cout << "Student M Number: " << removedStudent->getMNumber() << endl;
+				cout << "Student Birthday: " << removedStudent->getBirthday() << endl;
+				cout << "Student Age: " << removedStudent->getAge() << endl;
+				delete removedStudent;
+				removedStudent = nullptr;
+			}
+			break;
+		case 7: cout << StudentDirectory.toString();
+			break;
 			/*case 6:
 			try{
 			tempStudent = StudentDirectory.SeeNext();
@@ -154,7 +175,7 @@ int main() {
 			break;
 			case 9:
 			//StudentDirectory.DisplayAll();
-			break;*//*
+			break;*/
 		case 0: cout << "You have chosen to exit." << endl;
 			break;
 		default: cout << "You have entered an invalid choice." << endl;
@@ -162,4 +183,4 @@ int main() {
 		}
 	} while (choice != 0);
 	return 0;
-}*/
+}
