@@ -3,7 +3,7 @@
 #include"HashTable.h"
 using namespace std;
 
-int main123() {
+int main() {
 	int choice = 0;
 	int size;
 	do {
@@ -26,10 +26,7 @@ int main123() {
 		cout << "4. Check if directory is empty" << endl;
 		cout << "5. Get the number of students in the directory." << endl;
 		cout << "6. Get the information of a student in the directory." << endl;
-		//cout << "6. See the next student in the directory" << endl;
-		//cout << "7. See a student at a location in the directory" << endl;
-		//cout << "8. Reset the location. " << endl;
-		//cout << "9. Print ASCII art of all students. " << endl;
+		cout << "7. Display Hash Table. " << endl;
 		cout << "0. Exit" << endl;
 		cout << "Enter the number of the choice you wish to select: ";
 		cin >> choice;
@@ -54,10 +51,8 @@ int main123() {
 			cin >> byear;
 			cout << "Enter the student's GPA: ";
 			cin >> gpa;
-			// cout << endl;
 			tempStudent = new Student(firstName, lastName, mNumber, bmonth, bday, byear, gpa);
 			StudentDirectory.AddItem(tempStudent);
-			tempStudent = nullptr;
 			firstName = "";
 			lastName = "";
 			mNumber = 0;
@@ -65,11 +60,10 @@ int main123() {
 			bday = 0;
 			byear = 0;
 			gpa = 0.0;
-			// delete tempStudent;
+			tempStudent = nullptr;
 			break;
 		case 2: cout << "Enter the M Number of the Student you would like to remove: ";
 			cin >> mNumber;
-			//cout << "Size: " << StudentDirectory.GetLength() << endl;
 			tempStudent = new Student(firstName, lastName, mNumber, bmonth, bday, byear, gpa);
 			removedStudent = StudentDirectory.RemoveItem(tempStudent);
 			if (removedStudent == nullptr) {
@@ -84,7 +78,8 @@ int main123() {
 				delete removedStudent;
 				removedStudent = nullptr;
 			}
-			// delete tempStudent;
+			delete tempStudent;
+			tempStudent = nullptr;
 			break;
 		case 3: cout << "Enter the M Number of the student to check if they are in the directory: ";
 			cin >> mNumber;
@@ -98,7 +93,8 @@ int main123() {
 				cout << "No" << endl;
 			}
 
-			// delete tempStudent;
+			delete tempStudent;
+			tempStudent = nullptr;
 			break;
 		case 4: cout << "Is the directory empty?: ";
 			if (StudentDirectory.GetLength() == 0) {
@@ -112,70 +108,26 @@ int main123() {
 			break;
 		case 6: cout << "Enter the M Number of the Student you would like to view: ";
 			cin >> mNumber;
-			//cout << "Size: " << StudentDirectory.GetLength() << endl;
 			tempStudent = new Student(firstName, lastName, mNumber, bmonth, bday, byear, gpa);
-			removedStudent = StudentDirectory.GetItem(tempStudent);
+			removedStudent = StudentDirectory.GetItem(tempStudent); 
+			// Removed student in this case does not mean the student has been removed from the directory
 			if (removedStudent == nullptr) {
 				cout << "There is no student in the directory with that M Number." << endl;
 			}
 			else {
-				cout << "Here are details of the removed student: " << endl;
+				cout << "Here are details of the student: " << endl;
 				cout << "Student Name: " << removedStudent->getName() << endl;
 				cout << "Student M Number: " << removedStudent->getMNumber() << endl;
 				cout << "Student Birthday: " << removedStudent->getBirthday() << endl;
 				cout << "Student Age: " << removedStudent->getAge() << endl;
-				delete removedStudent;
+				/// delete removedStudent;
 				removedStudent = nullptr;
 			}
+			delete tempStudent;
+			tempStudent = nullptr;
 			break;
 		case 7: cout << StudentDirectory.toString();
 			break;
-			/*case 6:
-			try{
-			tempStudent = StudentDirectory.SeeNext();
-			}
-			catch(exception EmptyList){
-			cout << "You cannot see the next item in an empty list." << endl;
-			}
-			if (tempStudent == nullptr) {
-			cout << "There is no next student. You either have an empty directory or have reached the end of the directory. Please check whether the directory is empty and/or reset the starting location. " << endl;
-			}
-			else {
-			cout << "Here are details of the next student: " << endl;
-			cout << "Student Name: " << tempStudent->getName() << endl;
-			cout << "Student M Number: " << tempStudent->getMNumber() << endl;
-			cout << "Student Birthday: " << tempStudent->getBirthday() << endl;
-			cout << "Student Age: " << tempStudent->getAge() << endl;
-			}
-			// delete tempStudent;
-			break;
-			case 7: int index;
-			cout << "Enter the index of the student you would like to view (a number between 0 and " << StudentDirectory.GetLength() - 1 << "): ";
-			cin >> index;
-			/*try {
-			tempStudent = StudentDirectory.GetItem(index);
-			if (tempStudent != nullptr) {
-			cout << "Here are details of the student at that location: " << endl;
-			cout << "Student Name: " << tempStudent->getName() << endl;
-			cout << "Student M Number: " << tempStudent->getMNumber() << endl;
-			cout << "Student Birthday: " << tempStudent->getBirthday() << endl;
-			cout << "Student Age: " << tempStudent->getAge() << endl;
-			// delete tempStudent;
-			}
-			else {
-			cout << "That index is not in the directory." << endl;
-			}
-			}
-			catch (exception ItemNotFound) {
-			cout << "That index is not in the directory." << endl;
-			}
-			break;
-			case 8: cout << "The positions in the list have been reset." << endl;
-			//StudentDirectory.Reset();
-			break;
-			case 9:
-			//StudentDirectory.DisplayAll();
-			break;*/
 		case 0: cout << "You have chosen to exit." << endl;
 			break;
 		default: cout << "You have entered an invalid choice." << endl;

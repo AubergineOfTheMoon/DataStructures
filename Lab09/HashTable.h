@@ -71,10 +71,6 @@ inline int Student::getAge() {
 	int currentMonth = timePtr->tm_mon + 1;
 	int currentDay = timePtr->tm_mday;
 	int age = currentYear - birthday[2];
-	/*cout << currentMonth << "/" << currentDay << "/" << currentYear << endl;
-	bool b1 = currentMonth < birthday[0];
-	bool b2 = (currentMonth == birthday[0]) && (currentDay < birthday[1]);
-	cout << b1 << " " << b2 << endl;*/
 	if ((currentMonth < birthday[0]) || ((currentMonth == birthday[0]) && (currentDay < birthday[1]))) {
 		age--;
 	}
@@ -129,7 +125,7 @@ public:
 	T* SeeNext();
 	T* SeeAt(int index);
 	void Reset();
-	string toString();
+	string toString(); // For testing, should only used for linked lists with students
 	class ItemNotFound {
 	public:
 		ItemNotFound() {};
@@ -143,6 +139,7 @@ public:
 template<class T>
 inline LinkedList<T>::LinkedList()
 {
+	// Default constructor for linked list.
 	size = 0;
 	pos = 0;
 	head = nullptr;
@@ -152,6 +149,7 @@ inline LinkedList<T>::LinkedList()
 template<class T>
 inline LinkedList<T>::LinkedList(T * item = nullptr)
 {
+	// Constructor for linked list.
 	size = 0;
 	pos = 0;
 	head = item;
@@ -161,6 +159,7 @@ inline LinkedList<T>::LinkedList(T * item = nullptr)
 template<class T>
 inline void LinkedList<T>::AddItem(T * ptr)
 {
+	// Add item to linked list
 	if (head == nullptr) {
 		head = ptr;
 		head->next = nullptr;
@@ -191,6 +190,7 @@ inline void LinkedList<T>::AddItem(T * ptr)
 template<class T>
 inline T * LinkedList<T>::RemoveItem(T * ptr)
 {
+	// Remove item from linked list
 	T* retItem;
 	int findPos;
 	bool itemFound = false;
@@ -226,6 +226,7 @@ inline T * LinkedList<T>::RemoveItem(T * ptr)
 template<class T>
 inline bool LinkedList<T>::IsInList(T * ptr)
 {
+	// Returns whether item is in the list or not
 	for (int i = 0; i < size; i++) {
 		if ((*SeeAtSamePos(i)) == (*ptr)) {
 			return true;
@@ -237,18 +238,21 @@ inline bool LinkedList<T>::IsInList(T * ptr)
 template<class T>
 inline bool LinkedList<T>::IsEmpty()
 {
+	// Returns whether linked list is empty
 	return size == 0;
 }
 
 template<class T>
 inline int LinkedList<T>::Size()
 {
+	// Returns size of linked list
 	return size;
 }
 
 template<class T>
 inline T * LinkedList<T>::SeeNext()
 {
+	// Returns the next item in the linked list
 	if (head == nullptr) {
 		throw EmptyList();
 		return nullptr;
@@ -265,6 +269,7 @@ inline T * LinkedList<T>::SeeNext()
 template<class T>
 inline T * LinkedList<T>::SeeAt(int index)
 {
+	// Returns the item at a specific index in the linked list
 	if ((index >= size) || (index < 0)) {
 		throw ItemNotFound();
 		return nullptr;
@@ -289,6 +294,7 @@ inline T * LinkedList<T>::SeeAt(int index)
 template<class T>
 inline T * LinkedList<T>::SeeAtSamePos(int index)
 {
+	// Returns the item at a specific index in the linked list without changing the internal variable pos.
 	if ((index >= size) || (index < 0)) {
 		throw ItemNotFound();
 		return nullptr;
@@ -306,19 +312,21 @@ inline T * LinkedList<T>::SeeAtSamePos(int index)
 template<class T>
 inline void LinkedList<T>::Reset()
 {
+	// Resets pos and next.
 	pos = 0;
 	next = head;
 }
 
-template<class Student>
-inline string LinkedList<Student>::toString()
+template<class T>
+inline string LinkedList<T>::toString() // For testing
 {
+	// Returns a string with the information of the students (M numbers) in the linked list
 	string retString = "";
 	int tPos = pos;
 	pos = 0;
 	Student* s;
 	for (int i = 0; i < size; i++) {
-		s = SeeNext();
+		s = SeeAtSamePos(i);
 		retString += (*s).toString()+ ", ";
 	}
 	pos = tPos;
@@ -354,6 +362,7 @@ public:
 template<class T>
 inline int HashTable<T>::Hash(string s)
 {
+	// Hash function: Returns sum of the ASCII values in string argument modulo the max items in the hash table
 	int h = 0;
 	const char *cArray = s.c_str();
 	for (int i = 0; i < s.length(); i++) {
@@ -366,6 +375,7 @@ inline int HashTable<T>::Hash(string s)
 template<class T>
 inline HashTable<T>::HashTable()
 {
+	// Default constructor for Hash Table
 	max = 100;
 	size = 0;
 	dataTable = new T*[max];
@@ -377,6 +387,7 @@ inline HashTable<T>::HashTable()
 template<class T>
 inline HashTable<T>::HashTable(int length=100)
 {
+	// Constructor for Hash Table
 	max = length;
 	size = 0;
 	dataTable = new T*[max];
@@ -388,12 +399,12 @@ inline HashTable<T>::HashTable(int length=100)
 template<class T>
 inline void HashTable<T>::AddItem(T * ptr)
 {
+	// Add item to the Hash Table
 	if (size == max) {
 		throw ListFull();
 	}
 
 	int h = Hash(ptr->toString());
-	// bool spotOccupied;
 	while (dataTable[h] != nullptr) {
 		h = (h + 1) % max;
 	} 
@@ -404,23 +415,27 @@ inline void HashTable<T>::AddItem(T * ptr)
 template<class T>
 inline T * HashTable<T>::RemoveItem(T * ptr)
 {
+	// Removes item from the Hash Table
 	if (size == 0) {
 		// TODO Maybe error checking
 		return nullptr;
 	}
 	int h = Hash(ptr->toString());
-	// bool spotOccupied;
 	int count = 0;
-	// Check by value, not by pointer
+	// Iterate throught the Hash Table starting at the hash value checking every position after in the Hash Table 
+	// until the desired item is found or all values in Hash Table have been checked.  
+	// The item is found by comparing values not memory locations.
 	while ((dataTable[h] == nullptr || !(*dataTable[h] == *ptr)) && count < size) {
 		h = (h + 1) % max;
 		count++;
 	}
-	if (*dataTable[h] == *ptr) {
-		T* retPtr = dataTable[h];
-		dataTable[h] = nullptr;
-		size--;
-		return retPtr;
+	if dataTable[h] != nullptr){
+		if (*dataTable[h] == *ptr) {
+			T* retPtr = dataTable[h];
+			dataTable[h] = nullptr;
+			size--;
+			return retPtr;
+		}
 	}
 	return nullptr;
 }
@@ -428,21 +443,25 @@ inline T * HashTable<T>::RemoveItem(T * ptr)
 template<class T>
 inline T * HashTable<T>::GetItem(T * ptr)
 {
+	// Return an item in the Hash Table without removing it from the Hash Table
 	if (size == 0) {
 		// TODO Maybe error checking
 		return nullptr;
 	}
 	int h = Hash(ptr->toString());
-	// bool spotOccupied;
 	int count = 0;
-	// Check by value, not by pointer
+	// Iterate throught the Hash Table starting at the hash value checking every position after in the Hash Table 
+	// until the desired item is found or all values in Hash Table have been checked.  
+	// The item is found by comparing values not memory locations.
 	while ((dataTable[h] == nullptr || !(*dataTable[h] == *ptr)) && count < size) {
 		h = (h + 1) % max;
 		count++;
 	}
-	if (*dataTable[h] == *ptr && count != size) {
-		T* retPtr = dataTable[h];
-		return retPtr;
+	if (dataTable[h] != nullptr) {
+		if (*dataTable[h] == *ptr && count != size) {
+			T* retPtr = dataTable[h];
+			return retPtr;
+		}
 	}
 	return nullptr;
 }
@@ -450,6 +469,7 @@ inline T * HashTable<T>::GetItem(T * ptr)
 template<class T>
 inline int HashTable<T>::GetLength()
 {
+	// Returns number of items in the Hash Table
 	return size;
 }
 
@@ -465,6 +485,7 @@ protected:
 	int max;
 	int size;
 	LinkedList<T>* dataTable;
+	int Hash(string);
 public:
 	//HashTableLinked();
 	HashTableLinked(int);
@@ -473,12 +494,23 @@ public:
 	T* GetItem(T* ptr);
 	int GetLength();
 	string toString();
-	class HashTableLinkedFull {
+	/*class HashTableLinkedFull {
 	public:
 		HashTableLinkedFull() {};
-	};
+	};*/
 };
+template<class T>
+inline int HashTableLinked<T>::Hash(string s)
+{
+	// Hash function for Hash Table Linked
+	int h = 0;
+	const char *cArray = s.c_str();
+	for (int i = 0; i < s.length(); i++) {
+		h += (int)cArray[i];
+	}
 
+	return h % max;
+}
 /*template<class T>
 inline HashTableLinked<T>::HashTableLinked()
 {
@@ -493,35 +525,36 @@ inline HashTableLinked<T>::HashTableLinked()
 template<class T>
 inline HashTableLinked<T>::HashTableLinked(int length = 100)
 {
+	// Constructor for Hash Table Linked
 	max = length;
 	size = 0;
 	dataTable = new LinkedList<T>[max];
 	for (int i = 0; i < max; i++) {
-		dataTable[i] = LinkedList<T>();
+		dataTable[i] = LinkedList<T>(nullptr);
 	}
 }
 
 template<class T>
 inline void HashTableLinked<T>::AddItem(T * ptr)
 {
-	if (size == max) {
-		throw HashTableLinkedFull();
-	}
+	// Add item to the Hash Table Linked
 	int h = Hash(ptr->toString());
-	dataTable[h].AddItem(ptr);
+	dataTable[h].AddItem(ptr); // Add item to the linked list at hash value position in the Hash Table Linked
 	size++;
 }
 
 template<class T>
 inline T * HashTableLinked<T>::RemoveItem(T * ptr)
 {
+	// Remove Item from the Hash Table Linked
 	if (size == 0) {
 		// TODO Maybe error checking
 		return nullptr;
 	}
 	int h = Hash(ptr->toString());
-	T* t = dataTable[h].RemoveItem(ptr);
-	if (t != nullptr) {
+	T* t = dataTable[h].RemoveItem(ptr); // Remove item from the linked list at hash value position in the Hash Table
+	// If the item is not in the linked list, a null pointer is returned.
+	if (t != nullptr) { 
 		size--;
 	}
 	return t;
@@ -530,12 +563,13 @@ inline T * HashTableLinked<T>::RemoveItem(T * ptr)
 template<class T>
 inline T * HashTableLinked<T>::GetItem(T * ptr)
 {
+	// Return item in the Hash Tabled Linked without removing it.
 	/*if (size == 0) {
 		// TODO Maybe error checking
 		return nullptr;
 	}
 	int h = Hash(ptr->toString());
-	T* t = dataTable[h].GetItem(ptr);
+	T* t = dataTable[h].GetItem(ptr); // Removed this code because the Linked List has no GetItem function
 	return t;*/
 	int h = Hash(ptr->toString());
 	T* retPtr = nullptr;
@@ -545,20 +579,22 @@ inline T * HashTableLinked<T>::GetItem(T * ptr)
 			return retPtr;
 		}
 	}
-	return retPtr;
+	return nullptr;
 }
 
 template<class T>
 inline int HashTableLinked<T>::GetLength()
 {
+	// Returns the number of items in the Hash Table Linked
 	return size;
 }
 
 template<class T>
 inline string HashTableLinked<T>::toString() {
+	// Function for testing purposes only, returns a string representing the Hash Table Linked
 	string retString = "";
-	for (int i = 0; i < size; i++) {
-		retString += to_string(i) + ": " + dataTable[i].toString()+"'\n'";
+	for (int i = 0; i < max; i++) {
+		retString += to_string(i) + ": " + dataTable[i].toString() + "\n";
 	}
 	return retString;
 }
