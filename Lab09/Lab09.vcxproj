@@ -145,7 +145,6 @@
     <ClInclude Include="HashTable.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Lab09Task4_main.cpp" />
     <ClCompile Include="Lab09_main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

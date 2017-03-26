@@ -5,7 +5,7 @@ using namespace std;
 
 int main() {
 	
-	bool task4 = false; // If true it will use the class for task 4
+	bool task4 = true; // If true it will use the class for task 4
 	
 	
 	int size;
@@ -14,11 +14,8 @@ int main() {
 		cin >> size;
 	} while (size < 1);
 
-	HashTable<Student> StudentDirectory(3);
-	if (task4) {
-		HashTableLinked<Student> StudentDirectory(3);
-
-	}
+	//HashTable<Student> StudentDirectory(size);
+	HashTableLinked<Student> StudentDirectory(size);
 	int choice = 0;
 
 
@@ -66,16 +63,24 @@ int main() {
 			cin >> gpa;
 			// cout << endl;
 			tempStudent = new Student(firstName, lastName, mNumber, bmonth, bday, byear, gpa);
-			StudentDirectory.AddItem(tempStudent);
-			tempStudent = nullptr;
-			firstName = "";
-			lastName = "";
-			mNumber = 0;
-			bmonth = 0;
-			bday = 0;
-			byear = 0;
-			gpa = 0.0;
-			// delete tempStudent;
+			try {
+				StudentDirectory.AddItem(tempStudent);
+				tempStudent = nullptr;
+				firstName = "";
+				lastName = "";
+				mNumber = 0;
+				bmonth = 0;
+				bday = 0;
+				byear = 0;
+				gpa = 0.0;
+				// delete tempStudent;
+			}
+			catch (HashTableLinked<Student>::HashTableLinkedFull) {
+				cout << "The list is full" << endl;
+			}
+			catch (HashTable<Student>::ListFull) {
+				cout << "The list is full" << endl;
+			}
 			break;
 		case 2: cout << "Enter the M Number of the Student you would like to remove: ";
 			cin >> mNumber;

@@ -3,7 +3,7 @@
 #include"HashTable.h"
 using namespace std;
 
-int main() {
+int main123() {
 	int choice = 0;
 	int size;
 	do {

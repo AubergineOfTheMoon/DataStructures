@@ -343,6 +343,10 @@ public:
 	T* RemoveItem(T* ptr);
 	T* GetItem(T* ptr);
 	int GetLength();
+	class ListFull {
+	public:
+		ListFull() {};
+	};
 };
 
 #endif 
@@ -385,7 +389,7 @@ template<class T>
 inline void HashTable<T>::AddItem(T * ptr)
 {
 	if (size == max) {
-		// TODO Error checking
+		throw ListFull();
 	}
 
 	int h = Hash(ptr->toString());
@@ -462,16 +466,20 @@ protected:
 	int size;
 	LinkedList<T>* dataTable;
 public:
-	HashTableLinked();
+	//HashTableLinked();
 	HashTableLinked(int);
 	void AddItem(T* ptr);
 	T* RemoveItem(T* ptr);
 	T* GetItem(T* ptr);
 	int GetLength();
 	string toString();
+	class HashTableLinkedFull {
+	public:
+		HashTableLinkedFull() {};
+	};
 };
 
-template<class T>
+/*template<class T>
 inline HashTableLinked<T>::HashTableLinked()
 {
 	max = 100;
@@ -480,7 +488,7 @@ inline HashTableLinked<T>::HashTableLinked()
 	for (int i = 0; i < max; i++) {
 		dataTable[i] = LinkedList<T>();
 	}
-}
+}*/
 
 template<class T>
 inline HashTableLinked<T>::HashTableLinked(int length = 100)
@@ -496,6 +504,9 @@ inline HashTableLinked<T>::HashTableLinked(int length = 100)
 template<class T>
 inline void HashTableLinked<T>::AddItem(T * ptr)
 {
+	if (size == max) {
+		throw HashTableLinkedFull();
+	}
 	int h = Hash(ptr->toString());
 	dataTable[h].AddItem(ptr);
 	size++;
@@ -529,8 +540,9 @@ inline T * HashTableLinked<T>::GetItem(T * ptr)
 	int h = Hash(ptr->toString());
 	T* retPtr = nullptr;
 	for (int i = 0; i < dataTable[h].Size(); i++) {
-		if (*dataTable[h].SeeAt(i) == *ptr) {
-			retPtr = dataTable[h].SeeAt(i);
+		retPtr = dataTable[h].SeeAt(i);
+		if (*retPtr == *ptr) {
+			return retPtr;
 		}
 	}
 	return retPtr;
