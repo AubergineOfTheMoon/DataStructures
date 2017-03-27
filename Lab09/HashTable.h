@@ -429,7 +429,7 @@ inline T * HashTable<T>::RemoveItem(T * ptr)
 		h = (h + 1) % max;
 		count++;
 	}
-	if dataTable[h] != nullptr){
+	if (dataTable[h] != nullptr){
 		if (*dataTable[h] == *ptr) {
 			T* retPtr = dataTable[h];
 			dataTable[h] = nullptr;
