@@ -456,6 +456,7 @@ inline T * HashTable<T>::GetItem(T * ptr)
 	while ((dataTable[h] == nullptr || !(*dataTable[h] == *ptr)) && count < size) {
 		h = (h + 1) % max;
 		count++;
+		cout << count << endl;
 	}
 	if (dataTable[h] != nullptr) {
 		if (*dataTable[h] == *ptr && count != size) {
@@ -575,6 +576,7 @@ inline T * HashTableLinked<T>::GetItem(T * ptr)
 	T* retPtr = nullptr;
 	for (int i = 0; i < dataTable[h].Size(); i++) {
 		retPtr = dataTable[h].SeeAt(i);
+		cout << "Chained Performance: " << i << endl;
 		if (*retPtr == *ptr) {
 			return retPtr;
 		}

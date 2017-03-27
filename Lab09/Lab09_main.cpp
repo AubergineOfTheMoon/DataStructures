@@ -24,6 +24,12 @@ int main() {
 	bool flag = false;
 	Student* tempStudent;
 	Student* removedStudent;
+	string firstN = "Kyle";
+	string lastN = "O'Connor";
+	for (int f = 0; f < 1000;f++) {
+		tempStudent = new Student(firstN, lastN, 10000000 + f, 01, 21, 1997, 4.0);
+		StudentDirectory.AddItem(tempStudent);
+	}
 	do {
 		cout << "***************************************" << endl;
 		cout << "Please select the the action you would like to complete" << endl;

@@ -10,13 +10,19 @@ int main() {
 		cout << "How big would you like the hash table: ";
 		cin >> size;
 	} while (size < 1);
-	HashTableLinked<Student> StudentDirectory= HashTableLinked<Student>(size);
+	HashTableLinked<Student> StudentDirectory = HashTableLinked<Student>(size);
 	string firstName = "", lastName = "";
 	int bmonth = 0, bday = 0, byear = 0, mNumber;
 	float gpa = 0.0;
 	bool flag = false;
 	Student* tempStudent;
 	Student* removedStudent;
+	string firstN = "Kyle";
+	string lastN = "O'Connor";
+	for (int f = 0; f < 50;f++) {
+		tempStudent = new Student(firstN, lastN, 10000000 + f, 01, 21, 1997, 4.0);
+		StudentDirectory.AddItem(tempStudent);
+	}
 	do {
 		cout << "***************************************" << endl;
 		cout << "Please select the the action you would like to complete" << endl;
