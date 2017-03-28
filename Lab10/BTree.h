@@ -9,13 +9,15 @@
 template<class T> class Node {
 private:
 	int keyList[];
-	Node * children[];
+	Node* children[];
 	int max;
 	int pos;
 public:
 	Node(int);
-	void addKey(int);
-	int* removeKey(int);
+	void addKey(int*);
+	int* removeKey(int*);
+	void addChild(Node*);
+	Node* removeChild(Node*);
 	bool isFull();
 	bool isEmpty();
 };
@@ -64,6 +66,16 @@ inline int* Node<T>::removeKey(int *k)
 
 	// TODO if node is empty delete/merge things
 }
+template<class T>
+inline void Node<T>::addChild(Node*) {
+	//TODO: Add code for adding child	
+
+}
+
+template<class T>
+inline Node* Node<T>::removeChild(Node*) {
+	///TODO Add code for removing child
+}
 
 template<class T>
 inline bool Node<T>::isFull()
@@ -74,7 +86,7 @@ inline bool Node<T>::isFull()
 template<class T>
 inline bool Node<T>::isEmpty()
 {
-	return pos == max;
+	return pos == 0;
 }
 
 /*******************************************************
