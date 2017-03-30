@@ -76,8 +76,8 @@ private:
 	// void rotateRight();
 	// void rotateLeft();
 	// int nodeHeight();
-	// T* findParent(T*, T*);
-	// T* findLargest(T*);
+	T* findParent(T*, T*);
+	T* findLargest(T*);
 public:
 	T* root;
 	BinarySearchTree();
@@ -188,10 +188,10 @@ inline T* BinarySearchTree<T>::find(T* itemToFind, T* subtree = root) {
 	if (*subtree == *itemToFind) {
 		return subtree;
 	}
-	if ((*subtree < *itemToFind) && (*subtree->left != nullptr)) {
+	if ((*subtree > *itemToFind) && (*subtree->left != nullptr)) {
 		return find(itemToFind, subtree->left);
 	}
-	else if ((*subtree > *itemToFind) && (*subtree->right != nullptr)) {
+	else if ((*subtree < *itemToFind) && (*subtree->right != nullptr)) {
 		return find(itemToFind, subtree->right);
 	}
 	else {
@@ -201,43 +201,42 @@ inline T* BinarySearchTree<T>::find(T* itemToFind, T* subtree = root) {
 
 template<class T>
 inline T* BinarySearchTree<T>::findParent(T* itemToFind, T* subtree = root) {
+	parent = subtree;
 	if (*subtree == *itemToFind) {
-		return subtree;
+		return nullptr;
 	}
-	if ((*subtree < *itemToFind) && (*subtree->left!=nullptr)) {
-		return find(itemToFind, subtree->left);
+	else if ((subtree->right!=nullptr)&&(*subtree->right == *itemToFind)) {
+		return parent;
 	}
-	else if ((*subtree > *itemToFind) && (*subtree->right != nullptr)) {
-		return find(itemToFind, subtree->right);
+	else if ((subtree->left != nullptr) && (*subtree->left == *itemToFind)) {
+		return parent;
+	}
+	else if ((subtree->right == nullptr) && (subtree->left == nullptr)) {
+		throw ItemNotFound();
 	}
 	else {
-		return nullptr;
+		if (*itemToFind < *subTree) {
+			return findParent(itemToFind, subtree->left);
+		}
+		else {
+			return findParent(itemToFind, subtree->right);
+		}
 	}
 }
 
-// Finds the Largest Value (frequency) in the binary tree
+// Finds the largest node in the section of the binary tree passed in
 template<class T>
-inline T* BinarySearchTree<T>::findLargest(T* node)
+inline T* BinarySearchTree<T>::findLargest(T* subTree=root)
 {
-	nodeList = []
-	if (node == nullptr;) {
-		return nullptr;
+	if (subTree == nullptr) {
+		return nullptr; 
 	}
-	int maxVal = node->frequency;
-
-	if (node->left != nullptr) {
-		int leftMax = findLargest(node->left);
-		if (maxVal < leftMax) {
-			maxVal = leftMax;
-		}
+	// Change to return ["" , 0 ]
+	T* maxNode = subTree;
+	while (maxNode->right != nullptr) {
+		maxNode = maxNode->right;
 	}
-	if (node->right != nullptr) {
-		int rightMax = findLargest(node->right);
-		if (maxVal < rightMax) {
-			maxVal = rightMax;
-		}
-	}
-	return maxVal;
+	return maxNode;
 }
 
 // Returns an array of nodes - smallest to largest - based on sorting value
