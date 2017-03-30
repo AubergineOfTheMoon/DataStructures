@@ -72,18 +72,18 @@ BinarySearchTree Class
 template<class T> class BinarySearchTree {
 private:
 	int treeSize;
-	bool isUnbalanced();
-	void rotateRight();
-	void rotateLeft();
-	int nodeHeight();
-	T* findParent(T*, T*);
-	T* findLargest(T*);
+	// bool isUnbalanced();
+	// void rotateRight();
+	// void rotateLeft();
+	// int nodeHeight();
+	// T* findParent(T*, T*);
+	// T* findLargest(T*);
 public:
 	T* root;
 	BinarySearchTree();
 	void insert(T* in, T* subtree=root);
 	T* find(T*, T* subtree = root);
-	void size();
+	int size();
 	int getAllAscending();
 	int getAllDescending();
 	void emptyTree();
@@ -105,6 +105,8 @@ inline BinarySearchTree<T>::BinarySearchTree() {
 	root = in;
 }
 
+
+// Insterts an item into the tree where it should be ( ordered)
 template<class T>
 inline void BinarySearchTree<T>::insert(T* in, T* subtree = root){
 
@@ -133,7 +135,13 @@ inline void BinarySearchTree<T>::insert(T* in, T* subtree = root){
 	}
 }
 
+// Returns the number of elements in the tree
+template<class T>
+inline int BinarySearchTree<T>::size() {
+	return treeSize;
+}
 
+// Removes a certain item from the tree
 template<class T>
 inline T* BinarySearchTree<T>::remove(T* nodeToRemove){
 	T* parent = findParent(nodeToRemove); //pass in parameters
@@ -173,6 +181,8 @@ inline T* BinarySearchTree<T>::remove(T* nodeToRemove){
 	return nodeToRemove;
 }
 
+
+// Finds the node and returns a pointer to that node
 template<class T>
 inline T* BinarySearchTree<T>::find(T* itemToFind, T* subtree = root) {
 	if (*subtree == *itemToFind) {
@@ -205,10 +215,41 @@ inline T* BinarySearchTree<T>::findParent(T* itemToFind, T* subtree = root) {
 	}
 }
 
+// Finds the Largest Value (frequency) in the binary tree
 template<class T>
-inline T* BinarySearchTree<T>::findLargest(T*)
+inline T* BinarySearchTree<T>::findLargest(T* node)
 {
-	return //
+	nodeList = []
+	if (node == nullptr;) {
+		return nullptr;
+	}
+	int maxVal = node->frequency;
+
+	if (node->left != nullptr) {
+		int leftMax = findLargest(node->left);
+		if (maxVal < leftMax) {
+			maxVal = leftMax;
+		}
+	}
+	if (node->right != nullptr) {
+		int rightMax = findLargest(node->right);
+		if (maxVal < rightMax) {
+			maxVal = rightMax;
+		}
+	}
+	return maxVal;
+}
+
+// Returns an array of nodes - smallest to largest - based on sorting value
+template<class T>
+inline T* BinarySearchTree<T>::getAllAscending() {
+
+}
+
+// Returns an array of nodes - largest to smallest - based on sorting value
+template<class T>
+inline T* BinarySearchTree<T>::getAllDescending() {
+
 }
 
 template<class T>
