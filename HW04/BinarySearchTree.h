@@ -12,19 +12,20 @@ private:
 	string word;
 	int frequency;
 public:
-	Node(string , int);
+	Node(string);
 	Node* left;
 	Node* right;
 	string getWord();
 	int getFrequency();
+	void incrementFrequency();
 	bool operator<(Node);
 	bool operator>(Node);
 	bool operator==(Node);
 };
 
-Node::Node(string w, int f) {
+Node::Node(string w) {
 	word = w;
-	frequency = f;
+	frequency = 1;
 	left = nullptr;;
 	right = nullptr;
 }
@@ -37,6 +38,10 @@ string Node::getWord()
 int Node::getFrequency()
 {
 	return frequency;
+}
+
+void Node::incrementFrequency(){
+	frequency++;
 }
 
 bool Node::operator<(Node n) {
@@ -72,35 +77,46 @@ BinarySearchTree Class
 template<class T> class BinarySearchTree {
 private:
 	int treeSize;
+	int printPos = 0; // Variable counter for creating sorted array
+	T** sortedArray; // Variable for storing sorted array for get Ascending and descending
 	// bool isUnbalanced();
 	// void rotateRight();
 	// void rotateLeft();
 	// int nodeHeight();
 	T* findParent(T*, T*);
 	T* findLargest(T*);
+	void getAscending(T*); // Private helper function for getAllAscending()
+	void getDescending(T*); // Private helper function for getAllDescending()
 public:
 	T* root;
-	BinarySearchTree();
-	void insert(T* in, T* subtree=root);
-	T* find(T*, T* subtree = root);
+	// BinarySearchTree();
+	BinarySearchTree(T* in = nullptr);
+	void insert(T* in, T*);
+	T* find(T* in, T*);
 	int size();
-	int getAllAscending();
-	int getAllDescending();
+	T** getAllAscending();
+	T** getAllDescending();
 	void emptyTree();
 	T* remove(T*);
 	int getTreeSize();
 	class ItemAlreadyInTree {
-		ItemAlreadyInTree() {}
+	public: ItemAlreadyInTree() {}
 	};
 	class ItemNotFound {
-		ItemNotFound() {}
+	public: ItemNotFound() {}
 	};
 };
 
 #endif
-
+/*
 template<class T>
 inline BinarySearchTree<T>::BinarySearchTree() {
+	treeSize = 0;
+	root = in;
+}*/
+
+template<class T>
+inline BinarySearchTree<T>::BinarySearchTree(T* in = nullptr) {
 	treeSize = 0;
 	root = in;
 }
@@ -108,7 +124,7 @@ inline BinarySearchTree<T>::BinarySearchTree() {
 
 // Insterts an item into the tree where it should be ( ordered)
 template<class T>
-inline void BinarySearchTree<T>::insert(T* in, T* subtree = root){
+inline void BinarySearchTree<T>::insert(T* in, T* subtree){
 
 	if (subtree == nullptr) {
 		root = in;
@@ -130,9 +146,10 @@ inline void BinarySearchTree<T>::insert(T* in, T* subtree = root){
 		throw ItemAlreadyInTree();
 	}
 	treeSize++;
-	if (isUnbalanced()) {
+	//TODO: Rotate tree if it is unbalanced
+	// if (isUnbalanced()) {
 		// Rotate right or rotate left as needed.
-	}
+	// }
 }
 
 // Returns the number of elements in the tree
@@ -184,14 +201,14 @@ inline T* BinarySearchTree<T>::remove(T* nodeToRemove){
 
 // Finds the node and returns a pointer to that node
 template<class T>
-inline T* BinarySearchTree<T>::find(T* itemToFind, T* subtree = root) {
+inline T* BinarySearchTree<T>::find(T* itemToFind, T* subtree) {
 	if (*subtree == *itemToFind) {
 		return subtree;
 	}
-	if ((*subtree > *itemToFind) && (*subtree->left != nullptr)) {
+	if ((*subtree > *itemToFind) && (subtree->left != nullptr)) {
 		return find(itemToFind, subtree->left);
 	}
-	else if ((*subtree < *itemToFind) && (*subtree->right != nullptr)) {
+	else if ((*subtree < *itemToFind) && (subtree->right != nullptr)) {
 		return find(itemToFind, subtree->right);
 	}
 	else {
@@ -241,14 +258,40 @@ inline T* BinarySearchTree<T>::findLargest(T* subTree=root)
 
 // Returns an array of nodes - smallest to largest - based on sorting value
 template<class T>
-inline T* BinarySearchTree<T>::getAllAscending() {
+inline T** BinarySearchTree<T>::getAllAscending() {
+	sortedArray = new T*[treeSize];
+	printPos = 0;
+	getAscending(root);
+	return sortedArray;
+}
 
+template<class T>
+inline void BinarySearchTree<T>::getAscending(T* in) {
+	if (in != nullptr) {
+		getAscending(in->left);
+		sortedArray[printPos]= in;
+		printPos++;
+		getAscending(in->right);
+	}
 }
 
 // Returns an array of nodes - largest to smallest - based on sorting value
 template<class T>
-inline T* BinarySearchTree<T>::getAllDescending() {
+inline T** BinarySearchTree<T>::getAllDescending() {
+	sortedArray = new T*[treeSize];
+	printPos = 0;
+	getDescending(root);
+	return sortedArray;
+}
 
+template<class T>
+inline void BinarySearchTree<T>::getDescending(T* in) {
+	if (in != nullptr) {
+		getDescending(in->right);
+		sortedArray[printPos] = in;
+		printPos++;
+		getDescending(in->left);
+	}
 }
 
 template<class T>
@@ -257,13 +300,4 @@ inline int BinarySearchTree<T>::getTreeSize()
 	return treeSize;
 }
 
-template<class T>
-inline int BTree<T>::getTreeHeight()
-{
-	return 0;
-}
 
-template<class T>
-inline void BTree<T>::PrintTree()
-{
-}
