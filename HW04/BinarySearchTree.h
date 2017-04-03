@@ -2,6 +2,7 @@
 #ifndef BST_H
 #define BST_H
 #include<string>
+#include<algorithm> 
 using namespace std;
 /*******************************************************
 Node Class
@@ -89,9 +90,19 @@ private:
 	void getDescending(T*); // Private helper function for getAllDescending()
 
 	void subInsert(T* in, T*);
+	void balanceTree();
+
+	int getHeight(Node);
+	int getMin(Node *);
+	int getMax(Node *);
+	int getBalance(Node *);
+	//int subMin(int);
+	//int subMax(int);
+
+	const int heightDif = 2;
+
 public:
 	T* root;
-	// BinarySearchTree();
 	BinarySearchTree(T* in = nullptr);
 	void insert(T* in, T*);
 	T* find(T* in, T*);
@@ -101,6 +112,7 @@ public:
 	void emptyTree();
 	T* remove(T*);
 	int getTreeSize();
+
 	class ItemAlreadyInTree {
 	public: ItemAlreadyInTree() {}
 	};
@@ -110,12 +122,8 @@ public:
 };
 
 #endif
-/*
-template<class T>
-inline BinarySearchTree<T>::BinarySearchTree() {
-	treeSize = 0;
-	root = in;
-}*/
+
+
 
 template<class T>
 inline BinarySearchTree<T>::BinarySearchTree(T* in = nullptr) {
@@ -154,10 +162,15 @@ inline void BinarySearchTree<T>::subInsert(T* in, T* subtree) {
 	}
 	
 	//TODO: Rotate tree if it is unbalanced
-	// if (isUnbalanced()) {
-		// Rotate right or rotate left as needed.
-	// }
+	int min = getMin(root);
+	int max = getMax(root);
+	if (getBalance(root) > 1) {
+		cout << "UNBALANCED" << endl;
+		//balanceTree();
+	}
 }
+
+
 
 // Returns the number of elements in the tree
 template<class T>
@@ -295,6 +308,11 @@ inline T** BinarySearchTree<T>::getAllDescending() {
 }
 
 template<class T>
+inline void BinarySearchTree<T>::emptyTree()
+{
+}
+
+template<class T>
 inline void BinarySearchTree<T>::getDescending(T* in) {
 	if (in != nullptr) {
 		getDescending(in->right);
@@ -310,4 +328,47 @@ inline int BinarySearchTree<T>::getTreeSize()
 	return treeSize;
 }
 
+
+// Balancin code 
+template<class T>
+inline int BinarySearchTree<T>::getHeight(Node)
+{
+	return 0;
+}
+
+template<class T>
+inline int BinarySearchTree<T>::getMin(Node * n)
+{
+	if (n->left == nullptr && n->right == nullptr) {
+		return 0;
+	}
+	if (n->left == nullptr) {
+		return 1 + getMin(n->right);
+	}
+	if (n->right == nullptr) {
+		return 1 + getMin(n->left);
+	}
+	return 1 + min(getMin(n->right), getMin(n->left));
+}
+
+template<class T>
+inline int BinarySearchTree<T>::getMax(Node * n)
+{
+	if (n->left == nullptr && n->right == nullptr) {
+		return 0;
+	}
+	if (n->left == nullptr) {
+		return 1 + getMax(n->right);
+	}
+	if (n->right == nullptr) {
+		return 1 + getMax(n->left);
+	}
+	return 1 + max(getMax(n->right), getMax(n->left));
+}
+
+template<class T>
+inline int BinarySearchTree<T>::getBalance(Node * n)
+{
+	return getMax(n) - getMin(n);
+}
 
