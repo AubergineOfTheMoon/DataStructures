@@ -10,7 +10,7 @@ int main()
 	bool failedInput = false;
 
 	string filename;
-	cout << "Enter a file name to be processed" << endl;
+	cout << "Enter a file name to be processed: ";
 	cin >> filename;
 
 	fstream fin;
