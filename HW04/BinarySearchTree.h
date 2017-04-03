@@ -232,7 +232,7 @@ inline int BinarySearchTree<T>::nodeHeight(T* temp = root)
 	if (u == nullptr) {
 		return 0
 	}
-	return 1 + max(height(u->left), height(u->right));
+	return 1 + max(height(temp->left), height(temp->right));
 }
 
 template<class T>
