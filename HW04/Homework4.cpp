@@ -30,7 +30,7 @@ int main()
 			for (int i = 0; i < word.length(); i++) {
 				word[i] = tolower(word[i]);
 			}
-			*tempWord = Node(word);
+			tempWord = new Node(word);
 			foundWord = BSTWords.find(tempWord, BSTWords.root);
 			if (foundWord == nullptr) {
 				BSTWords.insert(tempWord, BSTWords.root);
@@ -75,7 +75,7 @@ int main()
 				for (int i = 0; i < word.length(); i++) {
 					word[i] = tolower(word[i]);
 				}
-				*tempWord = Node(word);
+				tempWord = new Node(word);
 				removedWord = BSTWords.find(tempWord, BSTWords.root);
 				if (removedWord == nullptr) {
 					cout << "The word is not in the tree." << endl;

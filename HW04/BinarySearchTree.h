@@ -87,6 +87,8 @@ private:
 	T* findLargest(T*);
 	void getAscending(T*); // Private helper function for getAllAscending()
 	void getDescending(T*); // Private helper function for getAllDescending()
+
+	void subInsert(T* in, T*);
 public:
 	T* root;
 	// BinarySearchTree();
@@ -124,16 +126,21 @@ inline BinarySearchTree<T>::BinarySearchTree(T* in = nullptr) {
 
 // Insterts an item into the tree where it should be ( ordered)
 template<class T>
-inline void BinarySearchTree<T>::insert(T* in, T* subtree){
+inline void BinarySearchTree<T>::insert(T* in, T* subtree) {
+	subInsert(in, subtree);
+	treeSize++;
+}
 
+template<class T>
+inline void BinarySearchTree<T>::subInsert(T* in, T* subtree) {
 	if (subtree == nullptr) {
 		root = in;
 	}
 	else if ((subtree->left != nullptr) && (*in < *subtree)) {
-		insert(in, subtree->left);
+		subInsert(in, subtree->left);
 	}
 	else if ((subtree->right != nullptr) && (*in > *subtree)) {
-		insert(in, subtree->right);
+		subInsert(in, subtree->right);
 	}
 	else if (*in < *subtree) {
 		subtree->left = in;
@@ -145,7 +152,7 @@ inline void BinarySearchTree<T>::insert(T* in, T* subtree){
 		// Handle error.
 		throw ItemAlreadyInTree();
 	}
-	treeSize++;
+	
 	//TODO: Rotate tree if it is unbalanced
 	// if (isUnbalanced()) {
 		// Rotate right or rotate left as needed.
@@ -202,6 +209,9 @@ inline T* BinarySearchTree<T>::remove(T* nodeToRemove){
 // Finds the node and returns a pointer to that node
 template<class T>
 inline T* BinarySearchTree<T>::find(T* itemToFind, T* subtree) {
+	if (root == nullptr) {
+		return nullptr;
+	}
 	if (*subtree == *itemToFind) {
 		return subtree;
 	}
