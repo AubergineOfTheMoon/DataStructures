@@ -92,8 +92,8 @@ private:
 
 	void subInsert(T* in, T*);
 	void balanceTree();
-	void rotateLeft(T*);
-	void rotateRight(T*);
+	void rotateLeft(T*, T*);
+	void rotateRight(T*, T*);
 	T* findUnBalNode(T *);
 
 	int getHeight(Node);
@@ -139,7 +139,7 @@ inline T * BinarySearchTree<T>::findUnBalNode(T * n)
 		return findUnBalNode(n->left);
 	}
 	// This should be the node that is unbalanced
-	return findParent(n, root);
+	return n; // findParent(n, root);
 }
 
 template<class T>
@@ -182,44 +182,64 @@ inline void BinarySearchTree<T>::subInsert(T* in, T* subtree) {
 	T* unBal;
 	if (abs(getBalance(root)) > 1) {
 		unBal = findUnBalNode(root);
-		if (getBalance(unBal) > 0) {
-			rotateLeft(unBal);
+		T* p = findParent(unBal, root);
+		if (root == p) {
+			if(getBalance(root) > 0) {
+				rotateLeft(unBal, p);
+			}
+			else {
+				rotateRight(unBal, p);
+			}
 		}
 		else {
-			rotateRight(unBal);
+			T* gp = findParent(p, root);
+			if (p->left == unBal && gp->left == p) {
+				T* gp = findParent(p, root);
+				rotateRight(unBal, p);
+			}
+			else if (p->right == unBal && gp->right == p) {
+				T* gp = findParent(p, root);
+				rotateLeft(unBal, p);
+			}
+			else if (p->right == unBal && gp->left == p) {
+				T* gp = findParent(p, root);
+				rotateLeft(unBal, unBal->right);
+			}
+			else {
+				T* gp = findParent(p, root);
+				rotateRight(unBal, unBal->left);
+			}
 		}
 	}
 }
 
 template<class T>
-inline void BinarySearchTree<T>::rotateLeft(T * n)
-{
-	T* parent = findParent(n, root);
-	if (parent != nullptr) {
-		parent->right = n->right;
-		n->right = nullptr;
-		parent->right->left = n;
+inline void BinarySearchTree<T>::rotateLeft(T* pivot, T* parent) {
+	parent->right = pivot->left;
+	pivot->left = parent;
+
+	if (parent == root) {
+		root = pivot;
 	}
 	else {
-		n->right->left = n;
-		root = n->right;
-		n->right = nullptr;
+		T* gp = findParent(parent, root);
+		gp->right = pivot;
 	}
+
 }
 
+
 template<class T>
-inline void BinarySearchTree<T>::rotateRight(T * n)
-{
-	T* parent = findParent(n, root);
-	if (parent != nullptr) {
-		parent->left = n->left;
-		n->left = nullptr;
-		parent->left->right = n;
+inline void BinarySearchTree<T>::rotateRight(T* parent, T* pivot) {
+	parent->left = pivot->right;
+	pivot->right = parent;
+
+	if (parent == root) {
+		root = pivot;
 	}
 	else {
-		n->left->right = n;	
-		root = n->left;
-		n->left = nullptr;
+		T* gp = findParent(parent, root);
+		gp->left = pivot;
 	}
 }
 
