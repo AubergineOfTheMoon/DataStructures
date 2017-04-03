@@ -83,7 +83,7 @@ private:
 	// bool isUnbalanced();
 	// void rotateRight();
 	// void rotateLeft();
-	// int nodeHeight();
+	int nodeHeight(T*);
 	T* findParent(T*, T*);
 	T* findLargest(T*);
 	void getAscending(T*); // Private helper function for getAllAscending()
@@ -240,6 +240,15 @@ inline T* BinarySearchTree<T>::find(T* itemToFind, T* subtree) {
 }
 
 template<class T>
+inline int BinarySearchTree<T>::nodeHeight(T* temp = root)
+{
+	if (u == nullptr) {
+		return 0
+	}
+	return 1 + max(height(temp->left), height(temp->right));
+}
+
+template<class T>
 inline T* BinarySearchTree<T>::findParent(T* itemToFind, T* subtree = root) {
 	parent = subtree;
 	if (*subtree == *itemToFind) {
@@ -328,6 +337,21 @@ inline int BinarySearchTree<T>::getTreeSize()
 	return treeSize;
 }
 
+template<class T>
+inline void BinarySearchTree<T>::emptyTree()
+{
+	if (root != nullptr)
+	{
+		delete_tree(root->left);
+		delete_tree(root->right);
+		delete(root);
+		if (root->left != nullptr)
+			root->left = nullptr;
+		if (root->right != nullptr)
+			root->right = nullptr;
+		root = nullptr;
+		}
+}
 
 // Balancin code 
 template<class T>
