@@ -3,6 +3,7 @@
 #define BST_H
 #include<string>
 #include<algorithm> 
+#include<cmath>
 using namespace std;
 /*******************************************************
 Node Class
@@ -91,6 +92,9 @@ private:
 
 	void subInsert(T* in, T*);
 	void balanceTree();
+	void rotateLeft(T*);
+	void rotateRight(T*);
+	T* findUnBalNode(T *);
 
 	int getHeight(Node);
 	int getMin(Node *);
@@ -99,7 +103,7 @@ private:
 	//int subMin(int);
 	//int subMax(int);
 
-	const int heightDif = 2;
+	//const int heightDif = 2;
 
 public:
 	T* root;
@@ -126,6 +130,19 @@ public:
 
 
 template<class T>
+inline T * BinarySearchTree<T>::findUnBalNode(T * n)
+{
+	if (getBalance(n) > 1) {
+		return findUnBalNode(n->right);
+	}
+	else if (getBalance(n) < -1) {
+		return findUnBalNode(n->left);
+	}
+	// This should be the node that is unbalanced
+	return findParent(n, root);
+}
+
+template<class T>
 inline BinarySearchTree<T>::BinarySearchTree(T* in = nullptr) {
 	treeSize = 0;
 	root = in;
@@ -135,6 +152,7 @@ inline BinarySearchTree<T>::BinarySearchTree(T* in = nullptr) {
 // Insterts an item into the tree where it should be ( ordered)
 template<class T>
 inline void BinarySearchTree<T>::insert(T* in, T* subtree) {
+	cout << in->getWord() << endl;
 	subInsert(in, subtree);
 	treeSize++;
 }
@@ -157,16 +175,51 @@ inline void BinarySearchTree<T>::subInsert(T* in, T* subtree) {
 		subtree->right = in;
 	}
 	else {
-		// Handle error.
 		throw ItemAlreadyInTree();
 	}
 	
-	//TODO: Rotate tree if it is unbalanced
-	int min = getMin(root);
-	int max = getMax(root);
-	if (getBalance(root) > 1) {
-		cout << "UNBALANCED" << endl;
-		//balanceTree();
+	
+	T* unBal;
+	if (abs(getBalance(root)) > 1) {
+		unBal = findUnBalNode(root);
+		if (getBalance(unBal) > 0) {
+			rotateLeft(unBal);
+		}
+		else {
+			rotateRight(unBal);
+		}
+	}
+}
+
+template<class T>
+inline void BinarySearchTree<T>::rotateLeft(T * n)
+{
+	T* parent = findParent(n, root);
+	if (parent != nullptr) {
+		parent->right = n->right;
+		n->right = nullptr;
+		parent->right->left = n;
+	}
+	else {
+		n->right->left = n;
+		root = n->right;
+		n->right = nullptr;
+	}
+}
+
+template<class T>
+inline void BinarySearchTree<T>::rotateRight(T * n)
+{
+	T* parent = findParent(n, root);
+	if (parent != nullptr) {
+		parent->left = n->left;
+		n->left = nullptr;
+		parent->left->right = n;
+	}
+	else {
+		n->left->right = n;	
+		root = n->left;
+		n->left = nullptr;
 	}
 }
 
@@ -240,17 +293,17 @@ inline T* BinarySearchTree<T>::find(T* itemToFind, T* subtree) {
 }
 
 template<class T>
-inline int BinarySearchTree<T>::nodeHeight(T* temp = root)
+inline int BinarySearchTree<T>::nodeHeight(T* temp)
 {
-	if (u == nullptr) {
-		return 0
+	if (temp == nullptr) {
+		return 0;
 	}
-	return 1 + max(height(temp->left), height(temp->right));
+	return 1 + max(nodeHeight(temp->left), nodeHeight(temp->right));
 }
 
 template<class T>
-inline T* BinarySearchTree<T>::findParent(T* itemToFind, T* subtree = root) {
-	parent = subtree;
+inline T* BinarySearchTree<T>::findParent(T* itemToFind, T* subtree) {
+	T * parent = subtree;
 	if (*subtree == *itemToFind) {
 		return nullptr;
 	}
@@ -264,7 +317,7 @@ inline T* BinarySearchTree<T>::findParent(T* itemToFind, T* subtree = root) {
 		throw ItemNotFound();
 	}
 	else {
-		if (*itemToFind < *subTree) {
+		if (*itemToFind < *subtree) {
 			return findParent(itemToFind, subtree->left);
 		}
 		else {
@@ -314,11 +367,6 @@ inline T** BinarySearchTree<T>::getAllDescending() {
 	printPos = 0;
 	getDescending(root);
 	return sortedArray;
-}
-
-template<class T>
-inline void BinarySearchTree<T>::emptyTree()
-{
 }
 
 template<class T>
@@ -393,6 +441,18 @@ inline int BinarySearchTree<T>::getMax(Node * n)
 template<class T>
 inline int BinarySearchTree<T>::getBalance(Node * n)
 {
-	return getMax(n) - getMin(n);
+	return nodeHeight(n->right) - nodeHeight(n->left);
+	/*
+	if (nodeHeight(n->left) - nodeHeight(n->right) == 1) {
+		// Left heavy
+	}
+	else (nodeHeight(n->left) - nodeHeight(n->right) == -1) {
+		// Right heavy
+	}else {
+		// Balanced
+
+	}
+	//return getMax(n) - getMin(n);
+	*/
 }
 
