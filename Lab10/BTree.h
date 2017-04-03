@@ -2,16 +2,18 @@
 #ifndef BTREE_H
 #define BTREE_H
 
+#include"OrderedList.h"
+
 /*******************************************************
 					Node Class
 ********************************************************/
 
 template<class T> class Node {
 private:
-	int keyList[];
+	OrderedList<T> keyList;
 	Node* children[];
 	int max;
-	int pos;
+	// int pos;
 public:
 	Node(int);
 	void addKey(int*);
@@ -25,32 +27,46 @@ public:
 template<class T>
 inline Node::Node(int m = 3) {
 	max = m;
-	pos = 0;
+	// pos = 0;
+	keyList = OrderedList<T>(max);
 }
 
 template<class T>
 inline void Node<T>::addKey(int *k)
 {
-	if (isFull()) {
+	/*	int counter = 0;
+	while ((counter < pos) && (*k > *keyList[counter])) {
+		counter++;
+	}
+	for (int i = pos; i > counter; i--) {
+		keyList[i] = keyList[i - 1];
+	}*/
+	try {
+		keyList.AddItem(k);
+	}
+	catch (OrderedListOverflow) {
+		cout << "Your program sucks right now. This means you aren't even splitting the nodes properly" << endl;
+	}
+	// pos++;
+	// if (isFull()) {
 		// TODO Throw Error for splitting
-	}
-	else {
-		int counter = 0;
-		while ((counter < pos) && (*k > *keyList[counter])) {
-			counter++;
-		}
-		for (int i = pos; i > counter; i--) {
-			keyList[i] = keyList[i - 1];
-		}
-		keyList[counter] = k;
-		pos++;
-	}
+	// }
 }
 
 template<class T>
 inline int* Node<T>::removeKey(int *k)
 {
-	int* retItem = nullptr;
+	try {
+		int* retItem = keyList.RemoveItem(k);
+	}
+	catch (OrderedListItemNotFound) {
+		cout<<"Add checking for item before trying to remove it."
+	}
+	catch (OrderedListUnderflow) {
+		cout << "Your program should not get tot this point, but if it has :( here is something to catch it." << endl;
+	}
+	return retItem;
+	/*int* retItem = nullptr;
 	int counter = 0;
 	for (int i = 0; i < pos; i++) {
 		if (*k == *keyList[i]) {
@@ -62,7 +78,7 @@ inline int* Node<T>::removeKey(int *k)
 		keyList[i] = keyList[i + 1];
 	}
 	pos--;
-	return retItem;
+	return retItem;*/
 
 	// TODO if node is empty delete/merge things
 }
@@ -80,13 +96,13 @@ inline Node* Node<T>::removeChild(Node*) {
 template<class T>
 inline bool Node<T>::isFull()
 {
-	return pos == max;
+	return keyList.isFull();
 }
 
 template<class T>
 inline bool Node<T>::isEmpty()
 {
-	return pos == 0;
+	return keyList.isEmpty();
 }
 
 /*******************************************************
@@ -96,11 +112,11 @@ inline bool Node<T>::isEmpty()
 template<class T> class BTree {
 private:
 	int treeSize;
-	
 
 public:
 	BTree();
-	void insertItem();
+	void insertItem(int*);
+	void splitChild(nodeToSplit, parent, child);
 	void removeItem();
 	void findItem();
 	int getTreeSize();
@@ -117,8 +133,9 @@ inline BTree<T>::BTree() {
 }
 
 template<class T>
-inline void BTree<T>::insertItem()
+inline void BTree<T>::insertItem(int*)
 {
+	if()
 }
 
 template<class T>
