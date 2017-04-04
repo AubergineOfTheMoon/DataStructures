@@ -48,7 +48,8 @@ int main()
 		Node* removedWord;
 		int choice;
 		int numWords = BSTWords.getTreeSize();
-		Node** sortedWords = new Node*[numWords];
+		vector<Node*> sortedWords = vector<Node*>(numWords, nullptr);
+		
 		do {
 			cout << "***************************************" << endl;
 			cout << "Please select the the action you would like to complete" << endl;
@@ -90,11 +91,7 @@ int main()
 			case 2: cout << "The sorted words are: " << endl;
 				sortedWords = BSTWords.getAllAscending();
 				for (int i = 0; i < numWords; i++) {
-					string temp_word = sortedWords[i]->getWord();
-					int count = sortedWords[i]->getFrequency();
-					cout << temp_word;
-					cout << ": ";
-					cout << count << endl; // Error here with peterpan.txt and mobydick.txt
+					cout << sortedWords[i]->getWord() << ": " << sortedWords[i]->getFrequency() << endl; // Error here with peterpan.txt and mobydick.txt
 				}
 				break;
 			case 3: cout << "The sorted words are: " << endl;

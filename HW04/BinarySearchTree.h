@@ -4,6 +4,7 @@
 #include<string>
 #include<algorithm> 
 #include<cmath>
+#include<vector>
 using namespace std;
 /*******************************************************
 Node Class
@@ -81,6 +82,7 @@ private:
 	int treeSize;
 	int printPos = 0; // Variable counter for creating sorted array
 	T** sortedArray; // Variable for storing sorted array for get Ascending and descending
+	vector<T*> sortedV;
 	// bool isUnbalanced();
 	// void rotateRight();
 	// void rotateLeft();
@@ -111,8 +113,8 @@ public:
 	void insert(T* in, T*);
 	T* find(T* in, T*);
 	int size();
-	T** getAllAscending();
-	T** getAllDescending();
+	vector<T*> getAllAscending();
+	vector<T*> getAllDescending();
 	void emptyTree();
 	T* remove(T*);
 	int getTreeSize();
@@ -178,29 +180,33 @@ inline void BinarySearchTree<T>::subInsert(T* in, T* subtree) {
 		throw ItemAlreadyInTree();
 	}
 	
-	
-	T* unBal;
 	if (abs(getBalance(root)) > 1) {
-		unBal = findUnBalNode(root);
-		T* p = findParent(unBal, root);
-		if (root == p) {
-			if(getBalance(root) > 0) {
-				rotateLeft(unBal, p);
-			}
-			else {
-				rotateRight(unBal, p);
-			}
+		balanceTree();
+	}
+}
+
+template<class T>
+inline void BinarySearchTree<T>::balanceTree()
+{
+	T* unBal = findUnBalNode(root);
+	T* p = findParent(unBal, root);
+	if (root == p) {
+		if (getBalance(root) > 0) {
+			rotateLeft(unBal, p);
 		}
 		else {
-			T* gp = findParent(p, root);
-			if (unBal->left == nullptr && p->left == unBal) {
-				rotateLeft(unBal, unBal->right);
-				rotateRight(p->left, p);
-			}
-			if (unBal->right == nullptr && p->right == unBal) {
-				rotateRight(unBal, unBal->left);
-				rotateLeft(p->right, p);
-			}
+			rotateRight(unBal, p);
+		}
+	}
+	else {
+		T* gp = findParent(p, root);
+		if (unBal->left == nullptr && p->left == unBal) {
+			rotateLeft(unBal, unBal->right);
+			rotateRight(p->left, p);
+		}
+		if (unBal->right == nullptr && p->right == unBal) {
+			rotateRight(unBal, unBal->left);
+			rotateLeft(p->right, p);
 		}
 	}
 }
@@ -311,9 +317,11 @@ inline T* BinarySearchTree<T>::remove(T* nodeToRemove){
 			parent->right = newNode;
 		}
 	}
-	if (isUnbalanced()) {
-		// Rotate right or rotate left as needed.
+	
+	if (abs(getBalance(root)) > 1) {
+		balanceTree();
 	}
+
 	return nodeToRemove;
 }
 
@@ -389,38 +397,42 @@ inline T* BinarySearchTree<T>::findLargest(T* subTree=root)
 
 // Returns an array of nodes - smallest to largest - based on sorting value
 template<class T>
-inline T** BinarySearchTree<T>::getAllAscending() {
-	sortedArray = new T*[treeSize];
-	printPos = 0;
+inline vector<T*> BinarySearchTree<T>::getAllAscending() {
+	//sortedArray = new T*[treeSize];
+	//printPos = 0;
+	//vector<T*> sortedV(treeSize, nullptr);
 	getAscending(root);
-	return sortedArray;
+	return sortedV;
 }
 
 template<class T>
 inline void BinarySearchTree<T>::getAscending(T* in) {
 	if (in != nullptr) {
 		getAscending(in->left);
-		sortedArray[printPos]= in;
-		printPos++;
+		//sortedArray[printPos]= in;
+		//printPos++;
+		sortedV.push_back(in);
 		getAscending(in->right);
 	}
 }
 
 // Returns an array of nodes - largest to smallest - based on sorting value
 template<class T>
-inline T** BinarySearchTree<T>::getAllDescending() {
-	sortedArray = new T*[treeSize];
-	printPos = 0;
+inline vector<T*> BinarySearchTree<T>::getAllDescending() {
+	//sortedArray = new T*[treeSize];
+	//printPos = 0;
+	//vector<T*> sortedV (treeSize, nullptr);
 	getDescending(root);
-	return sortedArray;
+	return sortedV;
 }
 
 template<class T>
 inline void BinarySearchTree<T>::getDescending(T* in) {
 	if (in != nullptr) {
 		getDescending(in->right);
-		sortedArray[printPos] = in;
-		printPos++;
+		//sortedArray[printPos] = in;
+		//printPos++;
+		sortedV.push_back(in);
 		getDescending(in->left);
 	}
 }
