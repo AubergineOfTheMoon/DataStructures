@@ -193,21 +193,9 @@ inline void BinarySearchTree<T>::subInsert(T* in, T* subtree) {
 		}
 		else {
 			T* gp = findParent(p, root);
-			if (p->left == unBal && gp->left == p) {
-				T* gp = findParent(p, root);
-				rotateRight(unBal, p);
-			}
-			else if (p->right == unBal && gp->right == p) {
-				T* gp = findParent(p, root);
-				rotateLeft(unBal, p);
-			}
-			else if (p->right == unBal && gp->left == p) {
-				T* gp = findParent(p, root);
+			if (unBal->left == nullptr && p->left == unBal) {
 				rotateLeft(unBal, unBal->right);
-			}
-			else {
-				T* gp = findParent(p, root);
-				rotateRight(unBal, unBal->left);
+				rotateRight(p, unBal->right);
 			}
 		}
 	}
@@ -215,8 +203,15 @@ inline void BinarySearchTree<T>::subInsert(T* in, T* subtree) {
 
 template<class T>
 inline void BinarySearchTree<T>::rotateLeft(T* pivot, T* parent) {
-	parent->right = pivot->left;
-	pivot->left = parent;
+	
+	if (parent->right == pivot) {
+		T* t = pivot->left;
+		pivot->left = parent;
+		parent->right = t;
+	}
+	else {
+		pivot->right = parent;
+	}
 
 	if (parent == root) {
 		root = pivot;
@@ -230,10 +225,16 @@ inline void BinarySearchTree<T>::rotateLeft(T* pivot, T* parent) {
 
 
 template<class T>
-inline void BinarySearchTree<T>::rotateRight(T* parent, T* pivot) {
-	parent->left = pivot->right;
-	pivot->right = parent;
+inline void BinarySearchTree<T>::rotateRight(T* pivot, T* parent) {
 
+	if (parent->left == pivot) {
+		T* t = pivot->right;
+		pivot->right = parent;
+		parent->left = t;
+	}
+	else {
+		pivot->right = parent;
+	}
 	if (parent == root) {
 		root = pivot;
 	}
