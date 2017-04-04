@@ -291,11 +291,11 @@ inline void BinarySearchTree<T>::balanceTree()
 	else {
 		T* gp = findParent(p, root);
 		if (unBal->left == nullptr && p->left == unBal) {
-			rotateLeft(unBal, unBal->right);
+			//rotateLeft(unBal, unBal->right);
 			rotateRight(p->left, p);
 		}
 		if (unBal->right == nullptr && p->right == unBal) {
-			rotateRight(unBal, unBal->left);
+			//rotateRight(unBal, unBal->left);
 			rotateLeft(p->right, p);
 		}
 	}
@@ -322,7 +322,7 @@ inline void BinarySearchTree<T>::emptyTree()
 // Insterts an item into the tree where it should be ( ordered)
 template<class T>
 inline void BinarySearchTree<T>::insert(T* in, T* subtree) {
-	//cout << in->getWord() << endl;
+	cout << in->getWord() << endl;
 	subInsert(in, subtree);
 	treeSize++;
 }
@@ -379,10 +379,8 @@ inline void BinarySearchTree<T>::rotateLeft(T* pivot, T* parent) {
 	// There are two cases
 	// The pivot is above the parent
 	// The pivot is not above the parent
-	if (parent->right == pivot) {// Pivot is not above the parent
-		T* t = pivot->left;
+		parent->right = pivot->left;
 		pivot->left = parent;
-		parent->right = t;
 
 		if (parent == root) {
 			root = pivot;
@@ -391,28 +389,15 @@ inline void BinarySearchTree<T>::rotateLeft(T* pivot, T* parent) {
 			T* gp = findParent(parent, root);
 			gp->right = pivot;
 		}
-	}
-	else {// Pivot is above the parent
-		if (pivot->right == parent) {
-			parent->left = pivot;
-			pivot->right = nullptr;
-		}
-		else {
-			parent->right = pivot;
-			pivot->left = nullptr;
-		}
-		findParent(pivot, root)->left = parent;
-	}
+
 }
 
 
 template<class T>
 inline void BinarySearchTree<T>::rotateRight(T* pivot, T* parent) {
 
-	if (parent->left == pivot) {
-		T* t = pivot->right;
+		parent->left = pivot->right;
 		pivot->right = parent;
-		parent->left = t;
 
 		if (parent == root) {
 			root = pivot;
@@ -421,19 +406,6 @@ inline void BinarySearchTree<T>::rotateRight(T* pivot, T* parent) {
 			T* gp = findParent(parent, root);
 			gp->left = pivot;
 		}
-	}
-	else {
-		if (pivot->left == parent) {
-			parent->right = pivot;
-			pivot->left = nullptr;
-		}
-		else {
-			parent->left = pivot;
-			pivot->right = nullptr;
-		}
-		findParent(pivot, root)->right = parent;
-	}
-
 }
 
 
