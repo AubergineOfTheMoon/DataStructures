@@ -90,7 +90,12 @@ int main()
 			case 2: cout << "The sorted words are: " << endl;
 				sortedWords = BSTWords.getAllAscending();
 				for (int i = 0; i < numWords; i++) {
-					cout << sortedWords[i]->getWord() << ": " << sortedWords[i]->getFrequency() << endl;
+					string temp_word = sortedWords[i]->getWord();
+					int count = sortedWords[i]->getFrequency();
+					cout << temp_word;
+					cout << ": ";
+					cout << count << endl; // Error here with peterpan.txt and mobydick.txt
+					cout << "DONE";
 				}
 				break;
 			case 3: cout << "The sorted words are: " << endl;
