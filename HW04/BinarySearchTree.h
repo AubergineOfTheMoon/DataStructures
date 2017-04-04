@@ -12,20 +12,21 @@ Node Class
 
 class Node {
 private:
-	string word;
-	int frequency;
+	int frequency; // Number of times this word has appeared in the text
+	string word; // The word
 public:
-	Node(string);
-	Node* left;
-	Node* right;
-	string getWord();
-	int getFrequency();
-	void incrementFrequency();
-	bool operator<(Node);
+	Node(string); // constructor
+	bool operator<(Node); // Operator overloads
 	bool operator>(Node);
 	bool operator==(Node);
+	int getFrequency(); // Get number of unique words (number of not nullptr nodes)
+	Node* left; // Left child node
+	Node* right; // Right child node
+	string getWord(); // Get the word of this node
+	void incrementFrequency(); // Increase size counter
 };
 
+// Constructor
 Node::Node(string w) {
 	word = w;
 	frequency = 1;
@@ -33,20 +34,7 @@ Node::Node(string w) {
 	right = nullptr;
 }
 
-string Node::getWord()
-{
-	return word;
-}
-
-int Node::getFrequency()
-{
-	return frequency;
-}
-
-void Node::incrementFrequency(){
-	frequency++;
-}
-
+// Overloaded < operator
 bool Node::operator<(Node n) {
 	if (word.compare(n.getWord()) < 0) {
 		return true;
@@ -56,6 +44,7 @@ bool Node::operator<(Node n) {
 	}
 }
 
+// Overloaded > operator
 bool Node::operator>(Node n) {
 	if (word.compare(n.getWord()) > 0) {
 		return true;
@@ -64,6 +53,8 @@ bool Node::operator>(Node n) {
 		return false;
 	}
 }
+
+// Overloaded == operator
 bool Node::operator==(Node n) {
 	if (word.compare(n.getWord()) == 0) {
 		return true;
@@ -73,52 +64,54 @@ bool Node::operator==(Node n) {
 	}
 }
 
+// Get number of unique words (number of not nullptr nodes)
+int Node::getFrequency()
+{
+	return frequency;
+}
+
+// Get the word of this node
+string Node::getWord()
+{
+	return word;
+}
+
+// Increase size counter
+void Node::incrementFrequency(){
+	frequency++;
+}
+
+
 /*******************************************************
 BinarySearchTree Class
 ********************************************************/
 
 template<class T> class BinarySearchTree {
 private:
-	int treeSize;
-	int printPos = 0; // Variable counter for creating sorted array
-	T** sortedArray; // Variable for storing sorted array for get Ascending and descending
-	vector<T*> sortedV;
-	// bool isUnbalanced();
-	// void rotateRight();
-	// void rotateLeft();
+	int getBalance(Node *); // Gets the height differnce, if it is greater than 1, it is unbalanced
+	int getHeight(Node);
 	int nodeHeight(T*);
-	T* findParent(T*, T*);
+	int printPos = 0; // Variable counter for creating sorted array	
+	int treeSize;
 	T* findLargest(T*);
+	T* findParent(T*, T*);
+	T* findUnBalNode(T *); // Finds the root of the subtree which needs to be rebalanced
+	void balanceTree(); // self explanitory
 	void getAscending(T*); // Private helper function for getAllAscending()
 	void getDescending(T*); // Private helper function for getAllDescending()
-
-	void subInsert(T* in, T*);
-	void balanceTree();
-	void rotateLeft(T*, T*);
-	void rotateRight(T*, T*);
-	T* findUnBalNode(T *);
-
-	int getHeight(Node);
-	int getMin(Node *);
-	int getMax(Node *);
-	int getBalance(Node *);
-	//int subMin(int);
-	//int subMax(int);
-
-	//const int heightDif = 2;
-
+	void rotateLeft(T*, T*); // Rotates a subtree with given pivot and parent
+	void rotateRight(T*, T*);	void subInsert(T* in, T*); // "Nested" function inside of insert
+	vector<T*> sortedV; // Holds the sorted values
 public:
-	T* root;
-	BinarySearchTree(T* in = nullptr);
+	BinarySearchTree(T* in = nullptr); // Constructor
+	int getTreeSize(); // Returns number of nodes
+	T* find(T* in, T*); // Returns the node if it finds it in the tree
+	T* remove(T*); // Returns and removes a node
+	T* root; // The top level node
+	vector<T*> getAllAscending(); // Returns a vector with the elements sorted in ascending order
+	vector<T*> getAllDescending(); // Returns a vector with the elements sorted in descending order
+	void emptyTree(); 
 	void insert(T* in, T*);
-	T* find(T* in, T*);
-	int size();
-	vector<T*> getAllAscending();
-	vector<T*> getAllDescending();
-	void emptyTree();
-	T* remove(T*);
-	int getTreeSize();
-
 	class ItemAlreadyInTree {
 	public: ItemAlreadyInTree() {}
 	};
@@ -128,6 +121,12 @@ public:
 };
 
 #endif
+
+template<class T>
+inline BinarySearchTree<T>::BinarySearchTree(T* in = nullptr) {
+	treeSize = 0;
+	root = in;
+}
 
 
 
@@ -143,13 +142,6 @@ inline T * BinarySearchTree<T>::findUnBalNode(T * n)
 	// This should be the node that is unbalanced
 	return n; // findParent(n, root);
 }
-
-template<class T>
-inline BinarySearchTree<T>::BinarySearchTree(T* in = nullptr) {
-	treeSize = 0;
-	root = in;
-}
-
 
 // Insterts an item into the tree where it should be ( ordered)
 template<class T>
@@ -277,11 +269,7 @@ inline void BinarySearchTree<T>::rotateRight(T* pivot, T* parent) {
 
 
 
-// Returns the number of elements in the tree
-template<class T>
-inline int BinarySearchTree<T>::size() {
-	return treeSize;
-}
+
 
 // Removes a certain item from the tree
 template<class T>
@@ -437,6 +425,7 @@ inline void BinarySearchTree<T>::getDescending(T* in) {
 	}
 }
 
+// Returns the number of elements in the tree
 template<class T>
 inline int BinarySearchTree<T>::getTreeSize()
 {
@@ -459,58 +448,10 @@ inline void BinarySearchTree<T>::emptyTree()
 		}
 }
 
-// Balancin code 
-template<class T>
-inline int BinarySearchTree<T>::getHeight(Node)
-{
-	return 0;
-}
-
-template<class T>
-inline int BinarySearchTree<T>::getMin(Node * n)
-{
-	if (n->left == nullptr && n->right == nullptr) {
-		return 0;
-	}
-	if (n->left == nullptr) {
-		return 1 + getMin(n->right);
-	}
-	if (n->right == nullptr) {
-		return 1 + getMin(n->left);
-	}
-	return 1 + min(getMin(n->right), getMin(n->left));
-}
-
-template<class T>
-inline int BinarySearchTree<T>::getMax(Node * n)
-{
-	if (n->left == nullptr && n->right == nullptr) {
-		return 0;
-	}
-	if (n->left == nullptr) {
-		return 1 + getMax(n->right);
-	}
-	if (n->right == nullptr) {
-		return 1 + getMax(n->left);
-	}
-	return 1 + max(getMax(n->right), getMax(n->left));
-}
 
 template<class T>
 inline int BinarySearchTree<T>::getBalance(Node * n)
 {
 	return nodeHeight(n->right) - nodeHeight(n->left);
-	/*
-	if (nodeHeight(n->left) - nodeHeight(n->right) == 1) {
-		// Left heavy
-	}
-	else (nodeHeight(n->left) - nodeHeight(n->right) == -1) {
-		// Right heavy
-	}else {
-		// Balanced
-
-	}
-	//return getMax(n) - getMin(n);
-	*/
 }
 
