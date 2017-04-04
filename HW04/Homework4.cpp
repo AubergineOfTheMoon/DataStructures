@@ -95,7 +95,6 @@ int main()
 					cout << temp_word;
 					cout << ": ";
 					cout << count << endl; // Error here with peterpan.txt and mobydick.txt
-					cout << "DONE";
 				}
 				break;
 			case 3: cout << "The sorted words are: " << endl;
