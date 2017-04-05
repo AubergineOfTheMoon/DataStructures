@@ -94,7 +94,8 @@ private:
 	void rotateLeft(T*, T*); // Rotates a subtree with given pivot and parent
 	void rotateRight(T*, T*);	
 	void subInsert(T* in, T*); // "Nested" function inside of insert
-	vector<T*> sortedV; // Holds the sorted values
+	vector<T*> sortedVA;    // Holds the sorted values
+	vector<T*> sortedVD;
 public:
 	BinarySearchTree(T* in = nullptr); // Constructor
 	int getTreeSize(); // Returns number of nodes
@@ -269,14 +270,14 @@ inline T* BinarySearchTree<T>::remove(T* nodeToRemove) {
 template<class T>
 inline vector<T*> BinarySearchTree<T>::getAllAscending() {
 	getAscending(root);
-	return sortedV;
+	return sortedVA;
 }
 
 // Returns an array of nodes - largest to smallest - based on sorting value
 template<class T>
 inline vector<T*> BinarySearchTree<T>::getAllDescending() {
 	getDescending(root);
-	return sortedV;
+	return sortedVD;
 }
 
 template<class T>
@@ -396,7 +397,7 @@ template<class T>
 inline void BinarySearchTree<T>::getAscending(T* in) {
 	if (in != nullptr) {
 		getAscending(in->left);
-		sortedV.push_back(in);
+		sortedVA.push_back(in);
 		getAscending(in->right);
 	}
 }
@@ -406,7 +407,7 @@ template<class T>
 inline void BinarySearchTree<T>::getDescending(T* in) {
 	if (in != nullptr) {
 		getDescending(in->right);
-		sortedV.push_back(in);
+		sortedVD.push_back(in);
 		getDescending(in->left);
 	}
 }
