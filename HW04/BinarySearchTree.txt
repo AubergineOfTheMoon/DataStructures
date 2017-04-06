@@ -133,10 +133,10 @@ inline int BinarySearchTree<T>::getBalance(Node * n)
 template<class T>
 inline int BinarySearchTree<T>::nodeHeight(T* temp)
 {
-	// Gets the max of each node height and returns it
 	if (temp == nullptr) {
 		return 0;
 	}
+	// Gets the max of each node height and returns it
 	int left = nodeHeight(temp->left);
 	int right = nodeHeight(temp->right);
 	return 1 + max(left, right);
@@ -285,53 +285,23 @@ inline void BinarySearchTree<T>::balanceTree()
 	T* unBal; // = findUnBalNode(root);
 	T* p; // = findParent(unBal, root);
 	T* gp;
-	T* temp;
-	unBal = root;  //findUnBalNode(root);
-	p = nullptr;// findParent(unBal, root);
-
-	
+	unBal = findUnBalNode(root);
+	p = findParent(unBal, root);
 
 	while (abs(getBalance(root)) > 1) {
-
-		int right = nodeHeight(unBal->right);
-		int left = nodeHeight(unBal->left);
-
-		while (abs(right - left) > 1) {
-			if (getBalance(unBal) > 0) {
-				temp = unBal;
-				unBal = unBal->right;
-				p = unBal;
-			}
-			else {
-				temp = unBal;
-				unBal = unBal->left;
-				p = unBal;
-			}
-			right = nodeHeight(unBal->right);
-			left = nodeHeight(unBal->left);
-		}
-		p = unBal;
-		if (getBalance(p) > 0) {
-			unBal = p->right;
-		}
-		else {
-			unBal = p->left;
-		}
-		gp = findParent(p, root);
-
-		if (getBalance(gp) > 0 && p->left == unBal) {
+		if (getBalance(root) > 0 && p->left == unBal) {
 			rotateRight(unBal, p);
 			rotateLeft(unBal, findParent(unBal, root));
 		}
-		else if (getBalance(gp) < 0 && p->right == unBal) {
+		else if (getBalance(root) < 0 && p->right == unBal) {
 			rotateLeft(unBal, p);
 			rotateRight(unBal, findParent(unBal,root));
 		}
-		else if (getBalance(p) > 0) {
-			rotateLeft(unBal, p);
+		else if (getBalance(root) > 0 && p->left != unBal) {
+			rotateLeft(p, findParent(p,root));
 		}
-		else if(getBalance(p) < 0) {
-			rotateRight(unBal, p);
+		else if(getBalance(root) < 0 && p->right != unBal) {
+			rotateRight(p, findParent(p, root));
 		}
 		else {
 			// Error, this should never happen
@@ -417,24 +387,22 @@ inline void BinarySearchTree<T>::rotateLeft(T* pivot, T* parent) {
 	// There are two cases
 	// The pivot is above the parent
 	// The pivot is not above the parent
-	T* temp = findUnBalNode(root);
+		parent->right = pivot->left;
+		pivot->left = parent;
 
-	parent->right = pivot->left;
-	pivot->left = parent;
-
-	if (parent == root) {
-		root = pivot;
-	}
-	else {
-		T* gp = findParent(parent, root);
-		if (gp->left == parent) {
-			gp->left = pivot;
+		if (parent == root) {
+			root = pivot;
 		}
 		else {
-			gp->right = pivot;
-		}
+			T* gp = findParent(parent, root);
+			if (gp->left == parent) {
+				gp->left = pivot;
+			}
+			else {
+				gp->right = pivot;
+			}
 			
-	}
+		}
 
 }
 
