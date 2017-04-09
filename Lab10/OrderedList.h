@@ -138,12 +138,13 @@ inline T* OrderedList<T>::RemoveItem(T* ptr) {
 		}
 		if (counter != pos) {
 			numOps++;
+			T* retItem = list[counter];
 			for (int i = counter; i < pos-1; i++) {
 				list[i] = list[i+1];
 				numOps++;
 			}
 			pos--;
-			return list[counter];
+			return retItem;
 		}
 		throw OrderedListItemNotFound();
 	}
