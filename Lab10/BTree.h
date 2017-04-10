@@ -245,6 +245,7 @@ inline void BTree<T>::insertItem(T* key, Node<T>* parent) {
 			// split child
 			splitChild(parent, insertNodeIndex, newParent);
 		}
+		cout << "counter" << endl; // Testing to see pointer follows
 		insertItem(key, newParent);
 	}
 }
@@ -273,6 +274,8 @@ inline T* BTree<T>::findItem(T* findkey, Node<T>* nodeToCheck) {
 				compNodeIndex = i+1;
 			}
 		}
+		
+		cout << "counter" << endl; // Testing to see pointer follows
 		return findItem(findkey, nodeToCheck->getChild(compNodeIndex));
 	}
 }
