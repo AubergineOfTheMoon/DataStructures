@@ -425,7 +425,7 @@ inline void BTree<T>::splitChild(Node<T>* nodeToSplit, int childIndex, Node<T>* 
 			int t = ceil((float)order / 2);
 			int middleTerm = t - 1;
 			for (int i = 0; i < middleTerm; i++) {
-				newNode->addKey(nodeToSplit->removeKey(nodeToSplit->peekKey(i)));
+				newNode->addKey(nodeToSplit->removeKey(nodeToSplit->peekKey(0)));
 			}
 			// If the parent has another child that is not a leaf, I'm assuming it has just split one of those children and that split child has extra children
 			// This portion of the code is to move those children to the new node
