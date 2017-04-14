@@ -15,7 +15,7 @@ private:
 	OrderedList<T> keyList;
 	OrderedList<Node<T>> children;
 	int max;
-	int posChildren;
+	//int posChildren;
 public:
 	Node(int m = 3);
 	void addKey(T*);
@@ -32,6 +32,7 @@ public:
 	bool operator<(Node<T>);
 	bool operator>(Node<T>);
 	bool operator==(Node<T>);
+	bool operator!=(Node<T>);
 	class IndexOutOfRange {
 	public: IndexOutOfRange() {}
 	};
@@ -40,9 +41,9 @@ public:
 template<class T>
 inline Node<T>::Node(int m = 3) {
 	max = m;
-	posChildren = 0;
+	// posChildren = 0;
 	keyList = OrderedList<T>(max);
-	children = OrderedList<Node<T>>(max);
+	children = OrderedList<Node<T>>(max+1);
 }
 
 template<class T>
@@ -105,7 +106,7 @@ template<class T>
 inline void Node<T>::addChild(Node* child) {
 	//TODO: Add code for adding child	
 	children.AddItem(child);
-	posChildren++;
+	// posChildren++;
 }
 
 template<class T>
@@ -125,7 +126,7 @@ inline Node<T>* Node<T>::getChild(int removePos) {
 template<class T>
 inline int Node<T>::getNumChildren() {
 	///TODO Add code for removing child
-	return posChildren;
+	return children.length();
 }
 
 template<class T>
@@ -137,7 +138,7 @@ inline bool Node<T>::isFull()
 template<class T>
 inline bool Node<T>::isLeaf()
 {
-	return posChildren == 0;
+	return children.length() == 0;
 }
 
 template<class T>
@@ -176,9 +177,12 @@ bool Node<T>::operator==(Node<T> comp) {
 		}
 	}
 	return flag;
-
 }
 
+template<class T>
+bool Node<T>::operator!=(Node<T> comp) {
+	return !(this->operator==(comp));
+}
 
 /*******************************************************
 					BTree Class
@@ -241,6 +245,7 @@ inline void BTree<T>::insertItem(T* key, Node<T>* parent) {
 			// split child
 			splitChild(parent, insertNodeIndex, newParent);
 		}
+		// cout << "counter" << endl; // Testing to see pointer follows
 		insertItem(key, newParent);
 	}
 }
@@ -269,6 +274,8 @@ inline T* BTree<T>::findItem(T* findkey, Node<T>* nodeToCheck) {
 				compNodeIndex = i+1;
 			}
 		}
+		
+		// cout << "counter" << endl; // Testing to see pointer follows
 		return findItem(findkey, nodeToCheck->getChild(compNodeIndex));
 	}
 }
@@ -289,7 +296,7 @@ inline Node<T>* BTree<T>::findParent(Node<T>* findNode, Node<T>* nodeToCheck) {
 			}
 		}
 		int checkNodeIndex = 0;
-		T* key = nodeToCheck->peekKey(0);
+		T* key = findNode->peekKey(0);
 		for (int i = 0; i < nodeToCheck->getNumKeys(); i++) {
 			T* keyComp = nodeToCheck->peekKey(i);
 			if (*key > *keyComp) {
@@ -312,7 +319,7 @@ inline int BTree<T>::getTreeHeight()
 {
 	Node<T>* node = rootNode;
 	int level = 1;
-	if (node == nullptr) {
+	if ((node == nullptr)||(node->getNumKeys()==0)) {
 		return 0;
 	}
 	while (!node->isLeaf()) {
@@ -327,17 +334,24 @@ inline void BTree<T>::PrintTree(Node<T>* parent, Node<T>* nodeToPrint) {
 	// Print node type
 	cout << "***Node***" << endl;
 	cout << "Node Type: ";
-	if (nodeToPrint->isLeaf()) {
-		cout << "Leaf" << endl;
+	if (parent == nullptr) {
+		cout << "Root";
+		// Node to print is root
+		if (nodeToPrint->isLeaf()) {
+			cout << ", Leaf";
+		}
+		cout << endl;
 	}
 	else {
-		if (parent == nullptr) {
-			cout << "Root" << endl;
+		if (nodeToPrint->isLeaf()) {
+			cout << "Leaf" << endl;
 		}
 		else {
 			cout << "Intermediate" << endl;
 		}
+		
 	}
+	
 	cout << "Node's keys: ";
 	// Print current node's keys
 	for (int i = 0; i < nodeToPrint->getNumKeys(); i++) {
@@ -352,7 +366,8 @@ inline void BTree<T>::PrintTree(Node<T>* parent, Node<T>* nodeToPrint) {
 		}
 	}
 	cout << endl;
-	for (int i = 0; i < nodeToPrint->getNumChildren(); i++) {
+	int numchild = nodeToPrint->getNumChildren();
+	for (int i = 0; i < numchild; i++) {
 		PrintTree(nodeToPrint, nodeToPrint->getChild(i));
 	}
 }
@@ -361,8 +376,8 @@ template<class T>
 inline void BTree<T>::splitChild(Node<T>* nodeToSplit, int childIndex, Node<T>* child) {
 	// Node<T>*nodeToSplit;
 	
-	// newNode is a leaf if whatever y is is a leaf
-	if (child != nullptr) {
+	// Normal split
+	/*if (child != nullptr) {
 		Node<T>* newNode = new Node<T>(order);
 		int t = ceil(order / 2);
 		for (int i = 0; i < t - 1; i++) {
@@ -375,42 +390,79 @@ inline void BTree<T>::splitChild(Node<T>* nodeToSplit, int childIndex, Node<T>* 
 		}
 		// nodeToSplit->addKey(child->removeKey(t));
 		nodeToSplit->addChild(newNode); // adjust index by making it 
+	}*/
+	// else {
+	if (nodeToSplit == rootNode) {
+		// The root node must have at least 2 children
+		Node<T>* newNode1 = new Node<T>(order);
+		Node<T>* newNode2 = new Node<T>(order);
+		int t = ceil((float)order / 2);
+		for (int i = 0; i < t-1; i++) {
+			newNode1->addKey(nodeToSplit->removeKey(nodeToSplit->peekKey(0)));
+		}
+		for (int i = t; i < order; i++) {
+			newNode2->addKey(nodeToSplit->removeKey(nodeToSplit->peekKey(nodeToSplit->getNumKeys()-1)));
+		}
+		if ((!nodeToSplit->isLeaf()) && (nodeToSplit->getNumChildren() == order + 1)) {
+			// A parent node which is full must have order + 1 children
+			// Divides children of parent node among the 2 new nodes
+			for (int i = 0; i < t; i++) {
+				newNode1->addChild(nodeToSplit->removeChild(nodeToSplit->getChild(0)));
+			}
+			for (int i = t; i < order + 1; i++) {
+				newNode2->addChild(nodeToSplit->removeChild(nodeToSplit->getChild(0)));
+			}
+		}
+		nodeToSplit->addChild(newNode1);
+		nodeToSplit->addChild(newNode2);
 	}
 	else {
-		if (nodeToSplit == rootNode) {
-			Node<T>* newNode1 = new Node<T>(order);
-			Node<T>* newNode2 = new Node<T>(order);
-			int t = ceil(order / 2);
-			T* keyToMove;
-			T* removedKey;
-			for (int i = 0; i < t-1; i++) {
-				keyToMove = nodeToSplit->peekKey(0);
-				removedKey = nodeToSplit->removeKey(keyToMove);
-				newNode1->addKey(removedKey);
+		Node<T>* parent = findParent(nodeToSplit, rootNode);
+		// parents should not have order+1 children anyway, but this has just been put in as a check
+		if (parent->getNumChildren() <= order) {
+			// Creates new node, adds keys to the left of the middle term in the node to split, adds the middle term to the parent, and adds the new node as a child to the parent 
+			Node<T>* newNode = new Node<T>(order);
+			int t = ceil((float)order / 2);
+			int middleTerm = t - 1;
+			for (int i = 0; i < middleTerm; i++) {
+				newNode->addKey(nodeToSplit->removeKey(nodeToSplit->peekKey(0)));
 			}
-			for (int i = t; i < order; i++) {
-				newNode2->addKey(nodeToSplit->removeKey(nodeToSplit->peekKey(nodeToSplit->getNumKeys()-1)));
-			}
-			nodeToSplit->addChild(newNode1);
-			nodeToSplit->addChild(newNode2);
-		}
-		else {
-			Node<T>* parent = findParent(nodeToSplit, rootNode);
-			if (parent->getNumChildren() < order) {
-				Node<T>* newNode = new Node<T>(order);
-				int t = ceil(order / 2);
-				int middleTerm = t - 1;
-				for (int i = 0; i < middleTerm; i++) {
-					newNode->addKey(nodeToSplit->removeKey(nodeToSplit->peekKey(i)));
+			// If the parent has another child that is not a leaf, I'm assuming it has just split one of those children and that split child has extra children
+			// This portion of the code is to move those children to the new node
+			if (!parent->isLeaf()) {
+				if (!(parent->getChild(0)->isLeaf())) {
+					Node<T>* nodeWithExtraChildren;
+					// Find child with extra children
+					for (int i = 0; i < parent->getNumChildren(); i++) {
+						if ((parent->getChild(i)->getNumChildren()) == (order + 1)) {
+							nodeWithExtraChildren = parent->getChild(i);
+						}
+					}
+					// Find nodes to move from nodeWithExtraChildren to newNode
+					if (*newNode < *nodeWithExtraChildren) {
+						// Add children before midpoint to newNode
+						for (int i = 0; i < t ; i++) {
+							newNode->addChild(nodeWithExtraChildren->removeChild(nodeWithExtraChildren->getChild(0)));
+						}
+					}
+					else {
+						// Add children after midpoint to newNode
+						for (int i = 0; i < t ; i++) {
+							newNode->addChild(nodeWithExtraChildren->removeChild(nodeWithExtraChildren->getChild(nodeWithExtraChildren->getNumChildren()-1)));
+						}
+					}
 				}
-
-				parent->addKey(nodeToSplit->removeKey(nodeToSplit->peekKey(0))); // since all terms to the left have been added to the new node, the middleterm is now the first term
-				parent->addChild(newNode);
-			
 			}
-			//TODO: Add else for if parent has max number of children
+			// Adds middle key to the parent
+			parent->addKey(nodeToSplit->removeKey(nodeToSplit->peekKey(0))); // since all terms to the left have been added to the new node, the middleterm is now the first term
+			// Adds new node to the parent
+			parent->addChild(newNode);
+			// If the parent has more than the permitted number of children (meaning that the parent is also full), the parent is split
+			if (parent->getNumChildren() == order+1) {
+				splitChild(parent, 0, nullptr);
+			}
 		}
-	
+		//TODO: Add else for if parent has max number of children, maybe
 	}
 }
 

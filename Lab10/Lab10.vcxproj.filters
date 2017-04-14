@@ -18,5 +18,13 @@
     <ClInclude Include="BTree.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="OrderedList.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Lab10MainTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
