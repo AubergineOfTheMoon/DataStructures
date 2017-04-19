@@ -3,7 +3,12 @@
 
 using namespace std;
 
-
+void printList(int arr[], int n) {
+	for (int i = 0; i < 20; i++) {
+		cout << arr[i] << " ";
+	}
+	cout << endl;
+}
 
 void bubbleSort(int arr[], int n) {
 	for (int i = 0; i < n; i++) {
@@ -31,9 +36,10 @@ void insertionSort(int arr[], int n) {
 	}
 }
 
-void mergeSort(int arr[], int n, int start, int end, int size) {
+void mergeSort(int arr[], int n, int start=0, int end=0, int size=0) {
 	if (end == 0) {
 		end = n-1;
+		size = n;
 	}
 
 
@@ -72,6 +78,34 @@ void mergeSort(int arr[], int n, int start, int end, int size) {
 
 }
 
+void quickSort(int arr[], int n, int start = 0, int end = 0, int pivotIndex = 0) {
+	if (end == 0) {
+		end = n;
+	}
+	int pivot = arr[pivotIndex];
+	//Partition
+	int lastGoodIndex=pivotIndex;
+	for (int i = start; i < end; i++) {
+
+		if (arr[i] > arr[lastGoodIndex] && lastGoodIndex == -1) {
+			lastGoodIndex = i;
+		}else{
+			int temp = arr[lastGoodIndex];
+			arr[lastGoodIndex] = arr[i];
+			arr[i] = temp;
+			lastGoodIndex = i;
+		}
+		printList(arr, n);
+	}
+	int j = 0;
+	while (arr[j] != pivot) {
+		j++;
+	}
+	//Quick sort left partition
+	
+	
+}
+
 
 int main() {
 	int* test = new int[20];
@@ -81,7 +115,7 @@ int main() {
 		cout << test[i] << " ";
 	}
 	cout << endl;
-	mergeSort(test, 20, 0, 0, 20);
+	quickSort(test, 20);
 	for (int i = 0; i < 20; i++) {
 		cout << test[i] << " ";
 	}

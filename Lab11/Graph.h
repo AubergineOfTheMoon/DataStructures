@@ -4,28 +4,38 @@
 #include<iostream>
 #include <algorithm>
 #include <vector>
+#include <iterator>
+#include "OrderedList.h"
 
 using namespace std;
 
 class Node {
 public:
 	int val;
+	int distance;
 	vector<int> out;
 	vector<int> in;
 	Node(int);
+	bool operator==(Node);
 };
 
 Node::Node(int v = NULL) {
 	val = v;
 }
 
+bool Node::operator==(Node n) {
+	return val == n.val;
+}
+
 class Graph {
 private:
 	int size;
 	int pos;
+	vector<int> visited;
+	vector<Node> vals;
+public:
 	Node* adj;
 	int findNodePos(int);
-public:
 	Graph(int);
 	void addNode(int);
 	void addEdge(int, int);
@@ -34,6 +44,8 @@ public:
 	vector<int> outEdges(int);
 	vector<int> inEdges(int);
 	void displayGraph();
+	void breadthFirstSearch(Node);
+	void recursiveBFS(Node, int);
 	class ItemNotFound {
 	public: ItemNotFound() {}
 	};
@@ -125,4 +137,44 @@ void Graph::displayGraph() {
 		cout << endl;
 	}
 }
+
+void Graph::breadthFirstSearch(Node n) {
+	visited= vector<int>(0);
+	vals= vector<Node>(0);
+	recursiveBFS(n, 0);
+	for (int i = 0; i < vals.size(); i++) {
+		cout << vals[i].val << " ";
+	}
+	cout << endl;
+}
+
+void Graph::recursiveBFS(Node n, int d) {
+	
+	if (find(visited.begin(), visited.end(), findNodePos(n.val)) == visited.end() || d < n.distance) {// If the node is in the visited list
+		if (d < n.distance) {
+			// Remove old ones to be readded
+			vals.erase(remove(vals.begin(), vals.end(), findNodePos(n.val)), vals.end());
+		}
+		else {
+			visited.insert(visited.begin(), findNodePos(n.val));
+		}
+		n.distance = d;
+		// If the node isn't found in the visited, add it to visited
+		adj[findNodePos(n.val)].distance = d;
+
+		// Put node in vector 
+		int j = 0; // index of sorted vector
+		int thisDistance = adj[findNodePos(n.val)].distance;
+		while (j < vals.size() && thisDistance > vals[j].distance) { // while you are 
+			j++;
+		}
+		vals.insert(vals.begin()+j, adj[findNodePos(n.val)]);
+		for (int j = 0; j < n.out.size(); j++) {
+			Node outNode = adj[n.out[j]];
+			recursiveBFS(outNode, d + 1);
+		}
+			
+	}
+}
+
 #endif
