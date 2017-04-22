@@ -4,8 +4,6 @@
 #include<iostream>
 #include <algorithm>
 #include <vector>
-#include <algorithm>
-#include <list>
 
 using namespace std;
 
@@ -23,12 +21,12 @@ Node::Node(int v = NULL) {
 
 class Graph {
 private:
-	vector<int> visited;
 	int size;
 	int pos;
+	Node* adj;
+	int findNodePos(int);
 public:
 	Graph(int);
-	Node* adj;
 	void addNode(int);
 	void addEdge(int, int);
 	void removeEdge(int, int);
@@ -36,14 +34,12 @@ public:
 	vector<int> outEdges(int);
 	vector<int> inEdges(int);
 	void displayGraph();
-	int findNodePos(int);
 	class ItemNotFound {
 	public: ItemNotFound() {}
 	};
 	class ItemAlreadyExists {
 	public: ItemAlreadyExists() {}
 	};
-	void DFS(Node);
 };
 
 Graph::Graph(int s) {
@@ -127,15 +123,6 @@ void Graph::displayGraph() {
 			cout << adj[i].out.at(j) << " ";
 		}
 		cout << endl;
-	}
-}
-void Graph::DFS(Node n) {
-	if (find(visited.begin(),visited.end(),n.val) == visited.end()) {
-		visited.push_back(n.val);
-		cout << n.val << endl;
-		for (int s = 0; s < n.out.size();s++) {
-			DFS(adj[findNodePos(n.out[s])]);
-		}
 	}
 }
 #endif

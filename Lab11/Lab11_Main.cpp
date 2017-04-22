@@ -4,51 +4,17 @@ using namespace std;
 
 int main() {
 
-	int maxNodes = 20;
-	// do {
-	// 	 cout << "What would you like the maximum number of nodes in the graph to be: ";
-	//	 cin >> maxNodes;
-	// } while (maxNodes <= 0);
+	int maxNodes;
+	do {
+		cout << "What would you like the maximum number of nodes in the graph to be: ";
+		cin >> maxNodes;
+	} while (maxNodes <= 0);
 
 	Graph myGraph = Graph(maxNodes);
 	int choice = 0;
 	int tempNode, tempEdge1, tempEdge2;
 	bool edgeFound;
 	vector<int> tempEdges;
-	//Task 2
-	for (int i = 0; i < 10; i++) {
-		myGraph.addNode(i);
-	}
-	myGraph.addEdge(0, 2);
-	myGraph.addEdge(0, 3);
-	myGraph.addEdge(0, 5);
-	myGraph.addEdge(1, 3);
-	myGraph.addEdge(1, 4);
-	myGraph.addEdge(1, 6);
-	myGraph.addEdge(2, 4);
-	myGraph.addEdge(2, 0);
-	myGraph.addEdge(2, 7);
-	myGraph.addEdge(3, 0);
-	myGraph.addEdge(3, 1);
-	myGraph.addEdge(3, 8);
-	myGraph.addEdge(4, 1);
-	myGraph.addEdge(4, 2);
-	myGraph.addEdge(4, 9);
-	myGraph.addEdge(5, 9);
-	myGraph.addEdge(5, 0);
-	myGraph.addEdge(5, 6);
-	myGraph.addEdge(6, 5);
-	myGraph.addEdge(6, 1);
-	myGraph.addEdge(6, 7);
-	myGraph.addEdge(7, 6);
-	myGraph.addEdge(7, 2);
-	myGraph.addEdge(7, 8);
-	myGraph.addEdge(8, 7);
-	myGraph.addEdge(8, 3);
-	myGraph.addEdge(8, 9);
-	myGraph.addEdge(9, 8);
-	myGraph.addEdge(9, 4);
-	myGraph.addEdge(9, 5);
 	// bool flag;
 	do {
 		cout << "***************************************" << endl;
@@ -60,8 +26,6 @@ int main() {
 		cout << "5. Find the out edges of a node" << endl;
 		cout << "6. Find the in edges of a node" << endl;
 		cout << "7. Display the graph as adjacency lists" << endl;
-		cout << "8. Perform a Breadth First Search" << endl;
-		cout << "9. Perform a Depth First Search" << endl;
 		cout << "0. Exit" << endl;
 		cout << "Enter the number of the choice you wish to select: ";
 		cin >> choice;
@@ -156,12 +120,6 @@ int main() {
 			break;
 		case 7: myGraph.displayGraph();
 			break;
-		case 8: cout << "Enter Node to Start Breadth First Search from" << endl;
-			break;
-		case 9: cout << "Enter Node to Start Depth First Search from" << endl;
-			int start;
-			cin >> start;
-			myGraph.DFS(myGraph.adj[myGraph.findNodePos(start)]);
 		case 0: cout << "You have chosen to exit." << endl;
 			break;
 		default: cout << "You have entered an invalid choice." << endl;
