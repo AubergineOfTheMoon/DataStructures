@@ -15,74 +15,74 @@ void printList(int arr[], int n) {
 	cout << endl;
 }
 
-/*
+
 class Node {
 public:
-int value;
-int level;
-Node* left;
-Node* right;
-Node(int, int);
+	int value;
+	int level;
+	Node* left;
+	Node* right;
+	Node(int, int);
 };
 
 Node::Node(int v, int l) {
-value = v;
-level = l;
-left = nullptr;
-right = nullptr;
+	value = v;
+	level = l;
+	left = nullptr;
+	right = nullptr;
 }
 
 class Heap {
 private:
-Node* root;
-Node* findNodeToAdd();
+	Node* root;
+	Node* findNodeToAdd();
 public:
-Heap();
-void addValue(int);
-Node* removeValue();
-void reheapDown(Node*);
+	Heap();
+	void addValue(int);
+	Node* removeValue();
+	void reheapDown(Node*);
 };
 
 Heap::Heap() {
-root = nullptr;
+	root = nullptr;
 }
 
 Node* Heap::findNodeToAdd() {
-
+	return nullptr;
 }
 
 void Heap::addValue(int v) {
-if (root == nullptr) {
-Node* newNode = new Node(v, 0);
-root = newNode;
-}
-else {
-Node* nodeToAdd = findNodeToAdd();
-if (nodeToAdd->left == nullptr) {
-nodeToAdd->left = new Node(v, 0);
-reheapDown(root);
-}
-else {
-nodeToAdd->right = new Node(v);
-reheapDown(root);
-}
-}
+	if (root == nullptr) {
+		Node* newNode = new Node(v, 0);
+		root = newNode;
+	}
+	else {
+		Node* nodeToAdd = findNodeToAdd();
+		if (nodeToAdd->left == nullptr) {
+			nodeToAdd->left = new Node(v, 0);
+			reheapDown(root);
+		}
+		else {
+			nodeToAdd->right = new Node(v, 0);
+			reheapDown(root);
+		}
+	}
 }
 
 void Heap::reheapDown(Node* nodeToCheck) {
-if ((nodeToCheck->left != nullptr) && (nodeToCheck->value < nodeToCheck->left->value)) {
-int tempVal = nodeToCheck->value;
-nodeToCheck->value = nodeToCheck->left->value;
-nodeToCheck->left->value = tempVal;
+	if ((nodeToCheck->left != nullptr) && (nodeToCheck->value < nodeToCheck->left->value)) {
+		int tempVal = nodeToCheck->value;
+		nodeToCheck->value = nodeToCheck->left->value;
+		nodeToCheck->left->value = tempVal;
+	}
+	else if ((nodeToCheck->right != nullptr) && (nodeToCheck->value < nodeToCheck->right->value)) {
+		int tempVal = nodeToCheck->value;
+		nodeToCheck->value = nodeToCheck->right->value;
+		nodeToCheck->right->value = tempVal;
+	}
+	if (nodeToCheck->left == nullptr) {}
 }
-else if ((nodeToCheck->right != nullptr) && (nodeToCheck->value < nodeToCheck->right->value)) {
-int tempVal = nodeToCheck->value;
-nodeToCheck->value = nodeToCheck->right->value;
-nodeToCheck->right->value = tempVal;
-}
-if (nodeToCheck->left == nullptr) {}
-}
-*/
+
 
 void bubbleSort(int arr[], int n) {
 	for (int i = 0; i < n; i++) {
@@ -345,6 +345,9 @@ int main() {
 		//printList(a1, n);
 		//cout << "Start" << endl;
 
+		// Sort numbers
+		// Record the times
+
 		auto t1 = Clock::now();
 		bubbleSort(a1, n);
 		auto t2 = Clock::now();
@@ -393,12 +396,12 @@ int main() {
 		*/
 	}
 	// Print out results
-	cout << "Bubble sort \t" << times[0] << "\t nano seconds" << endl;
-	cout << "Insertion sort \t" << times[1] << "\t nano seconds" << endl;
-	cout << "Merge sort \t" << times[2] << "\t nano seconds" << endl;
-	cout << "Counting sort \t" << times[3] << "\t nano seconds" << endl;
-	cout << "Quick sort \t" << times[4] << "\t nano seconds" << endl;
-	cout << "Radix sort \t" << times[5] << "\t nano seconds" << endl;
-	cout << "Heap sort \t" << times[6] << "\t nano seconds" << endl;
+	cout << "Bubble sort \t" << times[0] / 10 << "\t nano seconds" << endl;
+	cout << "Insertion sort \t" << times[1] / 10 << "\t nano seconds" << endl;
+	cout << "Merge sort \t" << times[2] / 10 << "\t nano seconds" << endl;
+	cout << "Counting sort \t" << times[3] / 10 << "\t nano seconds" << endl;
+	cout << "Quick sort \t" << times[4] / 10 << "\t nano seconds" << endl;
+	cout << "Radix sort \t" << times[5] / 10 << "\t nano seconds" << endl;
+	cout << "Heap sort \t" << times[6] / 10 << "\t nano seconds" << endl;
 
 }
