@@ -1,14 +1,20 @@
-#include <iostream> #include <string> #include <cstdlib> #include <time.h> #include <stdio.h>
-# include <stdlib.h>
+#include <iostream> 
+#include <string> 
+#include <cstdlib> 
+#include <time.h> 
+#include <stdio.h>
+#include <stdlib.h>
 #include <vector>
+#include <chrono>
 using namespace std;
-
+typedef std::chrono::high_resolution_clock Clock;
 void printList(int arr[], int n) {
 	for (int i = 0; i < n; i++) {
 		cout << arr[i] << " ";
 	}
 	cout << endl;
 }
+
 /*
 class Node {
 public:
@@ -133,6 +139,7 @@ void mergeSort(int arr[], int n, int start=0, int end=0, int size=0) {
 				pos2++;
 			}
 		}
+		delete[size] tempArr;
 	}
 
 	else if (n == 2) {
@@ -279,8 +286,32 @@ void quickSort(int arr[], int n, int start = 0, int end = 0) {
 	}
 }
 
+
 int main() {
-	int n = 20;
+	int c, n;
+	cout << "How big should the array be [0:10, 1:100, 2:500, 3:5000, 4:25000]: ";
+	cin >> c;
+
+	switch (c) { // Because I like typing 1 character vs 3
+	case 0:
+		n = 10;
+		break;
+	case 1:
+		n = 100;
+		break;
+	case 2:
+		n = 500;
+		break;
+	case 3:
+		n = 5000;
+		break;
+	case 4:
+		n = 25000;
+		break;
+	default:
+		n = c;
+		break;
+	}
 	// size of list being tested
 
 	// creates array of size n with random values
@@ -292,41 +323,82 @@ int main() {
 	int* a6 = new int[n];
 	int* a7 = new int[n];
 
+	int times[] = { 0,0,0,0,0,0,0 };
+
+	// Seed random number
+	srand(time(NULL));
+
+	// Insert random numbers
 	int num;
-	for (int i = 0; i < n; i++) {
-		num = rand() % (n);
-		a1[i] = num;
-		a2[i] = num;
-		a3[i] = num;
-		a4[i] = num;
-		a5[i] = num;
-		a6[i] = num;
-		a7[i] = num;
-		//a8[i] = num;
-		//a9[i] = num;
+	for (int j = 0; j < 10; j++) {
+		for (int i = 0; i < n; i++) {
+			num = rand() % (n);
+			a1[i] = num;
+			a2[i] = num;
+			a3[i] = num;
+			a4[i] = num;
+			a5[i] = num;
+			a6[i] = num;
+			a7[i] = num;
+		}
+
+		//printList(a1, n);
+		//cout << "Start" << endl;
+
+		auto t1 = Clock::now();
+		bubbleSort(a1, n);
+		auto t2 = Clock::now();
+		//printList(a1, n);
+		times[0] += std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+
+		t1 = Clock::now();
+
+		insertionSort(a2, n);
+		t2 = Clock::now();
+		//printList(a2, n);
+		times[1] += std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+
+		t1 = Clock::now();
+		mergeSort(a3, n);
+		t2 = Clock::now();
+		//printList(a3, n);
+		times[2] += std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+
+		/*
+		t1 = Clock::now();
+		countingSort(a4, n, n);
+		t2 = Clock::now();
+		//printList(a4, n);
+		times[3] += std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+		*/
+
+		t1 = Clock::now();
+		quickSort(a5, n);
+		t2 = Clock::now();
+		//printList(a5, n);
+		times[4] += std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+
+		t1 = Clock::now();
+		radixSort(a6, n);
+		t2 = Clock::now();
+		//printList(a6, n);
+		times[5] += std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+
+		/*
+		t1 = Clock::now();
+		heapSort(a7, n);
+		t2 = Clock::now();
+		//printList(a7, n);
+		times[6] += std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+		*/
 	}
-	
-	printList(a1, n);
-	cout << "Start" << endl;
-	
-	bubbleSort(a1, n);
-	printList(a1, n);
+	// Print out results
+	cout << "Bubble sort \t" << times[0] << "\t nano seconds" << endl;
+	cout << "Insertion sort \t" << times[1] << "\t nano seconds" << endl;
+	cout << "Merge sort \t" << times[2] << "\t nano seconds" << endl;
+	cout << "Counting sort \t" << times[3] << "\t nano seconds" << endl;
+	cout << "Quick sort \t" << times[4] << "\t nano seconds" << endl;
+	cout << "Radix sort \t" << times[5] << "\t nano seconds" << endl;
+	cout << "Heap sort \t" << times[6] << "\t nano seconds" << endl;
 
-	insertionSort(a2, n);
-	printList(a2, n);
-
-	mergeSort(a3, n);
-	printList(a3, n);
-
-	//countingSort(a4, n, n);
-	//printList(a4, n);
-
-	quickSort(a5, n);
-	printList(a5, n);
-
-	radixSort(a6, n);
-	printList(a6, n);
-
-	//heapSort(a7, n);
-	//printList(a7, n);
 }
