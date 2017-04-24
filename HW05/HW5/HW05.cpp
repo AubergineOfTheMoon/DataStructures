@@ -153,7 +153,7 @@ void mergeSort(int arr[], int n, int start=0, int end=0, int size=0) {
 }
 
 void countingSort(int arr[], int n, int max = 0) {
-	if (max = 0) {
+	if (max == 0) {
 		max = n;
 	}
 	// n is the size of the array
@@ -364,13 +364,13 @@ int main() {
 		//printList(a3, n);
 		times[2] += std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
 
-		/*
+		
 		t1 = Clock::now();
-		countingSort(a4, n, n);
+		countingSort(a4, n);
 		t2 = Clock::now();
 		//printList(a4, n);
 		times[3] += std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
-		*/
+		
 
 		t1 = Clock::now();
 		quickSort(a5, n);
