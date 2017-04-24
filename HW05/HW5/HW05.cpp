@@ -1,6 +1,6 @@
 #include <iostream> #include <string> #include <cstdlib> #include <time.h> #include <stdio.h>
 # include <stdlib.h>
-
+#include <vector>
 using namespace std;
 
 void printList(int arr[], int n) {
@@ -110,7 +110,6 @@ void mergeSort(int arr[], int n, int start=0, int end=0, int size=0) {
 		size = n;
 	}
 
-
 	// Only this should be done recursively 
 	if (n > 2) {
 		mergeSort(arr, n / 2, start, start + n / 2 - 1, size); // Left merge sort
@@ -134,7 +133,6 @@ void mergeSort(int arr[], int n, int start=0, int end=0, int size=0) {
 				pos2++;
 			}
 		}
-
 	}
 
 	else if (n == 2) {
@@ -147,7 +145,10 @@ void mergeSort(int arr[], int n, int start=0, int end=0, int size=0) {
 
 }
 
-void countingSort(int arr[], int n, int max) {
+void countingSort(int arr[], int n, int max = 0) {
+	if (max = 0) {
+		max = n;
+	}
 	// n is the size of the array
 
 	// Initialize array of all possible numbers from 0 to max
@@ -180,7 +181,11 @@ void countingSort(int arr[], int n, int max) {
 	delete count;
 }
 
-void radixSort(int arr[], int n, int max) {
+void radixSort(int arr[], int n, int max = 0) {
+	if (max == 0) {
+		max = n;
+	}
+
 	// Find the maximum number of significant digits in the array
 	int m = max;
 	int numSigDig = 0;
@@ -234,33 +239,44 @@ void radixSort(int arr[], int n, int max) {
 	delete count;
 }
 
-void quickSort(int arr[], int n, int start = 0, int end = 0, int pivotIndex = 0) {
+void quickSort(int arr[], int n, int start = 0, int end = 0) {
 	if (end == 0) {
-		end = n;
+		end = n-1;
 	}
-	int pivot = arr[pivotIndex];
-	//Partition
-	int lastGoodIndex = pivotIndex;
-	for (int i = start; i < end; i++) {
 
-		if (arr[i] > arr[lastGoodIndex] && lastGoodIndex == -1) {
-			lastGoodIndex = i;
+	int pIndex = end - n / 2;
+	int pivot = arr[pIndex];
+	int tStart = start;
+	int tEnd = end;
+	//Partition
+	while (tStart < tEnd) {
+		if (arr[tStart] >= pivot && pivot >= arr[tEnd]) {
+			// Swap them 
+			int temp = arr[tStart];
+			arr[tStart] = arr[tEnd];
+			arr[tEnd] = temp;
+			tStart++;
+			tEnd--;
 		}
 		else {
-			int temp = arr[lastGoodIndex];
-			arr[lastGoodIndex] = arr[i];
-			arr[i] = temp;
-			lastGoodIndex = i;
+			if (arr[tStart] <= pivot) {
+				tStart++;
+			}
+			if (arr[tEnd] >= pivot) {
+				tEnd--;
+			}
 		}
-		printList(arr, n);
+		// Debug
+		//printList(arr, 20);
 	}
-	int j = 0;
-	while (arr[j] != pivot) {
-		j++;
-	}
+	
+
 	//Quick sort left partition
-
-
+	if (n > 1) {
+		quickSort(arr, n / 2, start, pIndex);
+		quickSort(arr, n / 2, pIndex-1, end);
+		
+	}
 }
 
 int main() {
@@ -268,17 +284,49 @@ int main() {
 	// size of list being tested
 
 	// creates array of size n with random values
-	int* test = new int[n];
-	for (int i = 0; i < n; i++)
-		test[i] = rand() % (n);
-	for (int i = 0; i < n; i++) {
-		cout << test[i] << " ";
-	}
+	int* a1 = new int[n];
+	int* a2 = new int[n];
+	int* a3 = new int[n];
+	int* a4 = new int[n];
+	int* a5 = new int[n];
+	int* a6 = new int[n];
+	int* a7 = new int[n];
 
-	cout << endl;
-	// mergeSort(test, 20, 0, 0, 20);
-	// countingSort(test, n, max);
-	//countingSort(test, n, n);
-	mergeSort(test, n);
-	printList(test, n);
+	int num;
+	for (int i = 0; i < n; i++) {
+		num = rand() % (n);
+		a1[i] = num;
+		a2[i] = num;
+		a3[i] = num;
+		a4[i] = num;
+		a5[i] = num;
+		a6[i] = num;
+		a7[i] = num;
+		//a8[i] = num;
+		//a9[i] = num;
+	}
+	
+	printList(a1, n);
+	cout << "Start" << endl;
+	
+	bubbleSort(a1, n);
+	printList(a1, n);
+
+	insertionSort(a2, n);
+	printList(a2, n);
+
+	mergeSort(a3, n);
+	printList(a3, n);
+
+	//countingSort(a4, n, n);
+	//printList(a4, n);
+
+	quickSort(a5, n);
+	printList(a5, n);
+
+	radixSort(a6, n);
+	printList(a6, n);
+
+	//heapSort(a7, n);
+	//printList(a7, n);
 }
