@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <chrono>
+#include"Heap.h"
 using namespace std;
 typedef std::chrono::high_resolution_clock Clock;
 void printList(int arr[], int n) {
@@ -16,12 +17,13 @@ void printList(int arr[], int n) {
 }
 
 
-class Node {
+/*class Node {
 public:
 	int value;
 	int level;
 	Node* left;
 	Node* right;
+	bool isFull();
 	Node(int, int);
 };
 
@@ -32,10 +34,18 @@ Node::Node(int v, int l) {
 	right = nullptr;
 }
 
+bool Node::isFull() {
+	if ((left != nullptr) && (right != nullptr)) {
+		return true;
+	}
+	return false;
+}
+
 class Heap {
 private:
 	Node* root;
 	Node* findNodeToAdd();
+	
 public:
 	Heap();
 	void addValue(int);
@@ -81,8 +91,25 @@ void Heap::reheapDown(Node* nodeToCheck) {
 		nodeToCheck->right->value = tempVal;
 	}
 	if (nodeToCheck->left == nullptr) {}
-}
+}*/
 
+
+
+void heapSort(int arr[], int n) {
+	if (n > 0) {
+		Heap myHeap = Heap(arr[0]);
+		for (int i = 1; i < n; i++) {
+			myHeap.addItem(arr[i]);
+		}
+		// int* newSortedArray = new int[n];
+		for (int j = 0; j < n; j++) {
+			arr[j] = myHeap.removeMinItem();
+		}
+	}
+	else {
+		cout << "Cannot sort array with no items" << endl;
+	}
+}
 
 void bubbleSort(int arr[], int n) {
 	for (int i = 0; i < n; i++) {
@@ -387,13 +414,13 @@ int main() {
 		//printList(a6, n);
 		times[5] += std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
 
-		/*
+		
 		t1 = Clock::now();
 		heapSort(a7, n);
 		t2 = Clock::now();
-		//printList(a7, n);
+		printList(a7, n);
 		times[6] += std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
-		*/
+		
 	}
 	// Print out results
 	cout << "Bubble sort \t" << times[0] / 10 << "\t nano seconds" << endl;
@@ -403,5 +430,5 @@ int main() {
 	cout << "Quick sort \t" << times[4] / 10 << "\t nano seconds" << endl;
 	cout << "Radix sort \t" << times[5] / 10 << "\t nano seconds" << endl;
 	cout << "Heap sort \t" << times[6] / 10 << "\t nano seconds" << endl;
-
+	cout << "END" << endl;
 }
