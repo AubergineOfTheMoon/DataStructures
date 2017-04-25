@@ -16,21 +16,19 @@ class Student {
 public:
 	string firstName;
 	string lastName;
-	string mNumber;
+	int mNumber;
 	Student(string f, string l, int m);
 	string getName();
-	string getMNumber();
-	bool operator>(Student s);
-	bool operator<(Student s);
-	bool operator==(Student s);
+	int getMNumber();
 	string toString();
 	Student* next;
+	
 };
 
 inline Student::Student(string f, string l, int m) {
 	firstName = f;
 	lastName = l;
-	mNumber = "M" + to_string(m);
+	mNumber = m;
 	next = nullptr;
 }
 
@@ -42,13 +40,13 @@ inline string Student::getName() {
 	return fullName;
 }
 
-inline string Student::getMNumber() {
+inline int Student::getMNumber() {
 	return mNumber;
 }
 
 inline string Student::toString()
 {
-	return firstName + " " + lastName + " " + mNumber;
+	return firstName + " " + lastName + " " + to_string(mNumber);
 }
 
 
@@ -75,6 +73,7 @@ public:
 	T* SeeAt(int index);
 	void Reset();
 	void DisplayAll();
+	void BubbleSort(bool);
 	class ItemNotFound {
 	public:
 		ItemNotFound() {};
@@ -106,11 +105,8 @@ inline void LinkedList<T>::AddItem(T * ptr)
 		size++;
 	}
 	else {
-		int findPos = 0;
-		while ((findPos < size) && (*SeeAtSamePos(findPos) < *ptr)) {
-			findPos++;
-		}
-		if (findPos == 0) {
+		int findPos = size - 1;
+		if (size == 1) {
 			T* nextTemp = head;
 			head = ptr;
 			next = head;
@@ -128,12 +124,12 @@ inline void LinkedList<T>::AddItem(T * ptr)
 
 template<class T>
 inline T * LinkedList<T>::RemoveItem(T * ptr)
-{	
+{
 	T* retItem;
 	int findPos;
-	bool itemFound=false;
+	bool itemFound = false;
 	for (int i = 0; i < size; i++) {
-		if (*SeeAtSamePos(i) == *ptr){
+		if (*SeeAtSamePos(i) == *ptr) {
 			findPos = i;
 			itemFound = true;
 		}
@@ -145,8 +141,8 @@ inline T * LinkedList<T>::RemoveItem(T * ptr)
 			T* newHead = head->next;
 			head = newHead;
 			// head = SeeAtSamePos(findPos)->next;
-			/*if (head != nullptr) { 
-				head->next = tempNext; 
+			/*if (head != nullptr) {
+			head->next = tempNext;
 			}*/
 		}
 		else {
@@ -165,7 +161,7 @@ template<class T>
 inline bool LinkedList<T>::IsInList(T * ptr)
 {
 	for (int i = 0; i < size; i++) {
-		if ((*SeeAtSamePos(i)) == (*ptr)){
+		if ((*SeeAtSamePos(i)) == (*ptr)) {
 			return true;
 		}
 	}
@@ -186,7 +182,7 @@ inline int LinkedList<T>::Size()
 
 template<class T>
 inline T * LinkedList<T>::SeeNext()
-{	
+{
 	if (head == nullptr) {
 		throw EmptyList();
 		return nullptr;
@@ -202,7 +198,7 @@ inline T * LinkedList<T>::SeeNext()
 
 template<class T>
 inline T * LinkedList<T>::SeeAt(int index)
-{	
+{
 	if ((index >= size) || (index < 0)) {
 		throw ItemNotFound();
 		return nullptr;
@@ -255,39 +251,61 @@ inline void LinkedList<Student>::DisplayAll()
 	pos = 0;
 	Student* s;
 	for (int i = 0; i < size; i++) {
-		s = SeeNext();
-		cout << (*s).toString();
+		s = SeeAt(i);
+		if (s != nullptr) 
+
+			cout << (*s).toString() << " | ";
+		
+		else
+			cout << i << " was empty ";
 	}
 	pos = tPos;
 }
 
-void StudentSwap(Student *a, Student *b, Student *before) {
-	Student *tNext = b->next;
-	b->next = a;
-	a->next = tNext;
-	before->next = b;
-}
-
-void StudentSwapRoot(Student *a, Student *b, Student *root) {
-	Student *tNext = b->next;
-	b->next = a;
-	a->next = tNext;
-	root = b;
-}
-
 template<class Student>
-inline void LinkedList<Student>::BubbleSort(int type, bool ascending)
+inline void LinkedList<Student>::BubbleSort(bool ascending)
 {
-	for (int i = 0; i < l.Size(); i++) {
-		for (int k = 0; k < l.Size() - i - 1; k++) {
-			if (l.SeeAt(k).firstName > l.SeeAt(k + 1).firstName) {
-				if (k > 0) {
-					StudentSwap(l.SeeAt(k), l.SeeAt(k + 1), l.SeeAt(k - 1))
-				}
-				else {
-					StudentSwapRoot(l.SeeAt(k), l.SeeAt(k + 1), l.root)
+	if (ascending) {
+		for (int i = 0; i < Size(); i++) {
+			for (int k = 0; k < Size() - i - 1; k++) {
+				if (SeeAt(k)->firstName > SeeAt(k + 1)->firstName) {
+					Student* one = SeeAt(k);
+					Student* two = SeeAt(k + 1);
+
+					if (k > 0) {
+						SeeAt(k - 1)->next = two;
+					}
+					else if (k == 0)
+					{
+						head = two;
+					}
+
+					one->next = two->next;
+					two->next = one;
+					
 				}
 			}
 		}
 	}
+	else {
+		for (int i = 0; i < Size(); i++) {
+			for (int k = 0; k < Size() - i - 1; k++) {
+				if (SeeAt(k)->firstName < SeeAt(k + 1)->firstName) {
+					Student* one = SeeAt(k);
+					Student* two = SeeAt(k + 1);
+					if (k > 0) {
+						SeeAt(k - 1)->next = two;
+
+					}
+					else if (k == 0)
+					{
+						head = two;
+					}
+					one->next = two->next;
+					two->next = one;
+				}
+			}
+		}
+	}
+	//Student *test = SeeAt(48);
 }

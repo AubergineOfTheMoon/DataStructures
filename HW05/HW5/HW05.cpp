@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <chrono>
+#include "LinkedList.h"
 using namespace std;
 typedef std::chrono::high_resolution_clock Clock;
 void printList(int arr[], int n) {
@@ -286,6 +287,16 @@ void quickSort(int arr[], int n, int start = 0, int end = 0) {
 	}
 }
 
+// Student sorting
+
+static const char alphanum[] =
+"abcdefghijklmnopqrstuvwxyz";
+
+char genRandom()  // Random string generator function.
+{
+
+	return alphanum[rand() % 26];
+}
 
 int main() {
 	int c, n;
@@ -404,4 +415,35 @@ int main() {
 	cout << "Radix sort \t" << times[5] / 10 << "\t nano seconds" << endl;
 	cout << "Heap sort \t" << times[6] / 10 << "\t nano seconds" << endl;
 
+	LinkedList<Student> s(nullptr);
+	string first = "";
+	string last = "";
+	int numa;
+	srand(time(NULL));
+	for (int i = 0; i < 50; i++) {
+		first = "";
+		last = "";
+		for (int j = 0; j < 6; j++) {
+			
+			first += alphanum[rand() % 26];
+			last += alphanum[rand() % 26];
+		}
+		numa = rand() % 10000;
+		//cout << first << last << num << endl;
+		Student* t = new Student(first, last, numa);
+		s.AddItem(t);
+		
+	}
+	if ("yxuppk" > "zpfnoy") {
+		cout << "?";
+	}
+	s.DisplayAll();
+	s.BubbleSort(true);
+	cout << endl << endl;
+
+	s.DisplayAll();
+	s.BubbleSort(false);
+	cout << endl << endl;
+
+	s.DisplayAll();
 }
