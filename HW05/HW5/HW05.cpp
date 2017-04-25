@@ -217,7 +217,12 @@ void countingSort(int arr[], int n, int max = 0) {
 
 void radixSort(int arr[], int n, int max = 0) {
 	if (max == 0) {
-		max = n;
+		// max is the maximum value in the array
+		/*for (int i = 0; i < n; i++) {
+			if (arr[i] > max) {
+				max = arr[i];
+			}
+		}*/
 	}
 
 	// Find the maximum number of significant digits in the array
@@ -340,7 +345,7 @@ int main() {
 		break;
 	}
 	// size of list being tested
-
+	// int aTest[10] = { 8,9,4,5,0,4,0,9,9,2 };
 	// creates array of size n with random values
 	int* a1 = new int[n];
 	int* a2 = new int[n];
@@ -349,6 +354,7 @@ int main() {
 	int* a5 = new int[n];
 	int* a6 = new int[n];
 	int* a7 = new int[n];
+	// int* a8 = new int[n];
 
 	int times[] = { 0,0,0,0,0,0,0 };
 
@@ -367,8 +373,9 @@ int main() {
 			a5[i] = num;
 			a6[i] = num;
 			a7[i] = num;
+			// a8[i] = num;
 		}
-
+		
 		//printList(a1, n);
 		//cout << "Start" << endl;
 
@@ -419,6 +426,9 @@ int main() {
 		heapSort(a7, n);
 		t2 = Clock::now();
 		printList(a7, n);
+		printList(a1, n);
+		// printList(a8, n);
+		cout << endl;
 		times[6] += std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
 		
 	}

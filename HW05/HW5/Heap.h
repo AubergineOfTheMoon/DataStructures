@@ -68,7 +68,8 @@ int Heap::getTreeHeight() {
 }
 
 int Heap::findParentIndex(int valIndex) {
-	return int(valIndex / 2) - 1;
+	double valInd = valIndex;
+	return ceil(valInd / 2) - 1;
 }
 
 void Heap::reheapUp(int index) {
@@ -88,9 +89,9 @@ void Heap::reheapUp(int index) {
 		heapArray[parentIndex] = temp;
 	}
 	// If child has greater value than parent, heap is in order, so stop reheap
-	else {
+	/*else {
 		return;
-	}
+	}*/
 	// Reheap up again
 	reheapUp(parentIndex);
 }
@@ -121,6 +122,10 @@ void Heap::reheapDown(int index) {
 	heapArray[index] = heapArray[replaceIndex];
 	heapArray[replaceIndex] = temp;
 	// Reheap down again
-	reheapDown(replaceIndex);
+	// reheapDown(replaceIndex);
+	reheapDown(indexChild1);
+	if (indexChild2 < (getTreeSize() - 1)) {
+		reheapDown(indexChild2);
+	}
 }
 #endif
