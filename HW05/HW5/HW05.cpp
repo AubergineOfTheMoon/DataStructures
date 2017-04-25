@@ -400,7 +400,6 @@ int main() {
 		times[0] += std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
 
 		t1 = Clock::now();
-
 		insertionSort(a2, n);
 		t2 = Clock::now();
 		//printList(a2, n);
@@ -436,10 +435,10 @@ int main() {
 		t1 = Clock::now();
 		heapSort(a7, n);
 		t2 = Clock::now();
-		printList(a7, n);
-		printList(a1, n);
+		//printList(a7, n);
+		//printList(a1, n);
 		// printList(a8, n);
-		cout << endl;
+		//cout << endl;
 		times[6] += std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
 		
 	}
